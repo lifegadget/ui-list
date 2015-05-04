@@ -1,0 +1,78 @@
+.ui-list.item {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    width: 100%;
+    vertical-align: middle;
+    min-height: 40px;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    font-size: 1.2em;
+}
+.ui-list.item .left {
+    min-width: 45px;
+    margin: auto;
+    text-align: center;
+}
+.ui-list.item .left.two-lined-message {
+    font-size: 2.4em;
+}
+.ui-list.item .center {
+    -webkit-flex-grow: 4;
+    -moz-flex-grow: 4;
+    -ms-flex-grow: 4;
+    -o-flex-grow: 4;
+    flex-grow: 4;
+    margin: auto;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.ui-list.item .two-lined-message .title {
+    position: relative;
+    top: 4px;
+}
+.ui-list.item .two-lined-message .sub-heading {
+    position: relative;
+    top: -4px;
+}
+
+.ui-list.item .center.no-left {
+    padding-left: 10px;
+}
+.ui-list.item .right {
+    min-width: 45px;
+    margin: auto;
+    text-align: center;
+}
+.ui-list.item .right.with-badge {
+    min-width: 60px;
+}
+
+.ui-list.item .right .badge + .icon-right {
+    padding-right: 5px;
+}
+
+.ui-list .sub-heading {
+    font-size: smaller;
+    color: darkgrey;
+}
+
+/* SIZING::DEFAULTs */
+.ui-list.item.tiny {
+    font-size: .9em;
+}
+.ui-list.item.small {
+    font-size: 1em;
+}
+.ui-list.item.large {
+    font-size: 1.5em;
+}
+.ui-list.item.huge {
+    font-size: 2em;
+}
+.ui-list.item.huge .center.no-left {
+    padding-left: 15px;
+}

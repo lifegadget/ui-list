@@ -1,3 +1,14 @@
-<h2 id="title">Welcome to Ember.js</h2>
+<div class="container">
+    <h1 id="title">ui-list</h1>
+    <h2>List controls for ambitious Ember applications</h2>
+        
+    {{outlet}}
+</div>
 
-{{outlet}}
+{{#if notIndexPage}}
+    {{#link-to 'index'}}
+    <div class="back-navigation">
+        {{ui-icon icon='arrow-circle-left' size='5x' class='animated fadeIn'}}
+    </div>
+    {{/link-to}}
+{{/if}}

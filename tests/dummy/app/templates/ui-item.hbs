@@ -1,0 +1,112 @@
+<h3>Component::<code>ui-item</code></h3>
+
+<h4>Overview</h4>
+<div class="row">
+    <desc>
+        The <code>ui-item</code> is the default list item component and it's key properties are:
+    </desc>
+    <desc>
+        <ul>
+            <li>
+                type
+                <ul>
+                    <li>This gives a functional distinction for the list</li>
+                    <li>The clearest effect of a type is which Item components will be used but it can also effect</li>
+                    <li>By default this "type" defaults to "simple" which </li>
+                </ul>
+            </li>
+            <li>
+                style
+                <ul>
+                    <li>allows the user to choose from a variety of visual style familes in CSS</li>
+                    <li>the style can be related to a "type" but in most cases they're independant actors</li>
+                </ul>
+            </li>
+            <li>
+                size
+                <ul>
+                    <li>amongst other things this gives us to CSS psuedo events to work with <code>valid</code> and <code>invalid</code></li>
+                    <li>more importantly it provides context to browsers so they can make our lives better with better keyboards, etc.</li>
+                </ul>
+              </li>
+        </ul>
+        
+    </desc>
+</div>
+
+<h4>Basic Example</h4>
+
+<examples>
+    <widget>
+        {{ui-item icon='envelope' title='Went Running' badge=4}}
+    </widget>
+    <sourcecode>
+        {{#code-block language="handlebars"}}
+\{{ui-item icon='envelope' title='Went Running' badge=4}}
+        {{/code-block}}         
+    </sourcecode>
+</examples>
+
+<desc>
+    There are few things to note in the basic example above. 
+    <ul>
+        <li>
+            First off the use of <code>icon</code> property is really just an alias to the <code>iconLeft</code> property. The alias is setup this 
+            because its the left-pane which is most likely to have an icon in it (at least one that is dynamic).
+        </li>
+        <li>
+            Similarly the <code>title</code> property is assumed to refer to the <code>titleCenter</code> property. 
+        </li>
+        <li>
+            The <code>badge</code> property is assumed to be in the right-pane but can be placed anywhere if you use an explicit reference like <code>badgeCenter</code>. 
+        </li>
+    </ul>
+</desc>
+
+<h4>Sizing and Style Example</h4>
+<examples>
+    <widget class="wide">
+        {{ui-item icon=toggledIcon title='Went Running' subHeading=toggledSubHeading badge=toggledBadge size=size}}
+    </widget>
+    <sourcecode>
+        {{#code-block language="handlebars" poll=150}}
+\{{ui-item {{#if toggledIcon}}icon='{{toggledIcon}}'{{/if}}
+    title='Went Running' 
+    subHeading='ran 12mi in London' 
+    {{#if toggledBadge}}badge={{toggledBadge}}{{/if}} 
+}}
+        {{/code-block}}         
+    </sourcecode>
+</examples>
+
+<configuration>
+    <icon>{{icon-cog size="2x"}}</icon>
+    <config>
+        <columns>
+            <column>
+                Item Size: <br/>
+                {{ui-button-radio choices='tiny,small,normal,large,huge' selected=size size='small'}}<br/>
+            </column>
+            <column>
+                <div class="row">
+                    <div class="col-xs-4">
+                        subHeading:<br/>
+                        {{ui-toggle-button value=showSubHeading size='small'}}                        
+                    </div>
+                    <div class="col-xs-4">
+                        Badge:<br/>
+                        {{ui-toggle-button value=showBadge size='small'}}                        
+                    </div>
+                    <div class="col-xs-4">
+                        Icon:<br/>
+                        {{ui-toggle-button value=showIcon size='small'}}                        
+                    </div>
+                </div>
+            </column>
+            <column>
+                Style Family:<br/>        
+                {{ui-button-radio choices='bootstrap,flat' selected=style size='small' stretch=true}}<br/>
+            </column>
+        </columns>
+    </config>
+</configuration>

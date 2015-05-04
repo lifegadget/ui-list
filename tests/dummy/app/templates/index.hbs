@@ -1,0 +1,52 @@
+<h3>Introduction</h3>
+<desc>
+    The <strong>ui-list</strong> Ember-CLI addon is a set components meant to help you manage lists in your applications. Lists are everywhere and therefore it 
+    is our selfish hope that this addon is soon everywhere too but regardless of its distribution, here's what it does ...
+</desc>
+
+<h3>Components</h3>
+<desc>
+    The typical usage -- or at least the most compact/simplist usage -- is inline use of the "LIST" components. These in turn will manage the ITEMs and 
+    leverage HELPERs where appropriate. Still you may go into any level of detail you like, click on any of the components below to get
+    design details and interactive examples. Interactive examples? How lucky are you? Yes the world is finally giving back. You're a consumer. 
+    Your job is now clear ... start clicking on components.  
+</desc>
+<desc>
+    <div class="row">
+        <div class="">
+            <div class="col-xs-6 col-sm-4">
+                <heading>LIST</heading>
+                <ul class="components">
+                   <li>{{#link-to 'ui-list'}}<code>ui-list</code>{{/link-to}}</li>            
+                </ul>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <heading>ITEM</heading>
+                <ul class="components">
+                   <li>{{#link-to 'ui-item'}}<code>ui-item</code>{{/link-to}}</li>
+                   <li>{{#link-to 'ui-actionable-item'}}<code>ui-actionable-item</code>{{/link-to}}</li>
+                   <li>{{#link-to 'ui-tabular-item'}}<code>ui-tabular-item</code>{{/link-to}}</li>
+                </ul>        
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <heading>HELPER</heading>
+                <ul class="components">
+                   <li>{{#link-to 'ui-tabular-item'}}<code>tbd</code>{{/link-to}}</li>
+                </ul>        
+            </div>
+        </div>  
+    </div>
+</desc>
+
+
+<h3>Design Diagrams</h3>
+<desc>
+    Here are some high level design diagrams which illustrate the thinking involved in these components:<br/>
+    <centered>
+        {{ui-button-radio choices=designImages selected=designImage}}
+    </centered>
+    <indent>
+        <img src="images/{{designImage}}.png">
+    </indent>
+</desc>
+

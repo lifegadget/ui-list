@@ -1,0 +1,16 @@
+{{#if leftPaneExists}}
+<div class="left {{if twoLinedMessage 'two-lined-message'}}">
+    {{#if iconLeft}}{{ui-icon icon=iconLeft}}{{/if}}
+    {{#if titleLeft}}{{titleLeft}}{{/if}}
+</div>    
+{{/if}}
+<div class="center {{if leftPaneExists 'with-left' 'no-left'}} {{if twoLinedMessage 'two-lined-message'}}">
+    {{#if title}}<span class='title'>{{title}}</span>{{/if}}
+    <span class='sub-heading'><br/>{{subHeading}}</span>
+</div>
+<div class="right {{if badgeRight 'with-badge'}}">
+    {{#if badgeRight}}<span class="badge">{{badgeRight}}</span>{{/if}}   
+    {{#if iconRight}}{{ui-icon class="icon-right" icon=iconRight}}{{/if}}
+</div>
+
+{{yield}}
