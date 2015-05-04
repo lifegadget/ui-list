@@ -3,7 +3,7 @@
 
 ## Overview ##
 
-![ ](docs/images/hl-design.png)
+![ ](tests/dummy/public/images/hl-design.png)
 
 Lists are everywhere and now you've got a companion for your lists. Whether you want sort them, take action on them, 
 or just have a smart way of displaying them. 
