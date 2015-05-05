@@ -20,15 +20,16 @@ export default Ember.Component.extend({
     }
     items = items.contains ? items : A(items);
     return A(items.map( item => {
-      // mapping starts with a copy so any additional properties are maintained
+      // mapping starts with a copy so any additional properties are maintained 
+      // while ensuring that object is an Ember object
       let result = Ember.Object.create(item);
       // check each aspect
       aspects.forEach( aspect => {
-        result.set(aspect, this.setAspect(aspect,null,item));
+        result.set(aspect, this.setAspect(aspect,null,result));
         // check each pane
         panes.forEach( pane => {
           let aspectPane = aspect + Ember.String.capitalize(pane);
-          result.set(aspectPane, this.setAspect(aspect,pane,item));
+          result.set(aspectPane, this.setAspect(aspect,pane,result));
         });
       }); // end aspects
       // iterate global aspects
@@ -39,7 +40,6 @@ export default Ember.Component.extend({
       return result;
     }));
   })),
-  defaultIcon: 'envelope',
   setAspect: function(aspect,pane,dynamicItem) {
     let map = this.get('map') || {};
     let propName = pane ? aspect + Ember.String.capitalize(pane) : aspect;
@@ -52,12 +52,12 @@ export default Ember.Component.extend({
       } else {
         return propValue;
       }
-    } else if(map[aspect] && dynamicItem[map[aspect]]) {
+    } else if(map[aspect] && dynamicItem.get(map[aspect])) {
       // Mapper found a matched property
-      return dynamicItem[map[aspect]];
-    } else if(dynamicItem[propName]) {
+      return dynamicItem.get(map[aspect]);
+    } else if(dynamicItem.get(propName)) {
       // No need for mapper, property exists in object
-      return dynamicItem[propName];
+      return dynamicItem.get(propName);
     } else if(this.get(defaultProp)) {
       return this.get(defaultProp);
     }

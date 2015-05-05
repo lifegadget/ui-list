@@ -53,7 +53,7 @@ export default Ember.Controller.extend({
   })),
   mood: 'default',
   style: 'default',
-  size: 'default'
-  
+  size: 'default',
+  defaultIcon: 'envelope',
 
 });

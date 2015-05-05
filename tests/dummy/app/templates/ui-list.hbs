@@ -15,9 +15,9 @@
         <tr>
             <td class="col-xs-12 col-sm-4 text-center align-middle">
                 {{#if enableStaticChooser}}
-                  {{ui-list items=items map=map size=size mood=mood style=style}}
+                  {{ui-list items=items map=map size=size mood=mood style=style defaultIcon=defaultIcon}}
                 {{else}}
-                  {{ui-list items=items map=map size=size mood=sillyLogic style=style}}
+                  {{ui-list items=items map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon}}
                 {{/if}}
             </td>
             <td class="hidden-xs col-sm-8">
@@ -138,5 +138,13 @@ sillyLogic: function(context) {
         </li>
     </ul>
     
+</desc>
+
+
+<h4>Ember Data</h4>
+
+<desc>
+  Considering a lot of data lists come from Ember-Data, the below example is driven from a fictionalized "activities" model which is very similar in data
+  structure to the last example but illustrates this component working with ED.
 </desc>
 
