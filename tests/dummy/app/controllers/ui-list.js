@@ -6,7 +6,7 @@ export default Ember.Controller.extend({
   queryParams: ['mood','size','style'],
   
   items: [
-    {foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery"},
+    {foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery", badge: 6},
     {foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance"},
     {foo: "Pub", bar: "it's time for some suds", icon: "beer"},
     {foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"},

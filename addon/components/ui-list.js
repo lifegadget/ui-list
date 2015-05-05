@@ -7,8 +7,10 @@ export default Ember.Component.extend({
   layout: layout,
   tagName: 'div',
   classNames: ['ui-list','list-container'],
+  classNameBindings: ['compressed'],
+  compressed: false,
   items: null,
-  _items: on('init', computed('items','map', 'mood', function() {
+  _items: on('init', computed('items.[]','map', 'mood', function() {
     let aspects = [ 'icon', 'image', 'badge', 'title','subHeading' ];
     let panes = [ 'left', 'center', 'right' ];
     let globalAspects = [ 'mood' ];
@@ -37,6 +39,7 @@ export default Ember.Component.extend({
       return result;
     }));
   })),
+  defaultIcon: 'envelope',
   setAspect: function(aspect,pane,dynamicItem) {
     let map = this.get('map') || {};
     let propName = pane ? aspect + Ember.String.capitalize(pane) : aspect;

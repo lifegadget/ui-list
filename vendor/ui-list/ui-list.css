@@ -130,11 +130,11 @@
 }
 /* info */
 .ui-list.mood-info.enabled {
-    color: hsl(194, 66%, 14%);
+    color: hsl(194, 66%, 20%);
     border-color: hsl(194,66%, 61%);
 }
 .ui-list.mood-info.enabled .badge {
-    background-color: hsl(194, 66%, 14%);
+    background-color: hsl(194, 66%, 20%);
 }
 /* warn */
 .ui-list.mood-warning.enabled {
