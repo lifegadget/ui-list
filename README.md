@@ -1,4 +1,4 @@
-# ui-list ![ ](https://travis-ci.org/lifegadget/ui-list.svg)
+# ui-list ![ ](https://travis-ci.org/lifegadget/ui-list.svg) [![npm version](https://badge.fury.io/js/ui-list.svg)](http://badge.fury.io/js/ui-list)
 > List controls for ambitious Ember applications.
 
 ## Overview ##
