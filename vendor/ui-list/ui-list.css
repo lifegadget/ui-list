@@ -12,6 +12,10 @@
     font-size: 1.2em;
     cursor: pointer;
 }
+
+.ui-list.list-container .item {
+    margin: 10px 5px 10px 5px;
+}
 .ui-list.item .left {
     min-width: 45px;
     margin: auto;
@@ -117,34 +121,34 @@
 }
 
 /* DEFAULT MOODS */
-.ui-list.mood-success {
+.ui-list.mood-success.enabled {
     color: hsl(120, 39%, 20%);
     border-color: hsl(120,39%, 40%);
 }
-.ui-list.mood-success .badge {
+.ui-list.mood-success.enabled .badge {
     background-color: hsl(120, 39%, 20%);
 }
 /* info */
-.ui-list.mood-info {
+.ui-list.mood-info.enabled {
     color: hsl(194, 66%, 14%);
     border-color: hsl(194,66%, 61%);
 }
-.ui-list.mood-info .badge {
+.ui-list.mood-info.enabled .badge {
     background-color: hsl(194, 66%, 14%);
 }
 /* warn */
-.ui-list.mood-warning {
+.ui-list.mood-warning.enabled {
     color: hsl(35, 84%, 20%);
     border-color: hsl(35,84%, 62%);
 }
-.ui-list.mood-warning .badge {
+.ui-list.mood-warning.enabled .badge {
     background-color: hsl(35, 84%, 20%);
 }
 /* error */
-.ui-list.mood-error {
+.ui-list.mood-error.enabled {
     color: hsl(2, 84%, 20%);
     border-color: hsl(2,64%, 58%);
 }
-.ui-list.mood-error .badge {
+.ui-list.mood-error.enabled .badge {
     background-color: hsl(2, 64%, 20%);
 }

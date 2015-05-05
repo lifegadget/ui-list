@@ -1,1 +1,12 @@
+{{#each _items as |item|}}
+    {{ui-item 
+        title=item.title 
+        subHeading=item.subHeading
+        icon=item.icon
+        size=size 
+        style=style
+        mood=item.mood
+    }}
+{{/each}}
+
 {{yield}}

@@ -5,7 +5,7 @@ import layout from '../templates/components/ui-item';
 export default Ember.Component.extend({
   layout: layout,
   classNames: ['ui-list', 'item'],
-  classNameBindings: ['_size','_style','disabled', '_mood'],
+  classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood'],
   tagName: 'div',
   style: 'default',
   _style: on('init', computed('style', function() {
@@ -31,5 +31,7 @@ export default Ember.Component.extend({
   skin: computed.alias('style'),
   
   leftPaneExists: computed.or('iconLeft','titleLeft','badgeLeft'),
-  twoLinedMessage: computed.and('title','subHeading')
+  titleExists: computed.notEmpty('title'),
+  subHeadingExists: computed.notEmpty('title'),
+  twoLinedMessage: computed.and('titleExists','subHeadingExists')
 });

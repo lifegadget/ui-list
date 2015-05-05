@@ -50,10 +50,6 @@ h3 code {
 a code:hover {
     background-color: #37AA26;
 }
-code:active {
-    color: white;
-    background-color: #15520B;
-}
 a:hover {
     text-decoration: none;
     cursor: pointer;
