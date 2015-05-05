@@ -1,0 +1,22 @@
+/* FLAT STYLING OVERLAY */
+
+.ui-list.item.style-plus:hover {
+    background-color: #F5F5F5;
+}
+
+/* MOOD */
+.ui-list.style-plus.mood-success:hover {
+    background-color: hsl(120, 39%, 90%);
+}
+/* info */
+.ui-list.style-plus.mood-info:hover {
+    background-color: hsl(194, 66%, 90%);
+}
+/* warn */
+.ui-list.style-plus.mood-warning:hover {
+    background-color: hsl(35, 84%, 90%);
+}
+/* error */
+.ui-list.style-plus.mood-error:hover {
+    background-color: hsl(2, 84%, 90%);
+}

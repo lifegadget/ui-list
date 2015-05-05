@@ -1,0 +1,9 @@
+/* FLAT STYLING OVERLAY */
+
+.ui-list.item.style-flat {
+    border-radius: 0px;
+    border: 1px solid lightgrey;
+    border-left: none;
+    border-right: none;
+    font-size: 1.2em;
+}

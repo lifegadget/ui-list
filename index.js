@@ -13,6 +13,8 @@ module.exports = {
     );
     // component CSS
     app.import('vendor/ui-list/ui-list.css');
+    app.import('vendor/ui-list/ui-list-plus.css');
+    app.import('vendor/ui-list/ui-list-flat.css');
     
     // animations
     var defaultAnimations = [

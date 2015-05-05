@@ -10,6 +10,7 @@
     border-radius: 5px;
     border: 1px solid lightgrey;
     font-size: 1.2em;
+    cursor: pointer;
 }
 .ui-list.item .left {
     min-width: 45px;
@@ -27,7 +28,7 @@
     flex-grow: 4;
     margin: auto;
     text-align: left;
-    padding-left: 5px;
+    padding-left: 8px;
 }
 
 .ui-list.item .two-lined-message .title {
@@ -50,7 +51,6 @@
 .ui-list.item .right.with-badge {
     min-width: 60px;
 }
-
 .ui-list.item .right .badge + .icon-right {
     padding-right: 5px;
 }
@@ -70,9 +70,81 @@
 .ui-list.item.large {
     font-size: 1.5em;
 }
+
 .ui-list.item.huge {
     font-size: 2em;
 }
 .ui-list.item.huge .center.no-left {
     padding-left: 15px;
+}
+
+/* BADGE ADJUSTMENTS */
+.ui-list .badge {
+    position: relative;
+    top: -2px;
+}
+.ui-list.item.tiny .badge {
+    font-size: 9px;
+    font-weight: 200;
+}
+.ui-list.item.small .badge {
+    font-size: 11px;
+    font-weight: 200;
+}
+.ui-list.item.large .badge {
+    font-size: 16px;
+}
+.ui-list.item.huge .badge {
+    font-size: 18px;
+}
+
+/* DISABLED STYLING */
+.ui-list.disabled {
+    background-color: #F2F2F2;
+    border-color: darkgrey;
+    border-style: dashed;
+    cursor: not-allowed;
+}
+
+.ui-list.disabled .ui-icon {
+    color: lightgrey;
+}
+.ui-list.disabled .badge {
+    background-color: lightgrey;
+}
+.ui-list.disabled .title {
+    color: #686868;
+}
+
+/* DEFAULT MOODS */
+.ui-list.mood-success {
+    color: hsl(120, 39%, 20%);
+    border-color: hsl(120,39%, 40%);
+}
+.ui-list.mood-success .badge {
+    background-color: hsl(120, 39%, 20%);
+}
+/* info */
+.ui-list.mood-info {
+    color: hsl(194, 66%, 14%);
+    border-color: hsl(194,66%, 61%);
+}
+.ui-list.mood-info .badge {
+    background-color: hsl(194, 66%, 14%);
+}
+/* warn */
+.ui-list.mood-warning {
+    color: hsl(35, 84%, 20%);
+    border-color: hsl(35,84%, 62%);
+}
+.ui-list.mood-warning .badge {
+    background-color: hsl(35, 84%, 20%);
+}
+/* error */
+.ui-list.mood-error {
+    color: hsl(2, 84%, 20%);
+    border-color: hsl(2,64%, 58%);
+}
+.ui-list.mood-error .badge {
+    background-color: hsl(2, 64%, 20%);
 }

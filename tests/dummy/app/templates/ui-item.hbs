@@ -3,34 +3,8 @@
 <h4>Overview</h4>
 <div class="row">
     <desc>
-        The <code>ui-item</code> is the default list item component and it's key properties are:
-    </desc>
-    <desc>
-        <ul>
-            <li>
-                type
-                <ul>
-                    <li>This gives a functional distinction for the list</li>
-                    <li>The clearest effect of a type is which Item components will be used but it can also effect</li>
-                    <li>By default this "type" defaults to "simple" which </li>
-                </ul>
-            </li>
-            <li>
-                style
-                <ul>
-                    <li>allows the user to choose from a variety of visual style familes in CSS</li>
-                    <li>the style can be related to a "type" but in most cases they're independant actors</li>
-                </ul>
-            </li>
-            <li>
-                size
-                <ul>
-                    <li>amongst other things this gives us to CSS psuedo events to work with <code>valid</code> and <code>invalid</code></li>
-                    <li>more importantly it provides context to browsers so they can make our lives better with better keyboards, etc.</li>
-                </ul>
-              </li>
-        </ul>
-        
+        The <code>ui-item</code> is the default list item. It responds to size, mood/color, skin/style properties as well as allowing for the setting of 
+        various "aspects" including icon, image, title, subHeading, and badge.
     </desc>
 </div>
 
@@ -63,17 +37,18 @@
     </ul>
 </desc>
 
-<h4>Sizing and Style Example</h4>
+<h4>Dynamic Example: Size, Skin, and Mood</h4>
 <examples>
     <widget class="wide">
-        {{ui-item icon=toggledIcon title='Went Running' subHeading=toggledSubHeading badge=toggledBadge size=size}}
+        {{ui-item icon=toggledIcon title='Went Running' subHeading=toggledSubHeading badge=toggledBadge size=size disabled=isDisabled style=style mood=mood}}
     </widget>
     <sourcecode>
         {{#code-block language="handlebars" poll=150}}
 \{{ui-item {{#if toggledIcon}}icon='{{toggledIcon}}'{{/if}}
     title='Went Running' 
     subHeading='ran 12mi in London' 
-    {{#if toggledBadge}}badge={{toggledBadge}}{{/if}} 
+    {{#if toggledBadge}}badge={{toggledBadge}}
+    {{/if}}{{#if styleNotDefault}}style='{{style}}'{{/if}}
 }}
         {{/code-block}}         
     </sourcecode>
@@ -85,28 +60,38 @@
         <columns>
             <column>
                 Item Size: <br/>
-                {{ui-button-radio choices='tiny,small,normal,large,huge' selected=size size='small'}}<br/>
+                {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
+                Mood: <br/>
+                {{ui-button-radio choices='default,success,info,warning,error' selected=mood size='small' defaultValue='default'}}<br/>
             </column>
             <column>
                 <div class="row">
-                    <div class="col-xs-4">
-                        subHeading:<br/>
-                        {{ui-toggle-button value=showSubHeading size='small'}}                        
+                    Toggles<br/>                  
+                    <div class="col-xs-6">
+                        {{ui-toggle-button value=showSubHeading size='small'}} - SUB HEAD
+                        <p>&nbsp;</p>                      
+                        {{ui-toggle-button value=isDisabled size='small'}} - DISABLED <br/>
                     </div>
-                    <div class="col-xs-4">
-                        Badge:<br/>
-                        {{ui-toggle-button value=showBadge size='small'}}                        
-                    </div>
-                    <div class="col-xs-4">
-                        Icon:<br/>
-                        {{ui-toggle-button value=showIcon size='small'}}                        
+                    <div class="col-xs-6">
+                        {{ui-toggle-button value=showBadge size='small'}} - BADGE   <br/>
+                        <p>&nbsp;</p>                      
+                        {{ui-toggle-button value=showIcon size='small'}} - ICON<br/>
                     </div>
                 </div>
             </column>
             <column>
-                Style Family:<br/>        
-                {{ui-button-radio choices='bootstrap,flat' selected=style size='small' stretch=true}}<br/>
+                Skin / Style Family:<br/>        
+                {{ui-button-radio choices='default,plus,flat' selected=style size='small' stretch=true}}<br/>
             </column>
         </columns>
     </config>
 </configuration>
+
+<desc>
+    Things to note:
+    <ul>
+        <li>there is a CSS property <code>two-lined-message</code> which is turned on when text elements fill two line items (e.g., both 'title' and 'sub-heading' are set); this allows the size of the left most icon to be adjusted based on this property</li>
+        <li>left padding is increased for center pane if there is no content in the left-pane, this leverages the <code>with-left</code> and <code>no-left</code> CSS properties</li>
+        <li>you can use either <code>style</code> or <code>skin</code> properties for setting the skin/style family as they are aliased to the same root</li>
+    </ul>
+</desc>

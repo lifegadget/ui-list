@@ -3,6 +3,8 @@ const { computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
 
 export default Ember.Controller.extend({
 
+  queryParams: ['mood','size','style'],
+  
   toggledBadge: on('init',computed('showBadge', function() {
     return this.get('showBadge') ? 4 : null;
   })),
@@ -15,7 +17,9 @@ export default Ember.Controller.extend({
   toggledSubHeading: on('init',computed('showSubHeading', function() {
     return this.get('showSubHeading') ? 'ran 12mi in London' : null;
   })),
-  size: 'normal',
+  mood: 'default',
+  style: 'default',
+  size: 'default'
   
 
 });
