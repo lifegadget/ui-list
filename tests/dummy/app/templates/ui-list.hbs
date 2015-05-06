@@ -6,20 +6,122 @@
         The <code>ui-list</code> is the default list container. It does nothing more than list items with very basic styling for the container itself, 
         it's main function is to proxy properties into the items it contains as well manage actions coming out of them.
     </desc>
-</div>
+    <desc>
+      To understand <code>ui-list</code> as either an inline or block component you must understand it's parameters in terms of their scope:
+    </desc>
+    <desc>
+      <table class="row">
+        <tr>
+          <td class="col-xs-12 col-sm-6">
+            <heading>LIST SCOPE</heading>
+          </td>
+          <td class="col-xs-12 col-sm-6">
+            <heading>ITEM SCOPE</heading>
+          </td>
+        </tr>
+        <tr>
+          <td style="vertical-align:top">
+            <ul>
+              <li>
+                <code>items</code> 
+                <ul>
+                  <li>this is the array/list data payload which will then be distributed to each item</li>
+                </ul>
+              </li>
+              <li>
+                <code>map</code> 
+                <ul>
+                  <li>
+                    if the properties on the inputset don't match up to the pane-areas in an item the mapper can map appropriate names
+                  </li>
+                  <li>
+                    if you want to provide a function within the map you can provide cross-item or intra-item business rules to arrive
+                    at property values
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <code>size</code> 
+                <ul>
+                  <li>the size of items should always be consistent by item</li>
+                  <li>this doesn't prevent the item -- either through a style family or otherwise -- in adjusting its size</li>
+                  <li>
+                    as a "for instance" it could be imagined that an <em>active</em> item might be bigger, this is fine but the 'size' 
+                    property would remain static and instead provide a macro-level control on size/scale to any underlying effects
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <code>style</code> 
+                <ul>
+                  <li>all items should maintain the same style family</li>
+                </ul>
+              </li>
+              <li>
+                <code>type</code> 
+                <ul>
+                  <li>specifies the component-type of the items; all items must be of same type</li>
+                  <li>
+                    for instance, if you set <em>type</em> to <strong>tabular</strong> then each item would be of component 
+                    type <code>ui-tabular-item</code>
+                  </li>
+                  <li>by default type is null and therefore the item component used is <code>ui-item</code></li>
+                </ul>
+              </li>
+              <li>
+                <code>actionChoices</code> 
+                <ul>
+                  <li>specifies an array of actions that each item will provide</li>
+                  <li>
+                    all items should expose the same actions but have the right to display or hide them appropriate to their specific implementation
+                  </li>
+                  <li>the base <code>ui-item</code> does not support actions</li>
+                </ul>
+              </li>
+            </ul>
+          </td>
+          <td class="col-xs-4" style="vertical-align:top">
+            <ul>
+              <li>All <strong>AspectPanes</strong>
+                <ul>
+                  <li>each Aspect (e.g., icon, image, title), or </li>
+                  <li>each Aspect with an explicit Pane (e.g., iconRight, badgeLeft, etc.)</li>
+                </ul>
+              </li>
+              <li><code>mood</code>
+                <ul>
+                  <li>often used to visually segment items based on some sort of business logic</li>
+                  <li>in the example below try setting mood to the function <code>sillyLogic</code> to see this in action</li>
+                </ul>
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </table>
 
+      <note>
+          <strong>Note:</strong> 
+          Currently the only <em>type</em> implemented is the basic <strong>ui-item</strong>. Also, the concept of <em>actions</em> are not implemented 
+          in the basic item type. 
+      </note>
+
+    </desc>
+</div>
+{{! ------------------------------------------------------------------------------------------------------------------------- }}
 <h4>Example</h4>
 
 <div class="examples">
     <table class="row">
         <tr>
-            <td class="col-xs-12 col-sm-4 text-center align-middle">
+            <td class="col-xs-12 col-sm-4 text-center align-top">
+              <p>&nbsp;</p>
                 {{#if enableStaticChooser}}
                   {{ui-list items=items map=map size=size mood=mood style=style defaultIcon=defaultIcon}}
                 {{else}}
                   {{ui-list items=items map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon}}
                 {{/if}}
             </td>
+{{! ------------------------------------------------------------------------------------------------------------------------- }}
             <td class="hidden-xs col-sm-8">
                 <heading>CONTAINER PROPERTIES</heading>
                 
@@ -71,6 +173,7 @@ sillyLogic: function(context) {
         </tr>
     </table>
 </div>
+{{! ------------------------------------------------------------------------------------------------------------------------- }}
 <p>&nbsp;</p>
 <configuration>
     <icon>{{icon-cog size="2x"}}</icon>
@@ -79,6 +182,7 @@ sillyLogic: function(context) {
             <column>
                 List Size: <br/>
                 {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
+                condensed: {{ui-toggle-button value=condensed on='condensed' off='normal' size='small'}}
             </column>
             <column>
                 Mood: <br/>
@@ -95,6 +199,7 @@ sillyLogic: function(context) {
         </columns>
     </config>
 </configuration>
+{{! ------------------------------------------------------------------------------------------------------------------------- }}
 
 <desc>
     <strong>Notes on ui-list example:</strong>
@@ -137,14 +242,43 @@ sillyLogic: function(context) {
             by the property by the same name on the <code>ui-list</code> component.
         </li>
     </ul>
-    
 </desc>
 
 
 <h4>Ember Data</h4>
-
 <desc>
-  Considering a lot of data lists come from Ember-Data, the below example is driven from a fictionalized "activities" model which is very similar in data
-  structure to the last example but illustrates this component working with ED.
+  Considering a lot of data lists come from Ember-Data the example below loads all the data from above into a model called "Activity" and then works in precisely 
+  the same way. Check out the data in the Ember Inspector and play around with it to see it update:
 </desc>
+
+<examples>
+  <widget class='wide'>
+    {{#if enableStaticChooser}}
+      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon}}
+    {{else}}
+      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon}}
+    {{/if}}
+  </widget>
+  <sourcecode>
+  {{#code-block language="handlebars" poll=100}}
+    
+
+
+
+    
+\{{ui-list 
+  items=model.content 
+  map=map
+  {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
+  size="{{size}}"
+  style="{{style}}"
+}}
+
+
+
+
+
+    {{/code-block}}
+  </sourcecode>
+</examples>
 

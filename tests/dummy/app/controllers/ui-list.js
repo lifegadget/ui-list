@@ -35,7 +35,8 @@ export default Ember.Controller.extend({
       
     return mood;
   },
-  enableStaticChooser: on('didInsertElement',computed('moodStrategy', function() {
+  moodStrategy: 'static',
+  enableStaticChooser: on('init',computed('moodStrategy', function() {
     return this.get('moodStrategy') === 'static';
   })),
   
@@ -55,5 +56,14 @@ export default Ember.Controller.extend({
   style: 'default',
   size: 'default',
   defaultIcon: 'envelope',
+  
+  loadEmberData: on('init', function() {
+    let items = A(this.get('items'));
+    let index = 1;
+    console.log('inserting to ED: %o', items);
+    items.forEach( item => {
+      this.store.push('activity', {id: index++, foo: item.foo, bar: item.bar, icon: item.icon, badge: item.badge});
+    })
+  })
 
 });

@@ -45,8 +45,8 @@
     <sourcecode>
         {{#code-block language="handlebars" poll=150}}
 \{{ui-item {{#if toggledIcon}}icon='{{toggledIcon}}'{{/if}}
-    title='Went Running' 
-    subHeading='ran 12mi in London' 
+    title='Went Running' {{#if toggledSubHeading}}
+    subHeading='{{toggledSubHeading}}' {{/if}}
     {{#if toggledBadge}}badge={{toggledBadge}}
     {{/if}}style='{{style}}'
 }}

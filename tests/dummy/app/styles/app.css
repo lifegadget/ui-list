@@ -26,6 +26,10 @@ h2 {
 	margin-bottom: 3rem;
 }
 
+.align-top {
+    vertical-align: top;
+}
+
 .demo-table td {
 	padding-right: 1rem;
 	padding-top: .5rem;

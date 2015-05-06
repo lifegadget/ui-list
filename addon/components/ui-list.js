@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import WatchAll from '../mixins/watch-all';
 const { computed, observer, $, A, run, on, typeOf } = Ember;    // jshint ignore:line
 
 import layout from '../templates/components/ui-list';
@@ -10,7 +11,22 @@ export default Ember.Component.extend({
   classNameBindings: ['compressed'],
   compressed: false,
   items: null,
-  _items: on('init', computed('items.[]','map', 'mood', function() {
+  items2: on('init', computed('items','items.[]',function() {
+    return this.get('items').map( item => {
+      let mapper = this.get('map');
+      if(!mapper) {
+        return item;
+      } else {
+        Ember.keys(mapper).forEach( (key) => {
+          console.log('setting items %s property to alias of "%s"', key, mapper[key]);
+          item[key] = computed.alias(item[mapper[key]]);
+        });
+        return item;
+      }
+    })
+  })),
+  _items: on('didInsertElement', computed('items.[]', 'items.@each._propertyChanged', 'map', 'mood', function() { 
+    console.log('changed _items array');
     let aspects = [ 'icon', 'image', 'badge', 'title','subHeading' ];
     let panes = [ 'left', 'center', 'right' ];
     let globalAspects = [ 'mood' ];
@@ -22,7 +38,9 @@ export default Ember.Component.extend({
     return A(items.map( item => {
       // mapping starts with a copy so any additional properties are maintained 
       // while ensuring that object is an Ember object
-      let result = Ember.Object.create(item);
+      let WatchedObject = Ember.Object.extend(WatchAll);
+      let result = item.set ? item : WatchedObject.create(item);
+      console.log('result is set [%s,%s]: %o', result, result.get('_changedProperty'), result.get('_propertyChanged'));
       // check each aspect
       aspects.forEach( aspect => {
         result.set(aspect, this.setAspect(aspect,null,result));
@@ -45,11 +63,12 @@ export default Ember.Component.extend({
     let propName = pane ? aspect + Ember.String.capitalize(pane) : aspect;
     let propValue = this.get(propName);
     let defaultProp = 'default' + Ember.String.capitalize(propName);
-    // static properties always win
     if(propValue) {
       if(typeOf(propValue) === 'function') {
-        return propValue(dynamicItem);
+        // run business logic to determine value (item,list)
+        return propValue(dynamicItem,this.get('items'));
       } else {
+        // static properties across all items
         return propValue;
       }
     } else if(map[aspect] && dynamicItem.get(map[aspect])) {

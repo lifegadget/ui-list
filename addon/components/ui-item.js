@@ -32,6 +32,6 @@ export default Ember.Component.extend({
   
   leftPaneExists: computed.or('iconLeft','titleLeft','badgeLeft'),
   titleExists: computed.notEmpty('title'),
-  subHeadingExists: computed.notEmpty('title'),
+  subHeadingExists: computed.notEmpty('subHeading'),
   twoLinedMessage: computed.and('titleExists','subHeadingExists')
 });
