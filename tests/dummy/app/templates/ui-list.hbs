@@ -19,6 +19,7 @@
             <heading>ITEM SCOPE</heading>
           </td>
         </tr>
+        {{! ----------------------------------------------------------- }}
         <tr>
           <td style="vertical-align:top">
             <ul>
@@ -32,12 +33,9 @@
                 <code>map</code> 
                 <ul>
                   <li>
-                    if the properties on the inputset don't match up to the pane-areas in an item the mapper can map appropriate names
+                    if the properties on the input object don't match up to the pane-areas the mapper will do a simple property mapping
                   </li>
-                  <li>
-                    if you want to provide a function within the map you can provide cross-item or intra-item business rules to arrive
-                    at property values
-                  </li>
+                  <li>see how <code>foo</code> and <code>bar</code> are mapped to <em>title</em> and <em>subHeading</em> panes in the example below</li>
                 </ul>
               </li>
               <li>
@@ -80,18 +78,20 @@
               </li>
             </ul>
           </td>
+          {{! ----------------------------------------------------------- }}
           <td class="col-xs-4" style="vertical-align:top">
             <ul>
+              <li><code>mood</code>
+                <ul>
+                  <li>often used to visually segment items based on some sort of business logic</li>
+                  <li>yes it could be set statically, but typically it be run through a business rule</li>
+                  <li>in the example below notice how mood can be mapped to the <strong>sillyLogic</strong> function</li>
+                </ul>
+              </li>
               <li>All <strong>AspectPanes</strong>
                 <ul>
                   <li>each Aspect (e.g., icon, image, title), or </li>
                   <li>each Aspect with an explicit Pane (e.g., iconRight, badgeLeft, etc.)</li>
-                </ul>
-              </li>
-              <li><code>mood</code>
-                <ul>
-                  <li>often used to visually segment items based on some sort of business logic</li>
-                  <li>in the example below try setting mood to the function <code>sillyLogic</code> to see this in action</li>
                 </ul>
               </li>
             </ul>
@@ -116,9 +116,9 @@
             <td class="col-xs-12 col-sm-4 text-center align-top">
               <p>&nbsp;</p>
                 {{#if enableStaticChooser}}
-                  {{ui-list items=items map=map size=size mood=mood style=style defaultIcon=defaultIcon}}
+                  {{ui-list items=items map=map size=size mood=mood style=style defaultIcon=defaultIcon compressed=compressed}}
                 {{else}}
-                  {{ui-list items=items map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon}}
+                  {{ui-list items=items map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon compressed=compressed}}
                 {{/if}}
             </td>
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
@@ -128,7 +128,7 @@
                 {{#code-block language="js"}}
 items: [
   {foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery", badge: 6},
-  {foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance"},
+  {foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 1},
   {foo: "Pub", bar: "it's time for some suds", icon: "beer"},
   {foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"},
   {foo: "Had Coffee", bar: "need to chill out after that beer", icon: "coffee"}
@@ -137,25 +137,8 @@ map: {
   title: 'foo',
   subHeading: 'bar'
 },
-sillyLogic: function(context) {
-  let things = [
-    {type: goodThings, value: ['Pub']},
-    {type: badThings, value: ['Hospital']},
-    {type: dubiousThings, value: ['Groceries','Had Coffee']}
-  ];
-  let moodRing = { 
-    goodThings: 'success', badThings: 'error', dubiousThings: 'warning' 
-  };
-  
-  things.forEach( thing => {
-    if(context.title && Ember.A(thing.value).contains(context.title)) {
-      return moodRing[thing.type];
-    }
-  });
-  
-  return null;
-},
                 {{/code-block}}
+                {{code-reference ref=sillyLogic}}
                 
                 <heading>HANDLEBARS TEMPLATE</heading>
                 
@@ -165,7 +148,8 @@ sillyLogic: function(context) {
   map=map
   {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
   size="{{size}}"
-  style="{{style}}"
+  style="{{style}}"{{#if compressed}}
+  compressed=true{{/if}}
 }}
                 {{/code-block}}
                 
@@ -182,7 +166,7 @@ sillyLogic: function(context) {
             <column>
                 List Size: <br/>
                 {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
-                condensed: {{ui-toggle-button value=condensed on='condensed' off='normal' size='small'}}
+                compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}
             </column>
             <column>
                 Mood: <br/>
@@ -254,9 +238,9 @@ sillyLogic: function(context) {
 <examples>
   <widget class='wide'>
     {{#if enableStaticChooser}}
-      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon}}
+      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon  compressed=compressed}}
     {{else}}
-      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon}}
+      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed}}
     {{/if}}
   </widget>
   <sourcecode>
@@ -271,7 +255,8 @@ sillyLogic: function(context) {
   map=map
   {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
   size="{{size}}"
-  style="{{style}}"
+  style="{{style}}"{{#if compressed}}
+  compressed=true{{/if}}
 }}
 
 

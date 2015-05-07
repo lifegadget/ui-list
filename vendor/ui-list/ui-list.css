@@ -16,6 +16,11 @@
 .ui-list.list-container .item {
     margin: 10px 5px 10px 5px;
 }
+.ui-list.list-container.compressed .item {
+    margin: 5px 5px 5px 5px;
+}
+
+
 .ui-list.item .left {
     min-width: 45px;
     margin: auto;

@@ -3,11 +3,18 @@ const { computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
 
 export default Ember.Controller.extend({
 
-  queryParams: ['mood','size','style'],
+  queryParams: ['mood','size','style','compressed'],
   
+  emberItems: [
+    Ember.Object.create({foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery", badge: 6}),
+    Ember.Object.create({foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 1}),
+    Ember.Object.create({foo: "Pub", bar: "it's time for some suds", icon: "beer"}),
+    Ember.Object.create({foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"}),
+    Ember.Object.create({foo: "Had Coffee", bar: "need to chill out after that beer", icon: "coffee"})
+  ],
   items: [
     {foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery", badge: 6},
-    {foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance"},
+    {foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 1},
     {foo: "Pub", bar: "it's time for some suds", icon: "beer"},
     {foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"},
     {foo: "Had Coffee", bar: "need to chill out after that beer", icon: "coffee"}
@@ -16,24 +23,10 @@ export default Ember.Controller.extend({
     title: 'foo',
     subHeading: 'bar'
   },
-  sillyLogic: function(context) {
-    let mood = null;
-    let things = [
-      {type: 'goodThings', value: ['Pub']},
-      {type: 'badThings', value: ['Hospital']},
-      {type: 'dubiousThings', value: ['Groceries','Had Coffee']}
-    ];
-    let moodRing = { 
-      goodThings: 'success', badThings: 'error', dubiousThings: 'warning' 
-    };
-    
-    things.forEach( thing => {
-      if(context.title && Ember.A(thing.value).contains(context.title)) {
-        mood = moodRing[thing.type];
-      }
-    });
-      
-    return mood;
+  sillyLogic: function(item,list) {
+    let badge = item.get('badge');
+    let moodiness = badge && badge > 5 ? 'error' : 'warning';
+    return badge ? moodiness : null;
   },
   moodStrategy: 'static',
   enableStaticChooser: on('init',computed('moodStrategy', function() {
@@ -55,12 +48,12 @@ export default Ember.Controller.extend({
   mood: 'default',
   style: 'default',
   size: 'default',
+  compressed: false,
   defaultIcon: 'envelope',
   
   loadEmberData: on('init', function() {
     let items = A(this.get('items'));
     let index = 1;
-    console.log('inserting to ED: %o', items);
     items.forEach( item => {
       this.store.push('activity', {id: index++, foo: item.foo, bar: item.bar, icon: item.icon, badge: item.badge});
     })

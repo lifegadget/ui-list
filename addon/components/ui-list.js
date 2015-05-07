@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import WatchAll from '../mixins/watch-all';
-const { computed, observer, $, A, run, on, typeOf } = Ember;    // jshint ignore:line
+import ObserveAll from '../mixins/observe-all';
+const { computed, observer, $, A, run, on, typeOf, keys } = Ember;    // jshint ignore:line
 
 import layout from '../templates/components/ui-list';
 
@@ -10,38 +10,52 @@ export default Ember.Component.extend({
   classNames: ['ui-list','list-container'],
   classNameBindings: ['compressed'],
   compressed: false,
-  items: null,
-  items2: on('init', computed('items','items.[]',function() {
-    return this.get('items').map( item => {
-      let mapper = this.get('map');
-      if(!mapper) {
+  items: on('init',computed(function(key, value, previousValue) {
+    // setter
+    if(arguments.length > 1) {
+      let WatchedObject = Ember.Object.extend(ObserveAll).create();
+      return A(value).map(item => { 
+        item = item.set ? item : Ember.Object.create(item);
+        // add observers for set properties (allowing for change detection of _items)
+        run.once( () => {
+          WatchedObject.observeAll(item, (key) => {
+            // do something?
+          });                
+        })
         return item;
-      } else {
-        Ember.keys(mapper).forEach( (key) => {
-          console.log('setting items %s property to alias of "%s"', key, mapper[key]);
-          item[key] = computed.alias(item[mapper[key]]);
-        });
-        return item;
-      }
+      });
+    }
+    // getter / initial value
+    return A({});
+  })),
+  itemsObserveAll: on('afterRender', computed('items.[]', function() {
+    let items = this.get('items');
+    items.forEach( item => {
     })
   })),
-  _items: on('didInsertElement', computed('items.[]', 'items.@each._propertyChanged', 'map', 'mood', function() { 
-    console.log('changed _items array');
+  // _items mirrors the items array and then adorns it with:
+  //   a) the "map" is used to created computed aliases
+  //   b) in those properties who have business logic / functions, the logic is executed to produce a scalar result
+  // this array will be updated whenever a change is detected in 'items'
+  _items: on('didInsertElement', computed('items.[]', 'items.@each._propertyChanged', 'map', 'mood',  function() { 
     let aspects = [ 'icon', 'image', 'badge', 'title','subHeading' ];
     let panes = [ 'left', 'center', 'right' ];
-    let globalAspects = [ 'mood' ];
-    let {items, map} = this.getProperties('items','map');
+    let itemProproperties = [ 'mood' ]; // global means global to an item (aka, not constrained to a pane)
+    let items = this.get('items');
+    let mapper = this.get('map');
     if(!items) {
       items = new A([]);
     }
     items = items.contains ? items : A(items);
     return A(items.map( item => {
-      // mapping starts with a copy so any additional properties are maintained 
-      // while ensuring that object is an Ember object
-      let WatchedObject = Ember.Object.extend(WatchAll);
-      let result = item.set ? item : WatchedObject.create(item);
-      console.log('result is set [%s,%s]: %o', result, result.get('_changedProperty'), result.get('_propertyChanged'));
-      // check each aspect
+      let result = item;
+      // set aliases for mapped properties
+      if(mapper) {
+        Ember.keys(mapper).forEach(prop => {
+          Ember.defineProperty(result, prop, computed.alias(mapper[prop]));
+        }); 
+      } 
+      // iterate through Aspects (and AspectPanes)
       aspects.forEach( aspect => {
         result.set(aspect, this.setAspect(aspect,null,result));
         // check each pane
@@ -49,39 +63,36 @@ export default Ember.Component.extend({
           let aspectPane = aspect + Ember.String.capitalize(pane);
           result.set(aspectPane, this.setAspect(aspect,pane,result));
         });
-      }); // end aspects
-      // iterate global aspects
-      globalAspects.forEach( aspect => {
-        result.set(aspect, this.setAspect(aspect,null,result));
+      });
+      // iterate item-scoped properties
+      itemProproperties.forEach( itemProperty => {
+        result.set(itemProperty, this.setAspect(itemProperty,null,result));
       });
       
       return result;
     }));
   })),
   setAspect: function(aspect,pane,dynamicItem) {
-    let map = this.get('map') || {};
     let propName = pane ? aspect + Ember.String.capitalize(pane) : aspect;
     let propValue = this.get(propName);
     let defaultProp = 'default' + Ember.String.capitalize(propName);
+    let aspectValue = null;
     if(propValue) {
-      if(typeOf(propValue) === 'function') {
-        // run business logic to determine value (item,list)
-        return propValue(dynamicItem,this.get('items'));
-      } else {
-        // static properties across all items
-        return propValue;
-      }
-    } else if(map[aspect] && dynamicItem.get(map[aspect])) {
-      // Mapper found a matched property
-      return dynamicItem.get(map[aspect]);
+      aspectValue = propValue;
     } else if(dynamicItem.get(propName)) {
-      // No need for mapper, property exists in object
-      return dynamicItem.get(propName);
+      aspectValue = dynamicItem.get(propName);
     } else if(this.get(defaultProp)) {
-      return this.get(defaultProp);
+      aspectValue = this.get(defaultProp);
+    } else {
+      aspectValue = null;
     }
     
-    return null;
+    if(typeOf(aspectValue) === 'function') {
+      // run business logic to determine value
+      aspectValue = aspectValue(dynamicItem,this.get('items'));
+    } 
+    
+    return aspectValue;
   },
   mood: null
 });
