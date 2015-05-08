@@ -27,12 +27,12 @@ export default Ember.Component.extend(Ember.SortableMixin,{
   items: on('init',computed(function(key, value, previousValue) {
     // setter
     if(arguments.length > 1) {
-      let WatchedObject = Ember.Object.extend(ObserveAll).create();
+      let watcher = Ember.Object.extend(ObserveAll).create();
       return A(value).map(item => { 
         item = item.set ? item : Ember.Object.create(item);
         // add observers for set properties (allowing for change detection of _items)
         run.once( () => {
-          WatchedObject.observeAll(item, (key) => {
+          watcher.observeAll(item, (key) => {
             console.log('detected change to %s', key);
           });                
         })

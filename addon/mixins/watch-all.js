@@ -24,8 +24,9 @@ var ObserveAll =  Mixin.create({
       console.info('An object passed into addObservers() is not "observer aware"; object observers will not be setup: %o', object);
       return false;
     }
-    // iterate properties of sent in object 
+    // iterate properties of sent in object
     keys(object).forEach( key => {
+      console.log('processing: %o', key);
       let objectKey = object.get(key);
       if(typeOf(objectKey) !== 'function' && key.substr(0,1) !== '_') {
         object.set('_propertyChanged',false);
@@ -36,7 +37,7 @@ var ObserveAll =  Mixin.create({
             if(callback) {
               callback(key);
             }            
-          })
+          });
         });
       }
     });    
