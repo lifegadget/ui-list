@@ -30,11 +30,13 @@ var ObserveAll =  Mixin.create({
       if(typeOf(objectKey) !== 'function' && key.substr(0,1) !== '_') {
         object.set('_propertyChanged',false);
         object.addObserver(key, () => {
-          object.toggleProperty('_propertyChanged');
-          object.set('_changedProperty', key);
-          if(callback) {
-            callback(key);            
-          }
+          run.next( () => {
+            object.toggleProperty('_propertyChanged');
+            object.set('_changedProperty', key);
+            if(callback) {
+              callback(key);
+            }            
+          })
         });
       }
     });    

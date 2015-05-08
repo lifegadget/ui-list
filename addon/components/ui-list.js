@@ -4,7 +4,21 @@ const { computed, observer, $, A, run, on, typeOf, keys } = Ember;    // jshint 
 
 import layout from '../templates/components/ui-list';
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(Ember.SortableMixin,{
+  queryParams: ['sortProperties', 'sortAscending'],
+  sort: null,
+  sortProperties: on('init', computed('sort', function() {
+    let sort = this.get('sort');
+    if(typeOf(sort) === 'string') {
+      sort.split(',');
+      if(typeOf(sort) === 'string') {
+        sort = [sort];
+      }
+    }
+    
+    return typeOf(sort) === 'array' ? sort : null;
+  })),
+  sortAscending: true,
   layout: layout,
   tagName: 'div',
   classNames: ['ui-list','list-container'],
@@ -19,7 +33,7 @@ export default Ember.Component.extend({
         // add observers for set properties (allowing for change detection of _items)
         run.once( () => {
           WatchedObject.observeAll(item, (key) => {
-            // do something?
+            console.log('detected change to %s', key);
           });                
         })
         return item;
@@ -28,25 +42,18 @@ export default Ember.Component.extend({
     // getter / initial value
     return A({});
   })),
-  itemsObserveAll: on('afterRender', computed('items.[]', function() {
-    let items = this.get('items');
-    items.forEach( item => {
-    })
-  })),
   // _items mirrors the items array and then adorns it with:
   //   a) the "map" is used to created computed aliases
   //   b) in those properties who have business logic / functions, the logic is executed to produce a scalar result
   // this array will be updated whenever a change is detected in 'items'
-  _items: on('didInsertElement', computed('items.[]', 'items.@each._propertyChanged', 'map', 'mood',  function() { 
+  content: on('didInsertElement', computed('items.[]', 'items.@each._propertyChanged', 'map', 'mood',  function() { 
+    console.log('reprocessing _items');
     let aspects = [ 'icon', 'image', 'badge', 'title','subHeading' ];
     let panes = [ 'left', 'center', 'right' ];
-    let itemProproperties = [ 'mood' ]; // global means global to an item (aka, not constrained to a pane)
+    let itemProproperties = [ 'mood' ]; 
     let items = this.get('items');
+    console.log('items: %o', items);
     let mapper = this.get('map');
-    if(!items) {
-      items = new A([]);
-    }
-    items = items.contains ? items : A(items);
     return A(items.map( item => {
       let result = item;
       // set aliases for mapped properties
@@ -94,5 +101,5 @@ export default Ember.Component.extend({
     
     return aspectValue;
   },
-  mood: null
+  mood: null,
 });

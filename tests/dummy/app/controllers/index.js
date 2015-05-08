@@ -6,7 +6,8 @@ export default Ember.Controller.extend({
   designImage: 'hl-design',
   
   designImages: [
-    {id: 'hl-design', name: 'HL Design'}
+    {id: 'hl-design', name: 'HL Design'},
+    {id: 'items-transform', name: 'Content Preparation'},
   ]
 
 });

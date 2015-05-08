@@ -116,9 +116,19 @@
             <td class="col-xs-12 col-sm-4 text-center align-top">
               <p>&nbsp;</p>
                 {{#if enableStaticChooser}}
-                  {{ui-list items=items map=map size=size mood=mood style=style defaultIcon=defaultIcon compressed=compressed}}
+                  {{ui-list items=items map=map size=size mood=mood style=style defaultIcon=defaultIcon compressed=compressed sort=sortBy sortAscending=sortAscending}}
                 {{else}}
-                  {{ui-list items=items map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon compressed=compressed}}
+                  {{ui-list 
+                    items=items 
+                    map=map 
+                    size=size 
+                    mood=sillyLogic 
+                    style=style 
+                    defaultIcon=defaultIcon 
+                    compressed=compressed 
+                    sort=sortBy  
+                    sortAscending=sortAscending
+                  }}
                 {{/if}}
             </td>
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
@@ -149,8 +159,11 @@ map: {
   {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
   size="{{size}}"
   style="{{style}}"{{#if compressed}}
-  compressed=true{{/if}}
-}}
+  compressed=true{{/if}}{{#if sortBy}}
+  sort="{{sortBy}}" {{else}}
+  {{/if}}
+  
+}} 
                 {{/code-block}}
                 
             </td>
@@ -170,7 +183,7 @@ map: {
             </column>
             <column>
                 Mood: <br/>
-                {{ui-button-radio choices='static,sillyLogic' selected=moodStrategy size='small'}}<br/>
+                {{ui-button-radio choices='static,sillyLogic' selected=moodStrategy size='small' stretch=true}}<br/>
                 {{#if enableStaticChooser}}
                 Static Moods:<br/>
                   {{ui-button-radio choices='default,success,info,warning,error' selected=mood disable=disableStaticChooser size='small' defaultValue='default'}}
@@ -179,6 +192,9 @@ map: {
             <column>
                 Skin / Style Family:<br/>        
                 {{ui-button-radio choices='default,plus,flat' selected=style size='small' stretch=true}}<br/>
+                Sort By: 
+                {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>        
+                {{ui-button-radio choices=sortOrders selected=sortBy size='small' stretch=true}}<br/>
             </column>
         </columns>
     </config>
@@ -238,17 +254,17 @@ map: {
 <examples>
   <widget class='wide'>
     {{#if enableStaticChooser}}
-      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon  compressed=compressed}}
+      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy}}
     {{else}}
-      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed}}
+      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy}}
     {{/if}}
   </widget>
   <sourcecode>
   {{#code-block language="handlebars" poll=100}}
     
 
-
-
+    
+    
     
 \{{ui-list 
   items=model.content 
@@ -258,6 +274,7 @@ map: {
   style="{{style}}"{{#if compressed}}
   compressed=true{{/if}}
 }}
+
 
 
 
