@@ -28,7 +28,7 @@ export default Ember.Mixin.create({
   color: computed.alias('mood'),
   
   // Initialize "Dereferenced Computed Properties"
-  _defineAspectMappings: on('init', computed('aspects','panes', () => {
+  _defineAspectMappings: on('init', computed('define','aspects','panes', () => {
     const aspects = this.get('_aspects');
     const panes = this.get('_panes');
     _aspects.forEach( aspect => {

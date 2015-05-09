@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ObserveAll from '../mixins/observe-all';
+import ObserveAll from 'ember-cli-observe-all/mixins/observe-all';
 const { computed, observer, $, A, run, on, typeOf, keys, defineProperty } = Ember;    // jshint ignore:line
 
 import layout from '../templates/components/ui-list';
