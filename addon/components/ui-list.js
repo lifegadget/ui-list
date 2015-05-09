@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import ObserveAll from '../mixins/observe-all';
-const { computed, observer, $, A, run, on, typeOf, keys } = Ember;    // jshint ignore:line
+const { computed, observer, $, A, run, on, typeOf, keys, defineProperty } = Ember;    // jshint ignore:line
 
 import layout from '../templates/components/ui-list';
 
@@ -24,23 +24,22 @@ export default Ember.Component.extend(Ember.SortableMixin,{
   classNames: ['ui-list','list-container'],
   classNameBindings: ['compressed'],
   compressed: false,
-  items: on('init',computed(function(key, value, previousValue) {
+  items: on('init',computed(function(key, value) {
     // setter
     if(arguments.length > 1) {
       let watcher = Ember.Object.extend(ObserveAll).create();
-      return A(value).map(item => { 
+      return new A(value).map(item => { 
         item = item.set ? item : Ember.Object.create(item);
         // add observers for set properties (allowing for change detection of _items)
-        run.once( () => {
-          watcher.observeAll(item, (key) => {
-            console.log('detected change to %s', key);
-          });                
-        })
+        watcher.observeAll(item, (key) => {
+          console.log('detected change to %s', key);
+        });
+        
         return item;
       });
     }
     // getter / initial value
-    return A({});
+    return new A({});
   })),
   // _items mirrors the items array and then adorns it with:
   //   a) the "map" is used to created computed aliases
@@ -54,7 +53,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     let items = this.get('items');
     console.log('items: %o', items);
     let mapper = this.get('map');
-    return A(items.map( item => {
+    return new A(items.map( item => {
       let result = item;
       // set aliases for mapped properties
       if(mapper) {

@@ -5,7 +5,7 @@ import {
 
 moduleForComponent('ui-item', {
   // Specify the other units that are required for this test
-  // needs: ['component:foo', 'helper:bar']
+  needs: ['component:ui-icon']
 });
 
 test('it renders', function(assert) {

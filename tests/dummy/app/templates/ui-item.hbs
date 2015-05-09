@@ -3,8 +3,20 @@
 <h4>Overview</h4>
 <div class="row">
     <desc>
-        The <code>ui-item</code> is the default list item. It responds to size, mood/color, skin/style properties as well as allowing for the setting of 
-        various "aspects" including icon, image, title, subHeading, and badge.
+        The <code>ui-item</code> is the default list item. Like any item it responds to common/shared principles of:
+        <ul>
+          <li>Layout and property definition of <code>aspects</code> and <code>panes</code></li>
+          <li>The relative <code>size</code> of each item</li>
+          <li>The <code>style</code> family it belongs to</li>
+        </ul>
+        
+        This control does not have:
+        <ul>
+          <li>
+            This being the most basic item-type it only responds with click action type (aka, no fancy slide out actions or other visual effects for
+            these items). Check out 'actionable items' for that.             
+          </li>
+        </ul>
     </desc>
 </div>
 
@@ -38,6 +50,7 @@
 </desc>
 
 <h4>Dynamic Example: Size, Skin, and Mood</h4>
+{{! ----------------------------------------------------------- }}
 <examples>
     <widget class="wide">
         {{ui-item icon=toggledIcon title='Went Running' subHeading=toggledSubHeading badge=toggledBadge size=size disabled=isDisabled style=style mood=mood}}
@@ -53,7 +66,7 @@
         {{/code-block}}         
     </sourcecode>
 </examples>
-
+{{! ----------------------------------------------------------- }}
 <configuration>
     <icon>{{icon-cog size="2x"}}</icon>
     <config>

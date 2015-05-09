@@ -60,11 +60,11 @@ export default Ember.Controller.extend({
   defaultIcon: 'envelope',
   
   loadEmberData: on('init', function() {
-    let items = A(this.get('items'));
+    let items = new A(this.get('items'));
     let index = 1;
     items.forEach( item => {
       this.store.push('activity', {id: index++, foo: item.foo, bar: item.bar, icon: item.icon, badge: item.badge});
-    })
+    });
   })
 
 });

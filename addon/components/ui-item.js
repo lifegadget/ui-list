@@ -1,34 +1,20 @@
 import Ember from 'ember';
-const { computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
-import layout from '../templates/components/ui-item';
+const { Component, computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
 
-export default Ember.Component.extend({
+import layout from '../templates/components/ui-item';
+import SharedItem from '../mixins/shared-item-mixin';
+
+export default Component.extend(SharedItem,{
+  // Item Meta
   layout: layout,
-  classNames: ['ui-list', 'item'],
-  classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood'],
   tagName: 'div',
-  style: 'default',
-  _style: on('init', computed('style', function() {
-    let style = this.get('style');
-    return !style || style === 'default' ? '' : `style-${style}`;
-  })),
-  size: 'default',
-  _size: on('init', computed('size', function() {
-    let size = this.get('size');
-    return !size || size === 'default' ? '' : size;
-  })),
   disabled: false,
-  mood: 'default',
-  color: computed.alias('mood'),
-  _mood: on('init', computed('mood', function() {
-    let mood = this.get('mood');
-    return !mood || mood === 'default' ? '' : `mood-${mood}`;
-  })),
-  
   iconRight: 'chevron-right',
+  _aspects: new A(['title','subHeading','icon','image','actionIcon']),
+  _panes: new A(['left','center', 'right']),
+  // Defaulting panes for various Aspects
   iconLeft: computed.alias('icon'),
   badge: computed.alias('badgeRight'),
-  skin: computed.alias('style'),
   
   leftPaneExists: computed.or('iconLeft','titleLeft','badgeLeft'),
   titleExists: computed.notEmpty('title'),
