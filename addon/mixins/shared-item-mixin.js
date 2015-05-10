@@ -1,12 +1,12 @@
 import Ember from 'ember';
-const { computed, observer, $, A, run, on, typeOf, defineProperty } = Ember;    // jshint ignore:line
+const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 
-export default Ember.Mixin.create({
-  
+let SharedItem = Mixin.create({  
   // Classy stuff
   classNames: ['ui-list','item'],
   classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood' ],
+
   // Stylish stuff
   _style: on('init', computed('style', function() {
     let style = this.get('style');
@@ -20,6 +20,7 @@ export default Ember.Mixin.create({
     let mood = this.get('mood');
     return !mood || mood === 'default' ? '' : `mood-${mood}`;
   })),
+
   // Convenience Aliases and Defaults
   mood: 'default',
   style: 'default',
@@ -28,25 +29,34 @@ export default Ember.Mixin.create({
   color: computed.alias('mood'),
   
   // Initialize "Dereferenced Computed Properties"
-  _defineAspectMappings: on('init', computed('define','aspects','panes', () => {
-    const aspects = this.get('_aspects');
-    const panes = this.get('_panes');
+	// ---------------------------------------------
+	// NOTE: 'map' is a dereferenced hash of mappings; an item can use either a map or individual property assignments
+	// of the variety item.fooMap = 'mappedTo'; 
+  _defineAspectMappings: on('init', observer('_aspects','_panes', function() {
+    const aspects = new A(this.get('_aspects'));
+    const panes = new A(this.get('_panes'));
     aspects.forEach( aspect => {
-      const mapProp = 'define' + capitalize(aspect);
-      if(this.get(mapProp)) {
-        let cp = computed.readOnly(mapProp);
+      if(this.getMap(aspect)) {
+        let cp = computed.readOnly(this.getMap(aspect));
         defineProperty(this, aspect, cp);
-        // iterate through Panes
-        panes.forEach( pane => {
-          const paneMapProp = mapProp + capitalize(pane);
-          if(this.get('paneMapProp')) {
-            cp = computed.readOnly(this, paneMapProp);
-            defineProperty(this, aspect + capitalize(pane), cp);
-          }
-        });
-      }
+			}
+      // iterate through Panes
+      panes.forEach( pane => {
+        if(this.getMap(aspect,pane)) {
+          cp = computed.readOnly(this, this.getMap(aspect,pane));
+          defineProperty(this, aspect + capitalize(pane), cp);
+        }
+      });
     });
-  })), // aspect mappings
+  })),
+	// looks in both the map property directly off the item as well as the dereferenced
+	// map hash that may also contain the property. If both are defined the locally defined 
+	// map takes precedence
+	getMap: function(property, pane) {
+		pane = pane ? capitalize(pane) : '';
+		property = capitalize(property) + pane;
+    return this.get(`map${property}`) || this.get(`map.${property}`);
+	},
   
   // Default Values
   _setDefaultValues: on('didInsertElement', computed('items.[]', 'items.@each._propertyChanged', function() {
@@ -68,3 +78,5 @@ export default Ember.Mixin.create({
   })) // end default value
 });
 
+SharedItem[Ember.NAME_KEY] = 'Item Mixin';
+export default SharedItem;

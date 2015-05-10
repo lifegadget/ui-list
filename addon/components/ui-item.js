@@ -2,7 +2,7 @@ import Ember from 'ember';
 const { Component, computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
 
 import layout from '../templates/components/ui-item';
-import SharedItem from '../mixins/shared-item-mixin';
+import SharedItem from 'ui-list/mixins/shared-item-mixin';
 
 export default Component.extend(SharedItem,{
   // Item Meta

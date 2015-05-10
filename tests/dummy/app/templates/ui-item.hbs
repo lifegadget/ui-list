@@ -53,13 +53,26 @@
 {{! ----------------------------------------------------------- }}
 <examples>
     <widget class="wide">
-        {{ui-item icon=toggledIcon title='Went Running' subHeading=toggledSubHeading badge=toggledBadge size=size disabled=isDisabled style=style mood=mood}}
+        {{ui-item 
+					icon=toggledIcon 
+					foo='Went Running' 
+					mapTitle='foo' 
+					bar=toggledSubHeading 
+					mapSubHeading="bar"
+					badge=toggledBadge 
+					size=size 
+					disabled=isDisabled 
+					style=style 
+					mood=mood
+				}}
     </widget>
     <sourcecode>
         {{#code-block language="handlebars" poll=150}}
 \{{ui-item {{#if toggledIcon}}icon='{{toggledIcon}}'{{/if}}
-    title='Went Running' {{#if toggledSubHeading}}
-    subHeading='{{toggledSubHeading}}' {{/if}}
+    foo='Went Running' {{#if toggledSubHeading}}
+    mapTitle='foo'
+    bar='{{toggledSubHeading}}'
+    mapSubHeading='bar' {{/if}}
     {{#if toggledBadge}}badge={{toggledBadge}}
     {{/if}}style='{{style}}'
 }}
