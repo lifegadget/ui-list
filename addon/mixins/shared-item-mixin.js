@@ -31,7 +31,7 @@ export default Ember.Mixin.create({
   _defineAspectMappings: on('init', computed('define','aspects','panes', () => {
     const aspects = this.get('_aspects');
     const panes = this.get('_panes');
-    _aspects.forEach( aspect => {
+    aspects.forEach( aspect => {
       const mapProp = 'define' + capitalize(aspect);
       if(this.get(mapProp)) {
         let cp = computed.readOnly(mapProp);
@@ -43,7 +43,7 @@ export default Ember.Mixin.create({
             cp = computed.readOnly(this, paneMapProp);
             defineProperty(this, aspect + capitalize(pane), cp);
           }
-        })
+        });
       }
     });
   })), // aspect mappings
@@ -52,7 +52,7 @@ export default Ember.Mixin.create({
   _setDefaultValues: on('didInsertElement', computed('items.[]', 'items.@each._propertyChanged', function() {
     const aspects = this.get('_aspects');
     const panes = this.get('_panes');
-    _aspects.forEach( aspect => {
+    aspects.forEach( aspect => {
       const propValue = this.get('aspect');
       if(!propValue) {
         this.set(aspect,propValue);
@@ -66,5 +66,5 @@ export default Ember.Mixin.create({
       });
     });
   })) // end default value
-})
+});
 

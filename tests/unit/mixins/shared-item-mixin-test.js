@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import SharedItemMixinMixin from '../../../mixins/shared-item-mixin';
+import SharedItemMixinMixin from 'ui-list/mixins/shared-item-mixin';
 import { module, test } from 'qunit';
 
 module('SharedItemMixinMixin');
