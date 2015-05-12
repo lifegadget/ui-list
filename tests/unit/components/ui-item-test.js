@@ -1,3 +1,6 @@
+import Ember from 'ember';
+const { computed, observer, $, A, run, on, typeOf, debug } = Ember;    // jshint ignore:line
+
 import {
   moduleForComponent,
   test
@@ -46,4 +49,84 @@ test('size, mood, and style private properties set', function(assert) {
   assert.equal(component.get('_mood'), 'mood-success');
   component.set('style', 'flat');
   assert.equal(component.get('_style'), 'style-flat');
+});
+
+test('resolving static moods', function(assert) {
+  let component = this.subject({
+    title: 'Monkey',
+    subHeading: 'who doesn\'t love monkeys?',
+    mood: null
+  });
+  
+  this.render();
+  run(() => {
+    assert.equal(component.get('_mood'),'','null mood should convert to empty string');
+    component.set('mood','');
+    assert.equal(component.get('_mood'),'','empty string for mood should stay as empty string');
+    component.set('mood','foobar');
+    assert.equal(component.get('_mood'),'mood-foobar','a string value should have "mood-" prepended to result');
+    // CSS/DOM Checks
+    let done1 = assert.async();
+    let done2 = assert.async();
+    run.later( () => {
+      assert.ok(this.$().hasClass('mood-foobar'), '"mood-foobar" css class found: [' + this.$().attr('class') + ']' );
+      component.set('mood','success');
+      done1();
+      run.later( () => {
+        assert.ok(!this.$().hasClass('mood-foobar'), '"mood-foobar" css class no longer set' );
+        assert.ok(this.$().hasClass('mood-success'), '"mood-success" css class found: [' + this.$().attr('class') + ']' );
+        done2();  
+      },5);
+    }, 15);
+    
+  });
+});
+
+test('resolve mood if function presented', function(assert) {
+  let component = this.subject({
+    title: 'Monkey',
+    subHeading: 'who doesn\'t love monkeys?',
+    mood: function(item) {
+      return item.title === "Monkey" ? 'success' : 'warning';
+    }
+  });
+  assert.equal(component.get('_mood'), 'mood-success', 'Mood should have resolved to scalar value');
+  component.set('title','Rabbit');
+  let done = assert.async();
+  run.later( () => {
+    assert.equal(component.get('_mood'), 'mood-warning', 'Mood should have re-resolved to new scalar value');
+    done();
+  }, 5);
+});
+
+test('resolving static size', function(assert) {
+  let component = this.subject({
+    title: 'Monkey',
+    subHeading: 'who doesn\'t love monkeys?',
+    size: null
+  });
+  
+  this.render();
+  run(() => {
+    assert.equal(component.get('_size'),'','null size should convert to empty string');
+    component.set('size','default');
+    assert.equal(component.get('_size'),'','empty string for size should stay as empty string');
+    component.set('size','huge');
+    assert.equal(component.get('_size'),'huge','a string value should be directly copied across');
+
+    // CSS/DOM Tests
+    let done1 = assert.async();
+    let done2 = assert.async();
+    run.later( () => {
+      assert.ok(this.$().hasClass('huge'), '"huge" css class detected');
+      component.set('size','small');
+      done1();
+      run.later( () => {
+        assert.ok(!this.$().hasClass('huge'), '"huge" css class removed after switching');
+        assert.ok(this.$().hasClass('small'), '"small" css class detected');
+        done2();        
+      }, 5);
+    },5);
+	});
+  
 });

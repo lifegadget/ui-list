@@ -8,18 +8,34 @@ let SharedItem = Mixin.create({
   classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood' ],
 
   // Stylish stuff
-  _style: on('init', computed('style', function() {
+  _style: computed('style', function() {
     let style = this.get('style');
+    if (typeOf(style) === 'function') {
+      run( ()=> {
+        style = style(this);
+      });
+    }
     return !style || style === 'default' ? '' : `style-${style}`;
-  })),
-  _size: on('init', computed('size', function() {
+  }).volatile(),
+  _size: computed('size', function() {
     let size = this.get('size');
+    if (typeOf(size) === 'function') {
+      run( ()=> {
+        size = size(this);
+      });
+    }    
     return !size || size === 'default' ? '' : size;
-  })),
-  _mood: on('init', computed('mood', function() {
+  }).volatile(),
+  _mood: computed('mood','size','style', function() {
     let mood = this.get('mood');
+    console.log('mood is: %o', mood);
+    if (typeOf(mood) === 'function') {
+      run( ()=> {
+        mood = mood(this);
+      });
+    }
     return !mood || mood === 'default' ? '' : `mood-${mood}`;
-  })),
+  }).volatile(),
 
   // Convenience Aliases and Defaults
   mood: 'default',

@@ -8,6 +8,17 @@ import layout from '../templates/components/ui-list';
 export default Ember.Component.extend(Ember.SortableMixin,{
   queryParams: ['sortProperties', 'sortAscending'],
   sort: null,
+  sortProperties: on('init', computed('sort', function() {
+    let sort = this.get('sort');
+    if(typeOf(sort) === 'string') {
+      sort.split(',');
+      if(typeOf(sort) === 'string') {
+        sort = [sort];
+      }
+    }
+    
+    return typeOf(sort) === 'array' ? sort : null;
+  })),
   items: on('init', computed(function(key, value){
     // setter
     if(arguments.length > 1) {
@@ -30,17 +41,6 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     }
     // initial state / getter
     return new A([]);  
-  })),
-  sortProperties: on('init', computed('sort', function() {
-    let sort = this.get('sort');
-    if(typeOf(sort) === 'string') {
-      sort.split(',');
-      if(typeOf(sort) === 'string') {
-        sort = [sort];
-      }
-    }
-    
-    return typeOf(sort) === 'array' ? sort : null;
   })),
   filter: null,
   _filter: computed('filter', function() {
@@ -76,6 +76,21 @@ export default Ember.Component.extend(Ember.SortableMixin,{
   // List Meta
   _aspects: null,
   _panes: null,
+  _aspectPanes: on('init', computed('_aspects','_panes', function() {
+    const aspects = this.get('_aspects');
+    const panes = this.get('_panes');
+    if(!aspects) {
+      return new A([]);
+    }
+    const aspectPanes = new A(aspects);
+    aspects.forEach( aspect => {
+      panes.forEach( pane => {
+        aspectPanes.push(aspect + capitalize(pane));
+      });
+    });
+    
+    return aspectPanes;
+  })),
   _itemProperties: null,
   _listProperties: ['size','mood','style'],
   /**
@@ -96,7 +111,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
    *   2. aspect/panes properties are packaged up as hash and passed to the item as a single property 'aspectPanes'
    *   3. itemProperties are also packaged up as a hash and passed to the item as a single property 'itemProperties'
    */
-  content: on('init', computed('items.[]','items.@each._propertyChanged', 'size','style','mood', function() {
+  content: on('init', computed('items.[]','items.@each._propertyChanged', function() {
     const itemsArray = this.get('items') ? this.get('items') : new A([]);
     const content = new A(itemsArray.map( item => {
       return Ember.Object.create(item); 
@@ -124,6 +139,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     // -------------------------------
     const aspects = new A(this.get('_aspects'));
     const panes = new A(this.get('_panes'));
+    const aspectPanes = this.get('_aspectPanes');
     const listProperties = this.get('_listProperties');
     
     // Iterate over Items
@@ -151,15 +167,17 @@ export default Ember.Component.extend(Ember.SortableMixin,{
         }
       });
       // Aspects, Panes, and Maps
-      aspects.forEach( aspect => {
-        if(this._getMap(aspect)) {
-          item[aspect] = item[this._getMap(aspect)];
-          panes.forEach( pane => {
-            let aspectPane = aspect + Ember.String.capitalize(pane);
-            item[aspectPane] = item[this._getMap(aspect,pane)];
-          });
+      item.packed = item.packed ? item.packed : {};
+      aspectPanes.forEach( ap => {
+        // map where map exists
+        if(this._getMap(ap)) {
+          item[ap] = item[this._getMap(ap)];
         }
-      });
+        // put property into packed property if non-null
+        if(item[ap] !== null) {
+          item.packed[ap] = item[ap];
+        }
+      })
       
       return item;
     });

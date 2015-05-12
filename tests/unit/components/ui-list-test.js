@@ -105,26 +105,48 @@ test('content is set from items', function(assert) {
   assert.equal(
     component.get('items.0.foo'), 
     component.get('content.0.foo'), 
-    "foo should remain unchanged"
+    "foo should have been copied over to 'content' array"
   );
   assert.equal(
     component.get('items.0.badge'), 
     component.get('content.0.badge'), 
-    "badge should remain unchanged"
+    "badge should have been copied over to 'content' array"
   );
   // check new bindings
   assert.equal(
     component.get('content.0.foo'), 
     component.get('content.0.title'),
-    "title should have taken property value of 'foo' and therefore be equal"
+    "title should have taken mapped value from 'foo' and reside in 'content' array"
   );
   assert.equal(
     component.get('content.0.bar'), 
     component.get('content.0.subHeading'),
-    "subHeading should have taken property value of 'bar' and therefore be equal"
+    "subHeading should have taken mapped value from 'bar' and reside in 'content' array"
   );
     
 });
+
+test('test that “packed” object included in content', function(assert) {
+  let component = this.subject();
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, title: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"})
+  ]);
+  assert.equal(
+    component.get('content.0.packed.title'), 
+    component.get('content.0.title'),
+    "a mapped title should be in content as well as packed object off of content/item"
+  );
+  assert.equal(
+    component.get('content.1.packed.title'), 
+    component.get('content.1.title'),
+    "a direct reference to title should be in content as well as packed object off of content/item"
+  );
+
+  
+});
+
 
 test('listProperties injected into content', function(assert) {
   let component = this.subject();
@@ -170,13 +192,14 @@ test('inline business logic resolved', function(assert) {
 test('observing a property change in items', function(assert) {
   assert.expect(6);
   var done = assert.async();
-  var component = this.subject({
-    _propertyChangedCallback: (property) => {
-      assert.equal(component.get('content.0.foo'),'Food', "the 'content' array should have the updated value from 'items'");
-      assert.equal('foo', property, 'the changed property "foo" was detected');
-      done(); 
-    }
-  });
+    var component = this.subject({
+      _propertyChangedCallback: (property) => {
+        assert.equal(component.get('content.0.foo'),'Food', "the 'content' array should have the updated value from 'items'");
+        assert.equal('foo', property, 'the changed property "foo" was detected');
+        this.done = true;
+        done(); 
+      }
+    });
   assert.ok(component._propertyChangedCallback, 'change callback appears to exist');
   assert.equal(typeOf(component._propertyChangedCallback), 'function',  'callback is a valid function');
   component.set('items', [
@@ -187,9 +210,11 @@ test('observing a property change in items', function(assert) {
   component.set('items.0.foo','Food');
   assert.equal(component.get('items.0.foo'), 'Food', 'changed value of foo (in items) is correct');
   var later = run.later( () => {
-    assert.equal(component.get('content.0.foo'),'Food', "the 'content' array should have the updated value from 'items'");
-    assert.ok(false,"failed to observe change to 'foo' property");
-    done();
+    if(!this.done) {
+      assert.equal(component.get('content.0.foo'),'Food', "the 'content' array should have the updated value from 'items'");
+      assert.ok(false,"failed to observe change to 'foo' property");
+      done();      
+    }
   },50);
 });
 
