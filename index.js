@@ -75,7 +75,7 @@ module.exports = {
       });
     }
     if(!o.quiet) {
-      console.log('ui-input:%s, %s', faMessage, animateMessage); 
+      console.log('ui-list:%s, %s', faMessage, animateMessage); 
     }
 
   }

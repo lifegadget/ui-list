@@ -126,8 +126,6 @@ mapper: {
             <column>
                 Title: <br/>
                 {{text-input value=foo width='75%'}}<br/>
-                Item Size: <br/>
-                {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
                 Mood: {{ui-toggle-button value=dynamicMood on='dynamic' off='static' size='tiny'}}<br/>
                 {{#if dynamicMood}}
                     <em>
@@ -157,6 +155,8 @@ mapper: {
             <column>
                 Skin / Style Family:<br/>        
                 {{ui-button-radio choices='default,plus,flat' selected=style size='small' stretch=true}}<br/>
+                Item Size: <br/>
+                {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
             </column>
         </columns>
     </config>
