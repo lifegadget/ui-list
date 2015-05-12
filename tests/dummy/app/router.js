@@ -15,4 +15,10 @@ export default Router.map(function() {
   this.route('ui-actionable-item');
   this.route('ui-tabular-item');
   
+  // HELPER
+  this.route('ui-aspect-action-bar');
+  this.route('ui-aspect-timer');
+  this.route('ui-aspect-handle');
+  
+  this.resource('not-implemented', {path: '/*badurl'});
 });

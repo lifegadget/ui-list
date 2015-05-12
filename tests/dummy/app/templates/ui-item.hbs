@@ -63,7 +63,7 @@
         <heading>With individual property mappers</heading>
         {{ui-item 
 					icon=toggledIcon 
-					foo='Went Running' 
+					foo=foo
 					mapTitle='foo' 
 					bar=toggledSubHeading 
 					mapSubHeading="bar"
@@ -78,7 +78,7 @@
         <heading>With <code>map</code> property</heading>
         {{ui-item 
 					icon=toggledIcon 
-					foo='Went Running' 
+					foo=foo
 					bar=toggledSubHeading 
           map=mapper
 					badge=toggledBadge 
@@ -92,7 +92,7 @@
     <sourcecode>
         {{#code-block language="handlebars" poll=150}}
 \{{ui-item {{#if toggledIcon}}icon='{{toggledIcon}}'{{/if}}
-    foo='Went Running' {{#if toggledSubHeading}}
+    foo='{{foo}}' {{#if toggledSubHeading}}
     mapTitle='foo'
     bar='{{toggledSubHeading}}'
     mapSubHeading='bar' {{/if}}
@@ -102,7 +102,7 @@
 
 {{! using a singular map hash }}
 \{{ui-item {{#if toggledIcon}}icon='{{toggledIcon}}'{{/if}}
-    foo='Went Running' {{#if toggledSubHeading}}
+    foo='{{foo}}' {{#if toggledSubHeading}}
     bar='{{toggledSubHeading}}'
     map=mapper {{/if}}
     {{#if toggledBadge}}badge={{toggledBadge}}
@@ -114,7 +114,7 @@
 mapper: {
   title: 'foo',
   subHeading: 'bar'
-}        
+}
         {{/code-block}}
     </sourcecode>
 </examples>
@@ -124,10 +124,20 @@ mapper: {
     <config>
         <columns>
             <column>
+                Title: <br/>
+                {{text-input value=foo width='75%'}}<br/>
                 Item Size: <br/>
                 {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
-                Mood: <br/>
-                {{ui-button-radio choices='default,success,info,warning,error' selected=mood size='small' defaultValue='default'}}<br/>
+                Mood: {{ui-toggle-button value=dynamicMood on='dynamic' off='static' size='tiny'}}<br/>
+                {{#if dynamicMood}}
+                    <em>
+                      Dynamic rule sets mood to 'success' if<br/>
+                      title is 'Monkey' otherwise it's 'warning'
+                    </em>
+                {{else}}
+                  {{ui-button-radio choices='default,success,info,warning,error' selected=mood size='small' defaultValue='default'}}
+                  <br/>
+                {{/if}}
             </column>
             <column>
                 <div class="row">

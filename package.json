@@ -34,7 +34,8 @@
     "ember-try": "0.0.4",
     "ui-bs-button-choice": "0.0.11",
     "ui-button": "0.0.13",
-    "ui-code-highlight": "0.0.5"
+    "ui-code-highlight": "0.0.5",
+    "ui-input": "0.0.2"
   },
   "keywords": [
     "ember-addon"

@@ -33,7 +33,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
           if(callback && typeOf(callback) === 'function') {
             callback(key);
           }
-          console.log('detected change to %s', key);
+          debug('detected change to ' + key);
         });
         
         return item;
@@ -116,7 +116,6 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     const content = new A(itemsArray.map( item => {
       return Ember.Object.create(item); 
     }));
-    console.log('building content');
     // FILTER
     // -------------------------------
     const filter = this.get('filter');
@@ -134,7 +133,6 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     default:
       filteredContent = content;
     }    
-    console.log('content filtered');
     // Structural Constants
     // -------------------------------
     // const aspects = new A(this.get('_aspects'));
