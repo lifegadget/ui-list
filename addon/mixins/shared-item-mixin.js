@@ -32,7 +32,7 @@ let SharedItem = Mixin.create({
 	// ---------------------------------------------
 	// NOTE: 'map' is a dereferenced hash of mappings; an item can use either a map or individual property assignments
 	// of the variety item.fooMap = 'mappedTo'; 
-  _defineAspectMappings: on('init', observer('_aspects','_panes', function() {
+  _defineAspectMappings: on('init', observer('_aspects','_panes','map', function() {
     const aspects = new A(this.get('_aspects'));
     const panes = new A(this.get('_panes'));
     aspects.forEach( aspect => {
@@ -43,7 +43,7 @@ let SharedItem = Mixin.create({
       // iterate through Panes
       panes.forEach( pane => {
         if(this.getMap(aspect,pane)) {
-          cp = computed.readOnly(this, this.getMap(aspect,pane));
+          let cp = computed.readOnly(this, this.getMap(aspect,pane));
           defineProperty(this, aspect + capitalize(pane), cp);
         }
       });
@@ -54,8 +54,8 @@ let SharedItem = Mixin.create({
 	// map takes precedence
 	getMap: function(property, pane) {
 		pane = pane ? capitalize(pane) : '';
-		property = capitalize(property) + pane;
-    return this.get(`map${property}`) || this.get(`map.${property}`);
+		property = property + pane;
+    return this.get(`map${capitalize(property)}`) || this.get(`map.${property}`);
 	},
   
   // Default Values

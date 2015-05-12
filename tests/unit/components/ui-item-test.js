@@ -19,3 +19,21 @@ test('it renders', function(assert) {
   this.render();
   assert.equal(component._state, 'inDOM');
 });
+
+test('mapped property works with local map', function(assert) {
+  const mantra = 'To Foo is to Live';
+  assert.expect(2);
+  let component = this.subject( {foo: mantra, titleMap: 'foo'} );
+  this.render();
+  assert.equal(component.get('foo'), mantra);
+  assert.equal(component.get('title'), mantra);
+});
+
+test('mapped property works with map hash', function(assert) {
+  const mantra = 'To Foo is to Live';
+  assert.expect(2);
+  let component = this.subject( {foo: mantra, map: {title: 'foo'} } );
+  this.render();
+  assert.equal(component.get('foo'), mantra);
+  assert.equal(component.get('title'), mantra);
+});

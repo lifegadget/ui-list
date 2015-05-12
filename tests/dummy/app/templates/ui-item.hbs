@@ -21,38 +21,46 @@
 </div>
 
 <h4>Basic Example</h4>
-
+{{! ----------------------------------------------------------- }}
 <examples>
     <widget>
-        {{ui-item icon='envelope' title='Went Running' badge=4}}
+        {{ui-item icon='envelope' title='Went Running' badgeRight=4}}
     </widget>
     <sourcecode>
         {{#code-block language="handlebars"}}
-\{{ui-item icon='envelope' title='Went Running' badge=4}}
+\{{ui-item icon='envelope' title='Went Running' badgeRight=4}}
         {{/code-block}}         
     </sourcecode>
 </examples>
-
+{{! ----------------------------------------------------------- }}
 <desc>
-    There are few things to note in the basic example above. 
+    There are few things to note in the basic example above but they all map back to the idea of an "aspect". All the parameters in this basic example
+    are just setting the primary properties of various <em>aspects</em>. To be "fully qualified" an aspect must be placed into a "pane". A pane is an <em>area</em> 
+    of the item and with the basic <code>ui-item</code> component the only panes are "left", "right", and "center".
+</desc>
+<desc>
+  With all this talk of fully qualified aspects needing a pane you might be rightly unsure why only badge is being explict about which pane it should be 
+  placed in. For "badge" it is being placed to the "right" pane. What about the other two?
     <ul>
         <li>
-            First off the use of <code>icon</code> property is really just an alias to the <code>iconLeft</code> property. The alias is setup this 
-            because its the left-pane which is most likely to have an icon in it (at least one that is dynamic).
+            The <code>icon</code> property is an alias to the <code>iconLeft</code> property. The alias is setup  
+            because its very common to have an icon in this pane.
         </li>
         <li>
             Similarly the <code>title</code> property is assumed to refer to the <code>titleCenter</code> property. 
         </li>
         <li>
-            The <code>badge</code> property is assumed to be in the right-pane but can be placed anywhere if you use an explicit reference like <code>badgeCenter</code>. 
+            The <code>badgeRight</code> property is is our shining example of a fully qualified aspect/pane pair. Truth be told, we could have just stated
+            this as <code>badge</code> because there is an alias for the badge that places it into the right pane by default.
         </li>
     </ul>
 </desc>
 
-<h4>Dynamic Example: Size, Skin, and Mood</h4>
+<h4>Advanced Example: Mapping, Size, Skin, and Mood</h4>
 {{! ----------------------------------------------------------- }}
 <examples>
     <widget class="wide">
+        <heading>With individual property mappers</heading>
         {{ui-item 
 					icon=toggledIcon 
 					foo='Went Running' 
@@ -65,6 +73,21 @@
 					style=style 
 					mood=mood
 				}}
+        <br/>
+        
+        <heading>With <code>map</code> property</heading>
+        {{ui-item 
+					icon=toggledIcon 
+					foo='Went Running' 
+					bar=toggledSubHeading 
+          map=mapper
+					badge=toggledBadge 
+					size=size 
+					disabled=isDisabled 
+					style=style 
+					mood=mood
+				}}
+        
     </widget>
     <sourcecode>
         {{#code-block language="handlebars" poll=150}}
@@ -76,7 +99,23 @@
     {{#if toggledBadge}}badge={{toggledBadge}}
     {{/if}}style='{{style}}'
 }}
-        {{/code-block}}         
+
+{{! using a singular map hash }}
+\{{ui-item {{#if toggledIcon}}icon='{{toggledIcon}}'{{/if}}
+    foo='Went Running' {{#if toggledSubHeading}}
+    bar='{{toggledSubHeading}}'
+    map=mapper {{/if}}
+    {{#if toggledBadge}}badge={{toggledBadge}}
+    {{/if}}style='{{style}}'
+}}
+        {{/code-block}}
+        {{#code-block language='js'}}
+// where ... 
+mapper: {
+  title: 'foo',
+  subHeading: 'bar'
+}        
+        {{/code-block}}
     </sourcecode>
 </examples>
 {{! ----------------------------------------------------------- }}
@@ -112,10 +151,19 @@
         </columns>
     </config>
 </configuration>
-
+{{! ----------------------------------------------------------- }}
 <desc>
     Things to note:
     <ul>
+      <li>
+        Mapping:
+        <ul>
+          <li>The properties <code>foo</code> and <code>bar</code> are just random property names that came from the input, they have no meaning to <strong>ui-input</strong></li>
+          <li>These properties, however, can be mapped to aspects or aspect/pane property names which DO have meaning</li>
+          <li>This is achieved by either adding a mapping property 1:1 for each mapping or including a singular <code>map</code> property which provides a hash of mappings.</li>
+          <li>Both are illustrated above in the example</li>
+        </ul>
+      </li>
         <li>there is a CSS property <code>two-lined-message</code> which is turned on when text elements fill two line items (e.g., both 'title' and 'sub-heading' are set); this allows the size of the left most icon to be adjusted based on this property</li>
         <li>left padding is increased for center pane if there is no content in the left-pane, this leverages the <code>with-left</code> and <code>no-left</code> CSS properties</li>
         <li>you can use either <code>style</code> or <code>skin</code> properties for setting the skin/style family as they are aliased to the same root</li>

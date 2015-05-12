@@ -19,7 +19,11 @@ export default Ember.Controller.extend({
   })),
   mood: 'default',
   style: 'default',
-  size: 'default'
+  size: 'default',
+  mapper: {
+    title: 'foo',
+    subHeading: 'bar'
+  }
   
 
 });
