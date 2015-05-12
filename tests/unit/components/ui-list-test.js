@@ -10,6 +10,18 @@ moduleForComponent('ui-list', {
   needs: ['component:ui-item','component:ui-icon']
 });
 
+test('it renders', function(assert) {
+  assert.expect(2);
+
+  // Creates the component instance
+  var component = this.subject();
+  assert.equal(component._state, 'preRender');
+
+  // Renders the component to the page
+  this.render();
+  assert.equal(component._state, 'inDOM');
+}); 
+
 test('items are enumerable', function(assert) {
   let component = this.subject();
   assert.ok(component.get('items').firstObject, 'even at initialization state, items should be enumerable');
@@ -37,7 +49,7 @@ test('items are observable', function(assert) {
   assert.ok(!component.hasObserverFor('ignored'), "the ignored property should be ignored because it was created before the object was created");
 });
 
-test('only valid filters are set', function(assert) {
+test('only valid filters are settable', function(assert) {
   let component = this.subject();
   component.set('filter', ['when', 6 ]);
   assert.equal(
@@ -131,7 +143,6 @@ test('listProperties injected into content', function(assert) {
   assert.equal(component.get('content.0.mood'), 'success', 'the mood listProperty has been transferred over to the content array');
 });
 
-
 test('inline business logic resolved', function(assert) {
   let component = this.subject();
   component.set('items', [
@@ -156,68 +167,31 @@ test('inline business logic resolved', function(assert) {
   );
 });
 
-test('observing a new item', function(assert) {
-  let component = this.subject();
-  let done = assert.async();
-  component.set('items', [
-    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
-    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
-    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"}),
-    Ember.Object.create({when: 5, foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"}),
-    Ember.Object.create({when: 6, foo: "Had Coffee", bar: "need to chill out after that beer", icon: "coffee"}),
-    Ember.Object.create({when: 1, foo: "Ate Breakfast", bar: "start of every good morning", icon: "cutlery"})
-  ]);
-  let itemCount = component.get('items.length');
-  component.somethingShallowChanged = computed('component.items.[]', function() {
-    assert.equal(component.get('items.length'), itemCount + 1, 'detected the addition of a new item');
-    run.cancel(later);
-    done();
-  });
-  component.get('items').pushObject({foo: 'newbie'} );
-  let later = run.later( () => {
-    assert.equal(component.get('items.length'), itemCount + 1, 'detected the addition of a new item');
-    assert.ok(false,"failed to observe the addition of a new item record");
-    done();
-  },25);
-});
-
-
 test('observing a property change in items', function(assert) {
-  let done = assert.async();
-  let component = this.subject();
-  component.somethingDeepChanged = computed('items.@each._propertyChanged', function(property) {
-    assert.equal('foo', property, 'the changed property foo was detected')
-    run.cancel(later);
-    done();
+  assert.expect(6);
+  var done = assert.async();
+  var component = this.subject({
+    _propertyChangedCallback: (property) => {
+      assert.equal(component.get('content.0.foo'),'Food', "the 'content' array should have the updated value from 'items'");
+      assert.equal('foo', property, 'the changed property "foo" was detected');
+      done(); 
+    }
   });
-  component.somethingShallowChanged = computed('items.[]', function() {
-    assert.ok(true,'items were added or removed');
-  });
+  assert.ok(component._propertyChangedCallback, 'change callback appears to exist');
+  assert.equal(typeOf(component._propertyChangedCallback), 'function',  'callback is a valid function');
   component.set('items', [
     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
-    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
-    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"}),
-    Ember.Object.create({when: 5, foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"}),
-    Ember.Object.create({when: 6, foo: "Had Coffee", bar: "need to chill out after that beer", icon: "coffee"}),
-    Ember.Object.create({when: 1, foo: "Ate Breakfast", bar: "start of every good morning", icon: "cutlery"})
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6})
   ]);
+  assert.equal(component.get('items.0.foo'), 'Groceries', 'initial value of foo is correct');
   component.set('items.0.foo','Food');
-  let later = run.later( () => {
-    assert.equal(component.get('content.0.foo'),'Food', "the content array should have the updated value from items");
+  assert.equal(component.get('items.0.foo'), 'Food', 'changed value of foo (in items) is correct');
+  var later = run.later( () => {
+    assert.equal(component.get('content.0.foo'),'Food', "the 'content' array should have the updated value from 'items'");
     assert.ok(false,"failed to observe change to 'foo' property");
     done();
   },50);
 });
 
-test('it renders', function(assert) {
-  assert.expect(2);
 
-  // Creates the component instance
-  var component = this.subject();
-  assert.equal(component._state, 'preRender');
-
-  // Renders the component to the page
-  this.render();
-  assert.equal(component._state, 'inDOM');
-});
 

@@ -23,7 +23,7 @@ test('it renders', function(assert) {
 test('mapped property works with local map', function(assert) {
   const mantra = 'To Foo is to Live';
   assert.expect(2);
-  let component = this.subject( {foo: mantra, titleMap: 'foo'} );
+  let component = this.subject( {foo: mantra, mapTitle: 'foo'} );
   this.render();
   assert.equal(component.get('foo'), mantra);
   assert.equal(component.get('title'), mantra);
@@ -36,4 +36,14 @@ test('mapped property works with map hash', function(assert) {
   this.render();
   assert.equal(component.get('foo'), mantra);
   assert.equal(component.get('title'), mantra);
+});
+
+test('size, mood, and style private properties set', function(assert) {
+  let component = this.subject();
+  component.set('size', 'large');
+  assert.equal(component.get('_size'), 'large');
+  component.set('mood', 'success');
+  assert.equal(component.get('_mood'), 'mood-success');
+  component.set('style', 'flat');
+  assert.equal(component.get('_style'), 'style-flat');
 });

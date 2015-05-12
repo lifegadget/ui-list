@@ -116,7 +116,17 @@
             <td class="col-xs-12 col-sm-4 text-center align-top">
               <p>&nbsp;</p>
                 {{#if enableStaticChooser}}
-                  {{ui-list items=items map=map size=size mood=mood style=style defaultIcon=defaultIcon compressed=compressed sort=sortBy sortAscending=sortAscending}}
+                  {{ui-list 
+                    items=items 
+                    map=map 
+                    size=size 
+                    mood=mood 
+                    style=style 
+                    defaultIcon=defaultIcon 
+                    compressed=compressed 
+                    sort=sortBy 
+                    sortAscending=sortAscending
+                  }}
                 {{else}}
                   {{ui-list 
                     items=items 
@@ -261,13 +271,13 @@ map: {
   </widget>
   <sourcecode>
   {{#code-block language="handlebars" poll=100}}
-    
 
-    
-    
-    
-\{{ui-list 
-  items=model.content 
+
+
+
+
+\{{ui-list
+  items=model.content
   map=map
   {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
   size="{{size}}"
