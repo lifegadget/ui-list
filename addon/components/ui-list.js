@@ -137,8 +137,8 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     console.log('content filtered');
     // Structural Constants
     // -------------------------------
-    const aspects = new A(this.get('_aspects'));
-    const panes = new A(this.get('_panes'));
+    // const aspects = new A(this.get('_aspects'));
+    // const panes = new A(this.get('_panes'));
     const aspectPanes = this.get('_aspectPanes');
     const listProperties = this.get('_listProperties');
     
@@ -177,7 +177,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
         if(item[ap] !== null) {
           item.packed[ap] = item[ap];
         }
-      })
+      });
       
       return item;
     });

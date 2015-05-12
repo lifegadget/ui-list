@@ -1,5 +1,5 @@
 import Ember from 'ember';
-const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty } = Ember;    // jshint ignore:line
+const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, keys } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 
 let SharedItem = Mixin.create({  
@@ -8,7 +8,8 @@ let SharedItem = Mixin.create({
   classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood' ],
 
   // Stylish stuff
-  _style: computed('style', function() {
+  _styleDependencies: ['_componentWidth', '_componentHeight', '_windowWidth', '_windowHeight','size'],
+  _style: computed('style','_styleDependencies', function() {
     let style = this.get('style');
     if (typeOf(style) === 'function') {
       run( ()=> {
@@ -16,8 +17,9 @@ let SharedItem = Mixin.create({
       });
     }
     return !style || style === 'default' ? '' : `style-${style}`;
-  }).volatile(),
-  _size: computed('size', function() {
+  }),
+  _sizeDependencies: ['_componentWidth', '_componentHeight', '_windowWidth', '_windowHeight','_cpMutex'],
+  _size: computed('size', '_sizeDependencies', function() {
     let size = this.get('size');
     if (typeOf(size) === 'function') {
       run( ()=> {
@@ -25,17 +27,37 @@ let SharedItem = Mixin.create({
       });
     }    
     return !size || size === 'default' ? '' : size;
-  }).volatile(),
-  _mood: computed('mood','size','style', function() {
+  }),
+  _mood: computed('mood','title','subHeading','badge','icon','image','style', 'size', function() {
     let mood = this.get('mood');
-    console.log('mood is: %o', mood);
     if (typeOf(mood) === 'function') {
       run( ()=> {
         mood = mood(this);
       });
     }
     return !mood || mood === 'default' ? '' : `mood-${mood}`;
-  }).volatile(),
+  }),
+
+  /**
+   * Responsible for allowing the private CP's that sit as sidecars to 
+   * API props which take scalars OR function callbacks. The issue at hand is
+   * that scale inputs in the API are simple to handle but if a function is 
+   * recieved the function itself will be dependent on an unknown set of variables 
+   * in the item and the CP needs to respond to each of them.
+   * 
+   * The strategy for doing this is to combine all aspectPanes which are set to non-null values
+   * at construction, and then whatever properties are contained in _itemCoreProperties, _itemMetaProperties,
+   * and finally all _cpProperties. These properties are setup as an 
+   * mutex observer which signals change to the CP. From the perspective of the CP, it is only necessary
+   * to watch the mutex property for changes.
+   */
+  _cpInitialisation: on('init', function() {
+    const props = this.get('_cpProperties'); // jshint ignore:line
+    const aspectPanes = this.get('packed') ? keys(this.get('packed')) : this.get('_coreAspects'); // jshint ignore:line
+    
+    // TODO: implement
+  }),
+  _cpProperties: ['style','mood','size'],
 
   // Convenience Aliases and Defaults
   mood: 'default',

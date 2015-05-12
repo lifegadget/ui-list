@@ -51,7 +51,7 @@ test('size, mood, and style private properties set', function(assert) {
   assert.equal(component.get('_style'), 'style-flat');
 });
 
-test('resolving static moods', function(assert) {
+test('mood property - static values', function(assert) {
   let component = this.subject({
     title: 'Monkey',
     subHeading: 'who doesn\'t love monkeys?',
@@ -82,7 +82,7 @@ test('resolving static moods', function(assert) {
   });
 });
 
-test('resolve mood if function presented', function(assert) {
+test('mood property - function/callback', function(assert) {
   let component = this.subject({
     title: 'Monkey',
     subHeading: 'who doesn\'t love monkeys?',
@@ -99,7 +99,7 @@ test('resolve mood if function presented', function(assert) {
   }, 5);
 });
 
-test('resolving static size', function(assert) {
+test('size property - static values', function(assert) {
   let component = this.subject({
     title: 'Monkey',
     subHeading: 'who doesn\'t love monkeys?',
