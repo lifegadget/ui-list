@@ -38,6 +38,42 @@ let SharedItem = Mixin.create({
     return !mood || mood === 'default' ? '' : `mood-${mood}`;
   }),
 
+  // Unpacking packed hash
+  _unpackProperties:  on('init', function() {
+    const packed = this.get('packed');
+    if(packed) {
+      keys(packed).forEach( key => {
+        this.set(key, packed[key]);
+      });
+      this.set('_keyAspectPanes', new A(keys(packed)));
+    } else {
+      const aspectPanes = this.get('_aspectPanes'); // get full list supported by this item type
+      let keyAspectPanes = new A([]);
+      new A(aspectPanes).filter( item => {
+        if(this[item]) {
+          keyAspectPanes.push(item);
+        }
+      });
+      this.set('_keyAspectPanes', keyAspectPanes);
+    }
+  }), 
+  _aspectPanes: on('init', computed('_aspects','_panes',function() {
+    const aspects = this.get('_aspects');
+    const panes = this.get('_panes');
+    let aspectPanes = [];
+    if(aspects && panes) {
+      for (let aspect of aspects) {
+        aspectPanes.push(aspect);
+        for (let pane of panes) {
+          aspectPanes.push(aspect + capitalize(pane));
+        }
+      }      
+    }
+    
+    return aspectPanes;
+  })),
+  
+
   /**
    * Responsible for allowing the private CP's that sit as sidecars to 
    * API props which take scalars OR function callbacks. The issue at hand is
@@ -53,7 +89,7 @@ let SharedItem = Mixin.create({
    */
   _cpInitialisation: on('init', function() {
     const props = this.get('_cpProperties'); // jshint ignore:line
-    const aspectPanes = this.get('packed') ? keys(this.get('packed')) : this.get('_coreAspects'); // jshint ignore:line
+    const aspectPanes = this.get('_aspectPanes'); // jshint ignore:line
     
     // TODO: implement
   }),
@@ -70,50 +106,32 @@ let SharedItem = Mixin.create({
 	// ---------------------------------------------
 	// NOTE: 'map' is a dereferenced hash of mappings; an item can use either a map or individual property assignments
 	// of the variety item.fooMap = 'mappedTo'; 
-  _defineAspectMappings: on('init', observer('_aspects','_panes','map', function() {
-    const aspects = new A(this.get('_aspects'));
-    const panes = new A(this.get('_panes'));
-    aspects.forEach( aspect => {
-      if(this.getMap(aspect)) {
-        let cp = computed.readOnly(this.getMap(aspect));
-        defineProperty(this, aspect, cp);
-			}
-      // iterate through Panes
-      panes.forEach( pane => {
-        if(this.getMap(aspect,pane)) {
-          let cp = computed.readOnly(this, this.getMap(aspect,pane));
-          defineProperty(this, aspect + capitalize(pane), cp);
-        }
-      });
-    });
+  _defineAspectMappings: on('init', observer('_aspectPanes', function() {
+    const aspectPanes = new A(this.get('_aspectPanes'));
+    for (let aspectPane of aspectPanes) {
+      if(this.getMap(aspectPane)) {
+        let cp = computed.readOnly(this.getMap(aspectPane));
+        defineProperty(this, aspectPane, cp);        
+      }
+    }
   })),
 	// looks in both the map property directly off the item as well as the dereferenced
 	// map hash that may also contain the property. If both are defined the locally defined 
 	// map takes precedence
-	getMap: function(property, pane) {
-		pane = pane ? capitalize(pane) : '';
-		property = property + pane;
+	getMap: function(property) {
     return this.get(`map${capitalize(property)}`) || this.get(`map.${property}`);
 	},
   
   // Default Values
-  _setDefaultValues: on('didInsertElement', computed('items.[]', 'items.@each._propertyChanged', function() {
-    const aspects = this.get('_aspects');
-    const panes = this.get('_panes');
-    aspects.forEach( aspect => {
-      const propValue = this.get('aspect');
-      if(!propValue) {
-        this.set(aspect,propValue);
+  _setDefaultValues: on('init', function() {
+    const aspectPanes = this.get('_aspectPanes');
+    for (let item of aspectPanes) {
+      const defaultKey = 'default' + capitalize(item);
+      if(!this[item] && this[defaultKey]) {
+        this.set(item, this[defaultKey]);
       }
-      panes.forEach( pane => {
-        const prop = aspect + capitalize(pane);
-        const propValue = this.get(prop);
-        if(!propValue) {
-          this.set(prop,propValue);
-        }
-      });
-    });
-  })) // end default value
+    }    
+  })
 });
 
 SharedItem[Ember.NAME_KEY] = 'Item Mixin';

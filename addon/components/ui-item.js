@@ -10,8 +10,8 @@ export default Component.extend(SharedItem,{
   tagName: 'div',
   disabled: false,
   iconRight: 'chevron-right',
-  _aspects: new A(['title','subHeading','icon','image','actionIcon']),
-  _panes: new A(['left','center', 'right']),
+  _aspects: ['title','subHeading','icon','image','actionIcon'],
+  _panes: ['left','center', 'right'],
   // Defaulting panes for various Aspects
   iconLeft: computed.alias('icon'),
   badge: computed.alias('badgeRight'),

@@ -130,3 +130,34 @@ test('size property - static values', function(assert) {
 	});
   
 });
+
+test('unpacking the packed property', function(assert) {
+  let component = this.subject({
+    packed: {
+      title: 'Tiger',
+      subHeading: 'angry lion-like prowler',
+      badge:8,
+      icon: 'check-square-o'
+    }
+  });
+  assert.equal(component.get('title'), 'Tiger', 'title unpacked');
+  assert.equal(component.get('subHeading'), 'angry lion-like prowler', 'subHeading unpacked');
+  assert.equal(component.get('badge'), 8, 'badge unpacked');
+  assert.equal(component.get('icon'), 'check-square-o', 'icon unpacked');
+  
+  assert.equal(typeOf(component.get('_keyAspectPanes')), 'array', 'private _keyAspectPanes set as an array');
+  assert.ok(component.get('_keyAspectPanes').contains('title'), '_keyAspectPanes recognizes title as one of its properties');
+});
+
+test('default values', function(assert) {
+  let component = this.subject({
+    defaultTitle: 'Insert Title',
+    defaultIconCenter: 'check-square-o',
+    defaultSubHeading: 'nada',
+    subHeading: 'something'
+  });
+  assert.equal( component.get('title'), 'Insert Title', 'when no title set, default value should take its place');
+  assert.equal( component.get('iconCenter'), 'check-square-o', 'when no iconCenter is set, default value should take its place');
+  assert.equal( component.get('subHeading'), 'something', 'when subHeading has a value, default should be ignored');
+  
+});
