@@ -19,7 +19,7 @@ let SharedItem = Mixin.create({
     return !style || style === 'default' ? '' : `style-${style}`;
   }),
   _sizeDependencies: ['_componentWidth', '_componentHeight', '_windowWidth', '_windowHeight','_cpMutex'],
-  _size: computed('size', '_sizeDependencies', function() {
+  _size: computed('size', 'title','responsive.mutex', function() {
     let size = this.get('size');
     if (typeOf(size) === 'function') {
       run( ()=> {
@@ -57,6 +57,11 @@ let SharedItem = Mixin.create({
       this.set('_keyAspectPanes', keyAspectPanes);
     }
   }), 
+  
+  /**
+   * The specific Item components should define which aspects and panes they support, this 
+   * just bring together the resultant array of aspectPanes which can be targetted/configured by a user
+   */
   _aspectPanes: on('init', computed('_aspects','_panes',function() {
     const aspects = this.get('_aspects');
     const panes = this.get('_panes');
@@ -107,7 +112,7 @@ let SharedItem = Mixin.create({
 	// NOTE: 'map' is a dereferenced hash of mappings; an item can use either a map or individual property assignments
 	// of the variety item.fooMap = 'mappedTo'; 
   _defineAspectMappings: on('init', observer('_aspectPanes', function() {
-    const aspectPanes = new A(this.get('_aspectPanes'));
+    const aspectPanes = this.get('_aspectPanes');
     for (let aspectPane of aspectPanes) {
       if(this.getMap(aspectPane)) {
         let cp = computed.readOnly(this.getMap(aspectPane));
@@ -115,9 +120,7 @@ let SharedItem = Mixin.create({
       }
     }
   })),
-	// looks in both the map property directly off the item as well as the dereferenced
-	// map hash that may also contain the property. If both are defined the locally defined 
-	// map takes precedence
+
 	getMap: function(property) {
     return this.get(`map${capitalize(property)}`) || this.get(`map.${property}`);
 	},

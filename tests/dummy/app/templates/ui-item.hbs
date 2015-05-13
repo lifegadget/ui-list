@@ -63,6 +63,7 @@
         <heading>With individual property mappers</heading>
         {{ui-item 
 					icon=toggledIcon 
+          image=image
 					foo=foo
 					mapTitle='foo' 
 					bar=toggledSubHeading 
@@ -71,13 +72,14 @@
 					size=size 
 					disabled=isDisabled 
 					style=style 
-					mood=mood
+					mood=_mood
 				}}
         <br/>
         
         <heading>With <code>map</code> property</heading>
         {{ui-item 
-					icon=toggledIcon 
+					icon=toggledIcon
+          image=image 
 					foo=foo
 					bar=toggledSubHeading 
           map=mapper
@@ -85,7 +87,7 @@
 					size=size 
 					disabled=isDisabled 
 					style=style 
-					mood=mood
+					mood=_mood
 				}}
         
     </widget>
@@ -114,6 +116,9 @@
 mapper: {
   title: 'foo',
   subHeading: 'bar'
+},
+dynamicMoodFunction: function(item) {
+  return item.get('title') === 'Monkey' ? 'success' : 'warning';
 }
         {{/code-block}}
     </sourcecode>
@@ -144,6 +149,8 @@ mapper: {
                         {{ui-toggle-button value=showSubHeading size='small'}} - SUB HEAD
                         <p>&nbsp;</p>                      
                         {{ui-toggle-button value=isDisabled size='small'}} - DISABLED <br/>
+                        <p>&nbsp;</p>                      
+                        {{ui-toggle-button value=showImage size='small' defaultValue=false}} - IMAGE <br/>
                     </div>
                     <div class="col-xs-6">
                         {{ui-toggle-button value=showBadge size='small'}} - BADGE   <br/>

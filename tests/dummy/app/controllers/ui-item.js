@@ -18,6 +18,21 @@ export default Ember.Controller.extend({
     return this.get('showSubHeading') ? this.get('bar') : null;
   })),
   mood: 'default',
+  _mood: computed('mood','dynamicMood',function() {
+    let {dynamicMood, mood, dynamicMoodFunction} = this.getProperties('dynamicMood','mood', 'dynamicMoodFunction');
+    if(dynamicMood) {
+      return dynamicMoodFunction;
+    } else {
+      return mood;
+    }
+  }),
+  dynamicMoodFunction: function(item) {
+    return item.get('title') === 'Monkey' ? 'success' : 'warning';
+  },
+  image: computed('showImage', function() {
+    return this.get('showImage') ? this.get('imageExample') : null;
+  }),
+  imageExample: 'images/examples/jobs.png',
   style: 'default',
   size: 'default',
   foo: 'Monkey',

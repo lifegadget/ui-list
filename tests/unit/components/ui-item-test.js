@@ -87,7 +87,7 @@ test('mood property - function/callback', function(assert) {
     title: 'Monkey',
     subHeading: 'who doesn\'t love monkeys?',
     mood: function(item) {
-      return item.title === "Monkey" ? 'success' : 'warning';
+      return item.get('title') === "Monkey" ? 'success' : 'warning';
     }
   });
   assert.equal(component.get('_mood'), 'mood-success', 'Mood should have resolved to scalar value');
@@ -124,11 +124,27 @@ test('size property - static values', function(assert) {
       run.later( () => {
         assert.ok(!this.$().hasClass('huge'), '"huge" css class removed after switching');
         assert.ok(this.$().hasClass('small'), '"small" css class detected');
-        done2();        
+        done2();
       }, 5);
     },5);
 	});
   
+});
+
+test('size property - function/callback', function(assert) {
+  let component = this.subject({
+    title: 'Size Matters',
+    size: function(item) {
+      return item.get('title') === "Size Matters" ? 'huge' : 'small';
+    }
+  });
+  assert.equal(component.get('_size'), 'huge', 'Mood should have resolved to scalar value');
+  component.set('title','Perfection comes in all shapes and sizes');
+  let done = assert.async();
+  run.later( () => {
+    assert.equal(component.get('_size'), 'small', 'Mood should have re-resolved to new scalar value');
+    done();
+  }, 5);
 });
 
 test('unpacking the packed property', function(assert) {
@@ -159,5 +175,6 @@ test('default values', function(assert) {
   assert.equal( component.get('title'), 'Insert Title', 'when no title set, default value should take its place');
   assert.equal( component.get('iconCenter'), 'check-square-o', 'when no iconCenter is set, default value should take its place');
   assert.equal( component.get('subHeading'), 'something', 'when subHeading has a value, default should be ignored');
-  
 });
+
+
