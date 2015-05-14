@@ -219,4 +219,15 @@ test('observing a property change in items', function(assert) {
 });
 
 
+test('pack property set', function(assert) {
+  let component = this.subject({});
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, title: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"})
+  ]);
+  assert.equal(component.get('items').length, 3, "INIT: items array loaded");
+  assert.equal(typeOf(component.get('map')), 'object', "INIT: a map hash has been set: " + JSON.stringify(component.get('map')));
+  
+});
 

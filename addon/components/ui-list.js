@@ -108,7 +108,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
    * 
    *   1. Items are filtered based on the the 'filter' property
    *   2. Any functions() assigned to aspectPanes are resolved and replaced with resolved values
-   *   2. aspect/panes properties are packaged up as hash and passed to the item as a single property 'aspectPanes'
+   *   2. aspect/panes properties are packaged up as hash and passed to the item as a single property 'packed'
    *   3. itemProperties are also packaged up as a hash and passed to the item as a single property 'itemProperties'
    */
   content: on('init', computed('items.[]','items.@each._propertyChanged', function() {

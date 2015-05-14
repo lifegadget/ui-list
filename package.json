@@ -46,7 +46,7 @@
     "ember-cli-observe-all": "0.0.1",
     "merge": "^1.2.0",
     "ui-icon": "0.0.12",
-    "ui-responsive-toolbelt": "0.0.3"
+    "ui-responsive-toolbelt": "0.0.5"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
