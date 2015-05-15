@@ -1,7 +1,7 @@
-{{#if leftPaneExists}}
+{{#if hasLeftPane}}
 <div class="left-pane {{if twoLinedMessage 'two-lined-message'}}">
     {{#if iconLeft}}{{ui-icon icon=iconLeft}}{{/if}}
-    {{#if imageLeft}}<img src="{{imageLeft}}">{{/if}}      
+    {{#if imageLeft}}{{ui-image src=imageLeft size='default' borderMask='circle'}}{{/if}}      
     {{#if titleLeft}}{{titleLeft}}{{/if}}
 </div>    
 {{/if}}

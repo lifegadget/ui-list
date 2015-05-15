@@ -37,15 +37,34 @@ let SharedItem = Mixin.create({
     }
     return !mood || mood === 'default' ? '' : `mood-${mood}`;
   }),
+  
+  /**
+   * setups up logical flags to indicate the existance of content on a per pane basis
+   */
+  _logicPanes: on('init', function() {
+    const panes = new A(this.get('_panes'));
+    const aspects = new A(this.get('_aspects'));
+    let panesSet = [];
+    run.once(() => {
+      panes.forEach( pane => {
+        const property = 'has' + capitalize(pane) + 'Pane';
+        const relevantAspects = aspects.map(aspect=>{ return aspect + capitalize(pane) });
+        const cp = computed.or(...relevantAspects);
+        defineProperty(this,property,cp);
+        this.notifyPropertyChange(property);
+      });      
+    });
+  }),
 
   // Unpacking packed hash
   _unpackProperties:  on('init', function() {
     const packed = this.get('packed');
+    const packedProperties = this.get('packedProperties');
     if(packed) {
       keys(packed).forEach( key => {
         this.set(key, packed[key]);
       });
-      this.set('_keyAspectPanes', new A(keys(packed)));
+      this.set('_keyAspectPanes', packedProperties ? packedProperties : new A(keys(packed))); 
     } else {
       const aspectPanes = this.get('_aspectPanes'); // get full list supported by this item type
       let keyAspectPanes = new A([]);

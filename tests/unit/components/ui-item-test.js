@@ -177,4 +177,13 @@ test('default values', function(assert) {
   assert.equal( component.get('subHeading'), 'something', 'when subHeading has a value, default should be ignored');
 });
 
+test('test logic panes', function(assert) {
+  let component = this.subject();
+  assert.equal( component.get('hasLeftPane'), false, 'when no properties set, left pane should be false');
+  assert.equal( component.get('hasCenterPane'), false, 'when no properties set, center pane should be false');
+  assert.equal( component.get('hasRightPane'), false, 'when no properties set, right pane should be false');
+  component.set('icon','message');
+  assert.equal( component.get('hasLeftPane'), true, 'icon set which is aliased to left pane; should now be true');
+});
+
 

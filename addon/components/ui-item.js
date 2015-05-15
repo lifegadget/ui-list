@@ -17,6 +17,8 @@ export default Component.extend(SharedItem,{
   icon: computed.alias('iconLeft'),
   badge: computed.alias('badgeRight'),
   image: computed.alias('imageLeft'),
+  title: computed.alias('titleCenter'),
+  subHeading: computed.alias('subHeadingCenter'),
   
   leftPaneExists: computed.or('iconLeft','titleLeft','badgeLeft'),
   titleExists: computed.notEmpty('title'),

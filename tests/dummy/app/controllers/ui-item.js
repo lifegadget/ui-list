@@ -3,7 +3,7 @@ const { computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
 
 export default Ember.Controller.extend({
 
-  queryParams: ['mood','size','style','foo','bar'],
+  queryParams: ['mood','size','style','foo','bar','showImage'],
   
   toggledBadge: on('init',computed('showBadge', function() {
     return this.get('showBadge') ? 4 : null;
@@ -30,8 +30,11 @@ export default Ember.Controller.extend({
     return item.get('title') === 'Monkey' ? 'success' : 'warning';
   },
   image: computed('showImage', function() {
-    return this.get('showImage') ? this.get('imageExample') : null;
+    const show = this.get('showImage');
+    const image = this.get('imageExample');
+    return show ? image : null;
   }),
+  showImage:false,
   imageExample: 'images/examples/jobs.png',
   style: 'default',
   size: 'default',

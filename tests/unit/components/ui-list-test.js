@@ -175,10 +175,8 @@ test('test that “packed” object included in content', function(assert) {
     component.get('content.1.title'),
     "a direct reference to title should be in content as well as packed object off of content/item"
   );
-
   
 });
-
 
 test('listProperties injected into content', function(assert) {
   let component = this.subject();
@@ -250,8 +248,7 @@ test('observing a property change in items', function(assert) {
   },50);
 });
 
-
-test('pack property set', function(assert) {
+test('packed and packedProperties  set', function(assert) {
   let component = this.subject({});
   component.set('items', [
     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
@@ -271,4 +268,3 @@ test('pack property set', function(assert) {
   assert.ok($(packedProperties).not(['title','subHeading','icon','badge']).length === 0 && $(['title','subHeading','icon','badge']).not(packedProperties).length === 0, 'packedProperties are correct');
   
 });
-
