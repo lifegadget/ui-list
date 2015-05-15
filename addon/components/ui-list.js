@@ -33,7 +33,6 @@ export default Ember.Component.extend(Ember.SortableMixin,{
           if(callback && typeOf(callback) === 'function') {
             callback(key);
           }
-          debug('detected change to ' + key);
         });
         
         return item;
@@ -74,35 +73,29 @@ export default Ember.Component.extend(Ember.SortableMixin,{
   classNameBindings: ['compressed'],
   compressed: false, // horizontal space compression between items (provided via CSS),
   // List Meta
-  _aspects: null,
-  _panes: null,
-  _aspectPanes: on('init', computed('_aspects','_panes', function() {
+  _aspects: [ 'icon', 'image', 'badge', 'title','subHeading' ],
+  _panes: [ 'left', 'center', 'right' ],
+  /**
+   * The specific Item components should define which aspects and panes they support, this 
+   * just bring together the resultant array of aspectPanes which can be targetted/configured by a user
+   */
+  _aspectPanes: on('init', computed('_aspects','_panes',function() {
     const aspects = this.get('_aspects');
     const panes = this.get('_panes');
-    if(!aspects) {
-      return new A([]);
+    let aspectPanes = [];
+    if(aspects && panes) {
+      for (let aspect of aspects) {
+        aspectPanes.push(aspect);
+        for (let pane of panes) {
+          aspectPanes.push(aspect + capitalize(pane));
+        }
+      }      
     }
-    const aspectPanes = new A(aspects);
-    aspects.forEach( aspect => {
-      panes.forEach( pane => {
-        aspectPanes.push(aspect + capitalize(pane));
-      });
-    });
     
     return aspectPanes;
   })),
   _itemProperties: null,
   _listProperties: ['size','mood','style'],
-  /**
-  *  Look at the particular type of Item this list manages to determine 
-  *  the "aspects", "panes", and "itemProperties" that it is concerned with
-  */
-  _introspectItemScope: on('init', function() {
-    // note: I do not know how to do this introspection so hard coding for now
-    this.set('_aspects', [ 'icon', 'image', 'badge', 'title','subHeading' ]);
-    this.set('_panes', [ 'left', 'center', 'right' ]);
-    this.set('_itemProperties', []);
-  }),
   /**
    * Content is immutable copy of items with the following enhancements:
    * 
@@ -111,24 +104,31 @@ export default Ember.Component.extend(Ember.SortableMixin,{
    *   2. aspect/panes properties are packaged up as hash and passed to the item as a single property 'packed'
    *   3. itemProperties are also packaged up as a hash and passed to the item as a single property 'itemProperties'
    */
-  content: on('init', computed('items.[]','items.@each._propertyChanged', function() {
+  content: on('init', computed('items.[]','filter','items.@each._propertyChanged', function() {
     const itemsArray = this.get('items') ? this.get('items') : new A([]);
+    if(!itemsArray) {
+      return new A([]);
+    }
     const content = new A(itemsArray.map( item => {
+      const data = item.get('_data'); // if its an ember-data object then data is locked up in the _data property
+      item = data ? data : item;
       return Ember.Object.create(item); 
     }));
+    console.log('SUMMARY: %o', content);
+    console.log('-------------------------');
     // FILTER
     // -------------------------------
     const filter = this.get('filter');
     let filteredContent = null;
     switch(typeOf(filter)) {
     case "function":
-      filteredContent = new A(content.map( filter ));
+      filteredContent = content.filter(filter, this);
       break;
     case "object":
-      filteredContent = new A(content.filterBy(filter.key,filter.value));
+      filteredContent = content.filterBy(filter.key,filter.value);
       break;
     case "array":
-      filteredContent = new A(content.filterBy(filter[0],filter[1]));
+      filteredContent = content.filterBy(filter[0],filter[1]);
       break;
     default:
       filteredContent = content;
@@ -172,7 +172,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
           item[ap] = item[this._getMap(ap)];
         }
         // put property into packed property if non-null
-        if(item[ap] !== null) {
+        if(item[ap]) {
           item.packed[ap] = item[ap];
         }
       });
@@ -191,5 +191,18 @@ export default Ember.Component.extend(Ember.SortableMixin,{
   _getDefaultValue: function(prop) {
     const value = this.get('default' + capitalize(prop));
     return value ? value : false;
+  },
+  _registeredItems: new A([]),
+  registration: function(item, self) {
+    const registeredItems = self.get('_registeredItems');
+    if(item) {
+      registeredItems.pushObject(item);
+      if(registeredItems.length === 1) {
+        self.set('_aspects', item.get('_aspects'));
+        self.set('_panes', item.get('_panes'));
+      }      
+    } else {
+      debug('Item registered itself but did not pass a reference to itself back in');
+    }
   }
 });

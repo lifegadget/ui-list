@@ -189,7 +189,9 @@ map: {
             <column>
                 List Size: <br/>
                 {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
-                compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}
+                compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
+                Filter: <br/>
+                {{ui-button-radio choices=listFilters selected=filter size='small'}}
             </column>
             <column>
                 Mood: <br/>
@@ -264,9 +266,9 @@ map: {
 <examples>
   <widget class='wide'>
     {{#if enableStaticChooser}}
-      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy}}
+      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filter}}
     {{else}}
-      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy}}
+      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filter}}
     {{/if}}
   </widget>
   <sourcecode>

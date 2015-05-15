@@ -40,6 +40,13 @@ export default Ember.Controller.extend({
   enableStaticChooser: on('init',computed('moodStrategy', function() {
     return this.get('moodStrategy') === 'static';
   })),
+  listFilters: [
+    {id: null, name: '(none)'},
+    {id: item => { return item.badge > 0; }, name: 'Badge Exists'},
+    {id: ['icon','cab'], name: 'Cab Icon'}
+  ],
+  listFilter: null,
+  
   
   toggledBadge: on('init',computed('showBadge', function() {
     return this.get('showBadge') ? 4 : null;

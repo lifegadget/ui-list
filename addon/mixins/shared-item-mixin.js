@@ -134,6 +134,14 @@ let SharedItem = Mixin.create({
         this.set(item, this[defaultKey]);
       }
     }    
+  }),
+  
+  _register: on('didInsertElement', function() {
+    const register = this.get('register');
+    const targetObject = this.get('targetObject');
+    if(register && targetObject) {
+      register(this, this.get('targetObject'));
+    }
   })
 });
 

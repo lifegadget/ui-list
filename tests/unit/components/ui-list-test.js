@@ -86,6 +86,38 @@ test('only valid filters are settable', function(assert) {
   assert.equal(component.get('_filter'),null, 'yeah right! a number? come on.');
 });
 
+test('content is filtered', function(assert) {
+  let component = this.subject();
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"}),
+    Ember.Object.create({when: 5, foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"}),
+    Ember.Object.create({when: 6, foo: "Had Coffee", bar: "need to chill out after that beer", icon: "coffee"}),
+    Ember.Object.create({when: 1, foo: "Ate Breakfast", bar: "start of every good morning", icon: "cutlery"})
+  ]);
+  component.set('map', {
+    title: 'foo',
+    subHeading: 'bar'
+  });
+  assert.equal(component.get('items').length, 6, 'INIT: all items are loaded without filtering on');
+  assert.equal(component.get('content').length, 6, 'INIT: item content has been brought over to content array');
+  assert.equal(component.get('arrangedContent').length, 6, 'INIT: content array also residing in arrangeContent');
+  component.set('filter', ['icon','cab']);
+  assert.equal(component.get('content').length, 1, 'content should have only 1 item in it after filtering');
+  assert.equal(component.get('content.0.icon'), 'cab', 'property remaining should be equal to the filtered value');
+  component.set('filter', null);
+  assert.equal(component.get('content').length, 6, 'content array should have all items once filter has been removed');  
+  component.set('filter', { key:'icon', value: 'cab' });
+  assert.equal(typeOf(component.get('filter.key')), 'string', 'setting filter with object: {name/value}');
+  assert.equal(component.get('content').length, 1, 'content should have only 1 item in it after filtering (w/ object)');
+  assert.equal(component.get('content.0.icon'), 'cab', 'property remaining should be equal to the filtered value  (w/ object)');
+  component.set('filter', item => { return item.get('badge') > 0; });
+  assert.equal(component.get('content').length, 2, 'After filtering with function for items with badges there should be 2 remaining');
+  component.set('filter', null);
+  assert.equal(component.get('content').length, 6, 'content array should have all items once filter has been removed (again)');  
+});
+
 test('content is set from items', function(assert) {
   let component = this.subject();
   component.set('items', [
