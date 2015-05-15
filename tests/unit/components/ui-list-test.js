@@ -258,8 +258,17 @@ test('pack property set', function(assert) {
     Ember.Object.create({when: 3, title: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
     Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"})
   ]);
+  component.set('map', {
+    title: 'foo',
+    subHeading: 'bar'
+  });  
   assert.equal(component.get('items').length, 3, "INIT: items array loaded");
   assert.equal(typeOf(component.get('map')), 'object', "INIT: a map hash has been set: " + JSON.stringify(component.get('map')));
+    
+  assert.equal(component.get('content.0.packed.title'), 'Groceries', 'packed property has mapped title property');
+  assert.equal(component.get('content.0.packed.badge'), 1, 'packed property has un-mapped badge property');
+  const packedProperties = component.get('content.0.packedProperties');
+  assert.ok($(packedProperties).not(['title','subHeading','icon','badge']).length === 0 && $(['title','subHeading','icon','badge']).not(packedProperties).length === 0, 'packedProperties are correct');
   
 });
 

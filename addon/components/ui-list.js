@@ -135,10 +135,9 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     }    
     // Structural Constants
     // -------------------------------
-    // const aspects = new A(this.get('_aspects'));
-    // const panes = new A(this.get('_panes'));
     const aspectPanes = this.get('_aspectPanes');
     const listProperties = this.get('_listProperties');
+    let packedProperties = {};
     
     // Iterate over Items
     // --------------------------------
@@ -174,10 +173,16 @@ export default Ember.Component.extend(Ember.SortableMixin,{
         // put property into packed property if non-null
         if(item[ap]) {
           item.packed[ap] = item[ap];
+          packedProperties[ap] = true;
         }
       });
       
       return item;
+    });
+    // add inter-aspect packed properties to each item
+    packedProperties = keys(packedProperties);
+    filteredContent.forEach( item => {
+      item.packedProperties = packedProperties;
     });
     
     return filteredContent;
