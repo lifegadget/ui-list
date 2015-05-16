@@ -11,7 +11,7 @@ export default Component.extend(SharedItem,{
   tagName: 'div',
   disabled: false,
   iconRight: 'chevron-right',
-  _aspects: ['title','subHeading','icon','image'],
+  _aspects: ['title','subHeading','icon','image','badge'],
   _panes: ['left','center', 'right'],
   // Defaulting panes for various Aspects
   icon: computed.alias('iconLeft'),

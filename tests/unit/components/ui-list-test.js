@@ -178,21 +178,32 @@ test('test that “packed” object included in content', function(assert) {
   
 });
 
-test('listProperties injected into content', function(assert) {
+test('listProperties propagated to items', function(assert) {
   let component = this.subject();
+  let done = assert.async();
+  let done2 = assert.async();
   component.set('items', [
     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
     Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
   ]);
-  component.set('size','large');
-  assert.equal(component.get('size'), 'large', 'size listProperty set to large');
-  component.set('style','flat');
-  assert.equal(component.get('style'), 'flat', 'style listProperty set to flat');
-  component.set('mood','success');
-  assert.equal(component.get('mood'), 'success', 'mood listProperty set to success');
-  assert.equal(component.get('content.0.size'), 'large', 'the size listProperty has been transferred over to the content array');
-  assert.equal(component.get('content.0.style'), 'flat', 'the style listProperty has been transferred over to the content array');
-  assert.equal(component.get('content.0.mood'), 'success', 'the mood listProperty has been transferred over to the content array');
+  this.render();
+  run.later(() => {
+    component.set('size','large');
+    assert.equal(component.get('size'), 'large', 'INIT: size listProperty set to large');
+    component.set('style','flat');
+    assert.equal(component.get('style'), 'flat', 'INIT: style listProperty set to flat');
+    component.set('mood','success');
+    assert.equal(component.get('mood'), 'success', 'INIT: mood listProperty set to success');
+    done();
+    run.later(() => {
+      assert.equal(component.get('_registeredItems').filter( item => { return item.get('size') === 'large'; } ).length, 2, 'all items should have size set to large');
+      assert.equal(component.get('_registeredItems').filter( item => { return item.get('style') === 'flat'; } ).length, 2, 'all items should have style set to flat');
+      assert.equal(component.get('_registeredItems').filter( item => { return item.get('mood') === 'success'; } ).length, 2, 'all items should have mood set to success');
+      done2();
+    },5);
+  },5);
+
+
 });
 
 test('inline business logic resolved', function(assert) {
@@ -266,5 +277,27 @@ test('packed and packedProperties  set', function(assert) {
   assert.equal(component.get('content.0.packed.badge'), 1, 'packed property has un-mapped badge property');
   const packedProperties = component.get('content.0.packedProperties');
   assert.ok($(packedProperties).not(['title','subHeading','icon','badge']).length === 0 && $(['title','subHeading','icon','badge']).not(packedProperties).length === 0, 'packedProperties are correct');
-  
+});
+
+test('Squeezed property proxied down to items', function(assert) {
+  let component = this.subject();
+  let done = assert.async();
+  let done2 = assert.async();
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6})
+  ]);
+  this.render();
+  run.later( () => {
+    assert.ok(!component.get('squeezed'), 'INIT: the list component should have squeezed property off');
+    assert.equal(component.get('_registeredItems.length'), 2, 'INIT: there should be two items registered in the list');
+    console.log('registered: %o', component.get('_registeredItems'));
+    assert.equal(component.get('_registeredItems').filter( item => { return item.get('squeezed'); } ).length, 0, 'INIT: neither item should have squeezed turned on');
+    component.set('squeezed', true);
+    done();
+    run.later( () => {
+      assert.equal(component.get('_registeredItems').filter( item => { return item.get('squeezed'); } ).length, 2, 'all items should have squeezed turned on');
+      done2();
+    },5);
+  },30)
 });

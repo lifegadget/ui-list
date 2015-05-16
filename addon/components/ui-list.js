@@ -95,7 +95,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     return aspectPanes;
   })),
   _itemProperties: null,
-  _listProperties: ['size','mood','style'],
+  _listProperties: ['size','mood','style','squeezed'],
   /**
    * Content is immutable copy of items with the following enhancements:
    * 
@@ -114,8 +114,6 @@ export default Ember.Component.extend(Ember.SortableMixin,{
       item = data ? data : item;
       return Ember.Object.create(item); 
     }));
-    console.log('SUMMARY: %o', content);
-    console.log('-------------------------');
     // FILTER
     // -------------------------------
     const filter = this.get('filter');
@@ -141,19 +139,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     
     // Iterate over Items
     // --------------------------------
-    filteredContent.forEach( item => {
-      // Add List Properties to Content
-      listProperties.forEach( prop => {
-        let propFunc, propValue;
-        if(typeOf(this.get(prop)) === 'function') {
-          propFunc = this.get(prop);
-          propValue = propFunc(item,filteredContent);
-        } else {
-          propValue = this.get(prop);
-        }
-        item[prop] = propValue;
-      });
-      
+    filteredContent.forEach( item => {      
       // Resolve inline functions and set default values
       keys(item).forEach( prop => {
         if(typeOf(item[prop]) === 'function') {

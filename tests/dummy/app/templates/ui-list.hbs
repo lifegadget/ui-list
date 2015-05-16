@@ -118,6 +118,7 @@
                 {{#if enableStaticChooser}}
                   {{ui-list 
                     items=items 
+                    filter=listFilter
                     map=map 
                     size=size 
                     mood=mood 
@@ -130,6 +131,7 @@
                 {{else}}
                   {{ui-list 
                     items=items 
+                    filter=listFilter
                     map=map 
                     size=size 
                     mood=sillyLogic 
@@ -191,7 +193,7 @@ map: {
                 {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
                 compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
                 Filter: <br/>
-                {{ui-button-radio choices=listFilters selected=filter size='small'}}
+                {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false}}
             </column>
             <column>
                 Mood: <br/>

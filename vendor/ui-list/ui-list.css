@@ -21,6 +21,16 @@
     margin: 5px 5px 5px 5px;
 }
 
+.ui-list .ui-icon {
+    display: inline;
+}
+.ui-list .ui-image {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.ui-list.disabled .ui-image  {
+    opacity: .4;
+}
 
 .ui-list.item .left-pane {
     margin: auto;
@@ -67,12 +77,8 @@
 .ui-list.item.large {
     font-size: 1.5em;
 }
-
 .ui-list.item.huge {
     font-size: 2em;
-}
-.ui-list.item.huge .center-pane.no-left {
-    padding-left: 15px;
 }
 
 /* BADGE ADJUSTMENTS */
@@ -103,13 +109,34 @@
 .ui-list .hpad.squeezed {
     width: 5px;
 }
-.ui-list .hpad .left,.right {
+.ui-list .hpad.left,
+.ui-list .hpad.right {
     width: 15px;
 }
-.ui-list .hpad.left,.hpad.right {
-    width: 15px;
+.ui-list.tiny .hpad.left,
+.ui-list.tiny .hpad.right {
+    width: 8px;
 }
-
+.ui-list.small .hpad.left,
+.ui-list.small .hpad.right {
+    width: 10px;
+}
+/* SQUEEZED*/
+.ui-list .squeezed {
+    width: 3px;
+}
+.ui-list.item.squeezed .hpad.left, 
+.ui-list.item.squeezed .hpad.right {
+    width: 10px;
+}
+.ui-list.tiny.item.squeezed .hpad.left,
+.ui-list.item.squeezed .hpad.right {
+    width: 5px;
+}
+.ui-list.small.item.squeezed .hpad.left,
+.ui-list.item.squeezed .hpad.right {
+    width: 8px;
+}
 
 /* DEFAULT IMAGE SIZING */
 .ui-list .ui-image {
@@ -135,8 +162,6 @@
     height: 90px;
     width: auto;
 }
-
-
 
 /* DISABLED STYLING */
 .ui-list.disabled {

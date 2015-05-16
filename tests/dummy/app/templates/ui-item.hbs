@@ -73,6 +73,7 @@
 					disabled=isDisabled 
 					style=style 
 					mood=_mood
+          squeezed=squeezed
 				}}
         <br/>
         
@@ -88,6 +89,7 @@
 					disabled=isDisabled 
 					style=style 
 					mood=_mood
+          squeezed=squeezed
 				}}
         
     </widget>
@@ -156,6 +158,8 @@ dynamicMoodFunction: function(item) {
                         {{ui-toggle-button value=showBadge size='small'}} - BADGE   <br/>
                         <p>&nbsp;</p>                      
                         {{ui-toggle-button value=showIcon size='small'}} - ICON<br/>
+                        <p>&nbsp;</p>                      
+                        {{ui-toggle-button value=squeezed size='small' defaultValue=false}} - SQUEEZED <br/>
                     </div>
                 </div>
             </column>
