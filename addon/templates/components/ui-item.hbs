@@ -1,17 +1,20 @@
+<div class="hpad left"></div>
 {{#if hasLeftPane}}
-<div class="left-pane {{if twoLinedMessage 'two-lined-message'}}">
-    {{#if iconLeft}}{{ui-icon icon=iconLeft}}{{/if}}
-    {{#if imageLeft}}{{ui-image src=imageLeft size='default' borderMask='circle'}}{{/if}}      
-    {{#if titleLeft}}{{titleLeft}}{{/if}}
-</div>    
+  <div class="left-pane {{if twoLinedMessage 'two-lined-message'}}">
+      {{#if iconLeft}}{{ui-icon icon=iconLeft fw=false}}{{/if}}
+      {{#if imageLeft}}{{ui-image src=imageLeft borderMask='circle'}}{{/if}}
+      {{#if titleLeft}}{{titleLeft}}{{/if}}
+  </div>
+  <div class="hpad"></div>
 {{/if}}
-<div class="center-pane {{if leftPaneExists 'with-left' 'no-left'}} {{if twoLinedMessage 'two-lined-message'}}">
-    {{#if title}}<span class='title'>{{title}}</span>{{/if}}
-    <span class='sub-heading'><br/>{{subHeading}}</span>
-</div>
+  <div class="center-pane {{if hasLeftPane 'with-left' 'no-left'}} {{if twoLinedMessage 'two-lined-message'}}">
+      {{#if title}}<span class='title'>{{title}}</span>{{/if}}
+      <span class='sub-heading'><br/>{{subHeading}}</span>
+  </div>
+  <div class="hpad"></div>
 <div class="right-pane {{if badgeRight 'with-badge'}}">
     {{#if badgeRight}}<span class="badge">{{badgeRight}}</span>{{/if}}   
-    {{#if iconRight}}{{ui-icon class="icon-right" icon=iconRight}}{{/if}}
+    {{#if iconRight}}{{ui-icon class="icon-right" icon=iconRight fw=false}}{{/if}}
 </div>
-
+<div class="hpad right"></div>
 {{yield}}

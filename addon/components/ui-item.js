@@ -20,7 +20,6 @@ export default Component.extend(SharedItem,{
   title: computed.alias('titleCenter'),
   subHeading: computed.alias('subHeadingCenter'),
   
-  leftPaneExists: computed.or('iconLeft','titleLeft','badgeLeft'),
   titleExists: computed.notEmpty('title'),
   subHeadingExists: computed.notEmpty('subHeading'),
   twoLinedMessage: computed.and('titleExists','subHeadingExists'),
