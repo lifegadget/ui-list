@@ -21,6 +21,13 @@
     margin: 5px 5px 5px 5px;
 }
 
+.ui-list .ui-image {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.ui-list.disabled .ui-image  {
+    opacity: .4;
+}
 
 .ui-list.item .left-pane {
     margin: auto;
@@ -67,12 +74,8 @@
 .ui-list.item.large {
     font-size: 1.5em;
 }
-
 .ui-list.item.huge {
     font-size: 2em;
-}
-.ui-list.item.huge .center-pane.no-left {
-    padding-left: 15px;
 }
 
 /* BADGE ADJUSTMENTS */
@@ -96,20 +99,41 @@
 }
 
 /* HORIZONTAL PADDING */
-.ui-list .hpad {
+.ui-list.item .hpad {
     width: 10px;
     margin: 0;
 }
-.ui-list .hpad.squeezed {
+.ui-list.item .hpad.squeezed {
     width: 5px;
 }
-.ui-list .hpad .left,.right {
+.ui-list.item .hpad.left,
+.ui-list.item .hpad.right {
     width: 15px;
 }
-.ui-list .hpad.left,.hpad.right {
-    width: 15px;
+.ui-list.item.tiny .hpad.left,
+.ui-list.item.tiny .hpad.right {
+    width: 8px;
 }
-
+.ui-list.item.small .hpad.left,
+.ui-list.item.small .hpad.right {
+    width: 10px;
+}
+/* SQUEEZED*/
+.ui-list.item.squeezed .hpad {
+    width: 3px;
+}
+.ui-list.item.squeezed .hpad.left, 
+.ui-list.item.squeezed .hpad.right {
+    width: 10px;
+}
+.ui-list.tiny.item.squeezed .hpad.left,
+.ui-list.item.squeezed .hpad.right {
+    width: 5px;
+}
+.ui-list.small.item.squeezed .hpad.left,
+.ui-list.item.squeezed .hpad.right {
+    width: 8px;
+}
 
 /* DEFAULT IMAGE SIZING */
 .ui-list .ui-image {
@@ -135,8 +159,6 @@
     height: 90px;
     width: auto;
 }
-
-
 
 /* DISABLED STYLING */
 .ui-list.disabled {

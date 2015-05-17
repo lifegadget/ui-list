@@ -172,16 +172,40 @@ test('default values', function(assert) {
     defaultSubHeading: 'nada',
     subHeading: 'something'
   });
-  assert.equal( component.get('title'), 'Insert Title', 'when no title set, default value should take its place');
-  assert.equal( component.get('iconCenter'), 'check-square-o', 'when no iconCenter is set, default value should take its place');
+  assert.equal( component.get('titleCenter'), 'Insert Title', 'when no titleCenter set, default value should take its place');
+  assert.equal( component.get('title'), 'Insert Title', 'when no title set, default value should take its place (aliased)');
+  component.set('titleCenter', 'My Title');
+  assert.equal( component.get('title'), 'My Title', 'once Title is set, it overrides default value.');
+  assert.equal( component.get('iconCenter'), 'check-square-o', 'when no iconCenter is set, default value should be ignored');
+  component.set('iconCenter', 'envelope');
+  assert.equal( component.get('iconCenter'), 'envelope', 'once iconCenter is set, default value should be replaced');
   assert.equal( component.get('subHeading'), 'something', 'when subHeading has a value, default should be ignored');
+  assert.equal( component.get('subHeadingCenter'), 'something', 'when subHeading\'s alias subHeadingCenter has a value, default should be ignored');
 });
 
-// test('test logic panes', function(assert) {
-//   let component = this.subject();
-//   assert.equal( component.get('hasLeftPane'), false, 'when no properties set, left pane should be false');
-//   assert.equal( component.get('hasCenterPane'), false, 'when no properties set, center pane should be false');
-//   assert.equal( component.get('hasRightPane'), false, 'when no properties set, right pane should be false');
-//   component.set('icon','message');
-//   assert.equal( component.get('hasLeftPane'), tru, 'icon set which is aliased to left pane; should now be true');
-// });
+test('test logic panes', function(assert) {
+  let component = this.subject();
+  assert.equal( component.get('hasLeftPane') ? true:false, false, 'when no properties set, left pane should be false');
+  assert.equal( component.get('hasCenterPane') ? true:false, false, 'when no properties set, center pane should be false');
+  assert.equal( component.get('hasRightPane') ? true:false, true, 'when no properties set, right pane should be true because of default value');
+  component.set('icon','message');
+  assert.equal( component.get('hasLeftPane') ? true : false, true, 'icon set which is aliased to left pane; should now be true');
+});
+
+test('test squeezed CSS toggle', function(assert) {
+  let component = this.subject();
+  let done1 = assert.async();
+  let done2 = assert.async();
+  this.render();
+  run.later( () => {
+    assert.equal( component.$().hasClass('squeezed'), false, 'squeezed property is off by default');
+    done1();
+    component.set('squeezed', true);
+    run.later( () => {
+      assert.equal( component.$().hasClass('squeezed'), true, 'squeezed property is toggled on with the item property'); 
+      done2();     
+    },5);
+  }, 5);
+  
+  
+});

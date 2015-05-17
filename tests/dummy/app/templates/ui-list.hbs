@@ -118,24 +118,28 @@
                 {{#if enableStaticChooser}}
                   {{ui-list 
                     items=items 
+                    filter=listFilter
                     map=map 
                     size=size 
                     mood=mood 
                     style=style 
                     defaultIcon=defaultIcon 
                     compressed=compressed 
+                    squeezed=squeezed
                     sort=sortBy 
                     sortAscending=sortAscending
                   }}
                 {{else}}
                   {{ui-list 
                     items=items 
+                    filter=listFilter
                     map=map 
                     size=size 
                     mood=sillyLogic 
                     style=style 
                     defaultIcon=defaultIcon 
                     compressed=compressed 
+                    squeezed=squeezed
                     sort=sortBy  
                     sortAscending=sortAscending
                   }}
@@ -169,7 +173,8 @@ map: {
   {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
   size="{{size}}"
   style="{{style}}"{{#if compressed}}
-  compressed=true{{/if}}{{#if sortBy}}
+  compressed=true{{/if}}{{#if squeezed}}
+  squeezed=true{{/if}}{{#if sortBy}}
   sort="{{sortBy}}" {{else}}
   {{/if}}
   
@@ -189,9 +194,9 @@ map: {
             <column>
                 List Size: <br/>
                 {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
-                compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
-                Filter: <br/>
-                {{ui-button-radio choices=listFilters selected=filter size='small'}}
+                Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
+                Horzizontally Squeezed: {{ui-toggle-button value=squeezed on='squeezed' off='normal' size='small'}}<br/>
+                Filter: {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false size='small'}}
             </column>
             <column>
                 Mood: <br/>
@@ -266,9 +271,9 @@ map: {
 <examples>
   <widget class='wide'>
     {{#if enableStaticChooser}}
-      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filter}}
+      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filterList sortAscending=sortAscending}}
     {{else}}
-      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filter}}
+      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filterList sortAscending=sortAscending}}
     {{/if}}
   </widget>
   <sourcecode>

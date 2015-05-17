@@ -5,9 +5,10 @@ const capitalize = Ember.String.capitalize;
 let SharedItem = Mixin.create({  
   // Classy stuff
   classNames: ['ui-list','item'],
-  classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood' ],
+  classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood','squeezed' ],
 
   // Stylish stuff
+  squeezed: false,
   _styleDependencies: ['_componentWidth', '_componentHeight', '_windowWidth', '_windowHeight','size'],
   _style: computed('style','_styleDependencies', function() {
     let style = this.get('style');
@@ -44,15 +45,13 @@ let SharedItem = Mixin.create({
   _logicPanes: on('init', function() {
     const panes = new A(this.get('_panes'));
     const aspects = new A(this.get('_aspects'));
-    let panesSet = [];
-    run.once(() => {
-      panes.forEach( pane => {
-        const property = 'has' + capitalize(pane) + 'Pane';
-        const relevantAspects = aspects.map(aspect=>{ return aspect + capitalize(pane) });
-        const cp = computed.or(...relevantAspects);
-        defineProperty(this,property,cp);
-        this.notifyPropertyChange(property);
-      });      
+    // let panesSet = [];
+    panes.forEach( pane => {
+      const property = 'has' + capitalize(pane) + 'Pane';
+      const relevantAspects = aspects.map(aspect=>{ return aspect + capitalize(pane); });
+      const cp = computed.or(...relevantAspects);
+      defineProperty(this,property,cp);
+      this.notifyPropertyChange(property);
     });
   }),
 
@@ -133,14 +132,14 @@ let SharedItem = Mixin.create({
   _defineAspectMappings: on('init', observer('_aspectPanes', function() {
     const aspectPanes = this.get('_aspectPanes');
     for (let aspectPane of aspectPanes) {
-      if(this.getMap(aspectPane)) {
-        let cp = computed.readOnly(this.getMap(aspectPane));
+      if(this._getMap(aspectPane)) {
+        let cp = computed.readOnly(this._getMap(aspectPane));
         defineProperty(this, aspectPane, cp);        
       }
     }
   })),
 
-	getMap: function(property) {
+	_getMap: function(property) {
     return this.get(`map${capitalize(property)}`) || this.get(`map.${property}`);
 	},
   
@@ -149,17 +148,25 @@ let SharedItem = Mixin.create({
     const aspectPanes = this.get('_aspectPanes');
     for (let item of aspectPanes) {
       const defaultKey = 'default' + capitalize(item);
-      if(!this[item] && this[defaultKey]) {
+      if(!this.get(item) && this[defaultKey]) {
         this.set(item, this[defaultKey]);
       }
     }    
   }),
   
+  /**
+   * Registers the item with a parent list (if one exists)
+   */
   _register: on('didInsertElement', function() {
-    const register = this.get('register');
-    const targetObject = this.get('targetObject');
-    if(register && targetObject) {
-      register(this, this.get('targetObject'));
+    const list = this.get('list');
+    if(this.get('list.register')) {
+      list.register(this);
+    }
+  }),
+  _deregister: on('willDestroyElement', function() {
+    const list = this.get('list');
+    if(this.get('list.deregister')) {
+      list.deregister(this);
     }
   })
 });
