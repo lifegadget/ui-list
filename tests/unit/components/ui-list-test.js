@@ -296,8 +296,10 @@ test('Squeezed property proxied down to items', function(assert) {
     component.set('squeezed', true);
     done();
     run.later( () => {
-      assert.equal(component.get('_registeredItems').filter( item => { return item.get('squeezed'); } ).length, 2, 'all items should have squeezed turned on');
+      const results = component.get('_registeredItems').filter( item => { return item.get('squeezed'); } );
+      assert.equal(results.length, 2, 'all items should have squeezed turned on');
+      console.log('results are: %o', results);
       done2();
-    },5);
-  },30)
+    },50);
+  },50);
 });

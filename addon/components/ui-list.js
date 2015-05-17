@@ -19,9 +19,12 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     
     return typeOf(sort) === 'array' ? sort : null;
   })),
-  items: on('init', computed(function(key, value){
-    // setter
-    if(arguments.length > 1) {
+  /**
+   * The function of this computed properties is simply to add or remove observation points for the individual properties
+   * of a given an array element (aka, an item)
+   */
+  items: on('init', computed( {
+    set: function(key, value, oldValue) {
       const watcher = Ember.Object.extend(ObserveAll).create();
       value = value ? new A(value) : new A([]);
       return new A(value.map( item => { 
@@ -36,10 +39,12 @@ export default Ember.Component.extend(Ember.SortableMixin,{
         });
         
         return item;
-      }));
-    }
-    // initial state / getter
-    return new A([]);  
+      }));      
+    },
+    get: function() {
+      // initial state / getter
+      return new A([]);        
+    } 
   })),
   filter: null,
   _filter: computed('filter', function() {
@@ -184,16 +189,14 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     return value ? value : false;
   },
   _registeredItems: new A([]),
-  registration: function(item, self) {
-    const registeredItems = self.get('_registeredItems');
-    if(item) {
-      registeredItems.pushObject(item);
-      if(registeredItems.length === 1) {
-        self.set('_aspects', item.get('_aspects'));
-        self.set('_panes', item.get('_panes'));
-      }      
-    } else {
-      debug('Item registered itself but did not pass a reference to itself back in');
-    }
+  registration: (item) => {
+    console.log('registering new item: %o', item);
+    console.log('this is: %o', this);
+    const registeredItems = this.get('_registeredItems');
+    registeredItems.pushObject(item);
+    if(registeredItems.length === 1) {
+      self.set('_aspects', item.get('_aspects'));
+      self.set('_panes', item.get('_panes'));
+    }      
   }
 });

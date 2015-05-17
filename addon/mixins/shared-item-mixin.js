@@ -45,10 +45,10 @@ let SharedItem = Mixin.create({
   _logicPanes: on('init', function() {
     const panes = new A(this.get('_panes'));
     const aspects = new A(this.get('_aspects'));
-    let panesSet = [];
+    // let panesSet = [];
     panes.forEach( pane => {
       const property = 'has' + capitalize(pane) + 'Pane';
-      const relevantAspects = aspects.map(aspect=>{ return aspect + capitalize(pane) });
+      const relevantAspects = aspects.map(aspect=>{ return aspect + capitalize(pane); });
       const cp = computed.or(...relevantAspects);
       defineProperty(this,property,cp);
       this.notifyPropertyChange(property);
@@ -158,11 +158,13 @@ let SharedItem = Mixin.create({
    * Registers the item with a parent list (if one exists)
    */
   _register: on('didInsertElement', function() {
-    const register = this.get('register');
-    const targetObject = this.get('targetObject');
-    if(register && targetObject) {
-      register(this, this.get('targetObject'));
+    const register = this.get('list.registration');
+    if(register) {
+      register(this);
     }
+  }),
+  _unRegister: on('didRemoveElement', function() {
+    const list = this.get('list');
   })
 });
 

@@ -268,9 +268,9 @@ map: {
 <examples>
   <widget class='wide'>
     {{#if enableStaticChooser}}
-      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filter}}
+      {{ui-list items=model.content map=map size=size mood=mood style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filterList sortAscending=sortAscending}}
     {{else}}
-      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filter}}
+      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filterList sortAscending=sortAscending}}
     {{/if}}
   </widget>
   <sourcecode>
