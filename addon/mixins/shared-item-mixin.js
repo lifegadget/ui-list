@@ -72,17 +72,15 @@ let SharedItem = Mixin.create({
    * just bring together the resultant array of aspectPanes which can be targetted/configured by a user
    */
   _aspectPanes: on('init', computed('_aspects','_panes',function() {
-    const aspects = this.get('_aspects');
-    const panes = this.get('_panes');
+    const aspects = new A(this.get('_aspects'));
+    const panes = new A(this.get('_panes'));
     let aspectPanes = [];
-    if(aspects && panes) {
-      for (let aspect of aspects) {
-        aspectPanes.push(aspect);
-        for (let pane of panes) {
-          aspectPanes.push(aspect + capitalize(pane));
-        }
-      }      
-    }
+    aspects.forEach( aspect => {
+      aspectPanes.push(aspect);
+      panes.forEach( pane => {
+        aspectPanes.push(aspect + capitalize(pane));
+      });
+    });
     
     return aspectPanes;
   })),
