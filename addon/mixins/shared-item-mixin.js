@@ -158,13 +158,16 @@ let SharedItem = Mixin.create({
    * Registers the item with a parent list (if one exists)
    */
   _register: on('didInsertElement', function() {
-    const register = this.get('list.registration');
-    if(register) {
-      register(this);
+    const list = this.get('list');
+    if(this.get('list.register')) {
+      list.register(this);
     }
   }),
-  _unRegister: on('didRemoveElement', function() {
+  _deregister: on('willDestroyElement', function() {
     const list = this.get('list');
+    if(this.get('list.deregister')) {
+      list.deregister(this);
+    }
   })
 });
 

@@ -21,9 +21,6 @@
     margin: 5px 5px 5px 5px;
 }
 
-.ui-list .ui-icon {
-    display: inline;
-}
 .ui-list .ui-image {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -102,27 +99,27 @@
 }
 
 /* HORIZONTAL PADDING */
-.ui-list .hpad {
+.ui-list.item .hpad {
     width: 10px;
     margin: 0;
 }
-.ui-list .hpad.squeezed {
+.ui-list.item .hpad.squeezed {
     width: 5px;
 }
-.ui-list .hpad.left,
-.ui-list .hpad.right {
+.ui-list.item .hpad.left,
+.ui-list.item .hpad.right {
     width: 15px;
 }
-.ui-list.tiny .hpad.left,
-.ui-list.tiny .hpad.right {
+.ui-list.item.tiny .hpad.left,
+.ui-list.item.tiny .hpad.right {
     width: 8px;
 }
-.ui-list.small .hpad.left,
-.ui-list.small .hpad.right {
+.ui-list.item.small .hpad.left,
+.ui-list.item.small .hpad.right {
     width: 10px;
 }
 /* SQUEEZED*/
-.ui-list .squeezed {
+.ui-list.item.squeezed .hpad {
     width: 3px;
 }
 .ui-list.item.squeezed .hpad.left, 

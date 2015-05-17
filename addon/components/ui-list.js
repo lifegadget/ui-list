@@ -25,9 +25,10 @@ export default Ember.Component.extend(Ember.SortableMixin,{
    */
   items: on('init', computed( {
     set: function(key, value, oldValue) {
+      console.log('items being SET');
       const watcher = Ember.Object.extend(ObserveAll).create();
       value = value ? new A(value) : new A([]);
-      return new A(value.map( item => { 
+      return new A(value.map( item => {
         // ensure we have an Ember object
         item = item.set ? item : Ember.Object.create(item);
         // add observers allowing for change detection of 'content'
@@ -37,14 +38,14 @@ export default Ember.Component.extend(Ember.SortableMixin,{
             callback(key);
           }
         });
-        
+
         return item;
-      }));      
+      }));
     },
     get: function() {
       // initial state / getter
-      return new A([]);        
-    } 
+      return new A([]);
+    }
   })),
   filter: null,
   _filter: computed('filter', function() {
@@ -189,14 +190,20 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     return value ? value : false;
   },
   _registeredItems: new A([]),
-  registration: (item) => {
-    console.log('registering new item: %o', item);
-    console.log('this is: %o', this);
+  register: function(item) {
+    console.log('registering new item: %s', item.get('elementId'));
     const registeredItems = this.get('_registeredItems');
     registeredItems.pushObject(item);
+    // on first registered item, ask for meta information from item type
     if(registeredItems.length === 1) {
-      self.set('_aspects', item.get('_aspects'));
-      self.set('_panes', item.get('_panes'));
+      console.log('getting meta from registered item');
+      this.set('_aspects', item.get('_aspects'));
+      this.set('_panes', item.get('_panes'));
     }      
+  },
+  deregister: function(item) {
+    console.log('DEregistering item: %s', item.get('elementId'));
+    const registeredItems = this.get('_registeredItems');
+    registeredItems.removeObject(item);
   }
 });

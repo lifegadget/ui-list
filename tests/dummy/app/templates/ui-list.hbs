@@ -125,6 +125,7 @@
                     style=style 
                     defaultIcon=defaultIcon 
                     compressed=compressed 
+                    squeezed=squeezed
                     sort=sortBy 
                     sortAscending=sortAscending
                   }}
@@ -138,6 +139,7 @@
                     style=style 
                     defaultIcon=defaultIcon 
                     compressed=compressed 
+                    squeezed=squeezed
                     sort=sortBy  
                     sortAscending=sortAscending
                   }}
@@ -171,7 +173,8 @@ map: {
   {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
   size="{{size}}"
   style="{{style}}"{{#if compressed}}
-  compressed=true{{/if}}{{#if sortBy}}
+  compressed=true{{/if}}{{#if squeezed}}
+  squeezed=true{{/if}}{{#if sortBy}}
   sort="{{sortBy}}" {{else}}
   {{/if}}
   
@@ -191,9 +194,9 @@ map: {
             <column>
                 List Size: <br/>
                 {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
-                compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
-                Filter: <br/>
-                {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false}}
+                Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
+                Horzizontally Squeezed: {{ui-toggle-button value=squeezed on='squeezed' off='normal' size='small'}}<br/>
+                Filter: {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false size='small'}}
             </column>
             <column>
                 Mood: <br/>

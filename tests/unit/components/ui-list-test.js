@@ -182,10 +182,11 @@ test('listProperties propagated to items', function(assert) {
   let component = this.subject();
   let done = assert.async();
   let done2 = assert.async();
-  component.set('items', [
+  let items = [
     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
     Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
-  ]);
+  ];
+  component.set('items', items);
   this.render();
   run.later(() => {
     component.set('size','large');
@@ -196,9 +197,9 @@ test('listProperties propagated to items', function(assert) {
     assert.equal(component.get('mood'), 'success', 'INIT: mood listProperty set to success');
     done();
     run.later(() => {
-      assert.equal(component.get('_registeredItems').filter( item => { return item.get('size') === 'large'; } ).length, 2, 'all items should have size set to large');
-      assert.equal(component.get('_registeredItems').filter( item => { return item.get('style') === 'flat'; } ).length, 2, 'all items should have style set to flat');
-      assert.equal(component.get('_registeredItems').filter( item => { return item.get('mood') === 'success'; } ).length, 2, 'all items should have mood set to success');
+      assert.equal(component.get('_registeredItems').filter( item => { return item.get('size') === 'large'; } ).length, items.length, 'all items should have size set to large');
+      assert.equal(component.get('_registeredItems').filter( item => { return item.get('style') === 'flat'; } ).length, items.length, 'all items should have style set to flat');
+      assert.equal(component.get('_registeredItems').filter( item => { return item.get('mood') === 'success'; } ).length, items.length, 'all items should have mood set to success');
       done2();
     },5);
   },5);
