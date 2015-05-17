@@ -44,7 +44,7 @@
   "dependencies": {
     "ember-cli-babel": "^5.0.0",
     "ember-cli-htmlbars": "0.7.6",
-    "ember-cli-observe-all": "0.0.1",
+    "ember-cli-observe-all": "0.0.2",
     "merge": "^1.2.0",
     "ui-icon": "0.0.12",
     "ui-image": "0.0.3",

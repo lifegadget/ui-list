@@ -19,14 +19,16 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     
     return typeOf(sort) === 'array' ? sort : null;
   })),
+  _watcher: Ember.Object.extend(ObserveAll).create(),
   /**
    * The function of this computed properties is simply to add or remove observation points for the individual properties
    * of a given an array element (aka, an item)
    */
   items: on('init', computed( {
-    set: function(key, value, oldValue) {
-      console.log('items being SET');
-      const watcher = Ember.Object.extend(ObserveAll).create();
+    set: function(key, value) {
+      const watcher = this.get('_watcher');
+      // release all old observations
+      watcher.destroyObservers();
       value = value ? new A(value) : new A([]);
       return new A(value.map( item => {
         // ensure we have an Ember object
@@ -140,7 +142,6 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     // Structural Constants
     // -------------------------------
     const aspectPanes = this.get('_aspectPanes');
-    const listProperties = this.get('_listProperties');
     let keyAspectPanes = {};
     
     // Iterate over Items
@@ -191,18 +192,15 @@ export default Ember.Component.extend(Ember.SortableMixin,{
   },
   _registeredItems: new A([]),
   register: function(item) {
-    console.log('registering new item: %s', item.get('elementId'));
     const registeredItems = this.get('_registeredItems');
     registeredItems.pushObject(item);
     // on first registered item, ask for meta information from item type
     if(registeredItems.length === 1) {
-      console.log('getting meta from registered item');
       this.set('_aspects', item.get('_aspects'));
       this.set('_panes', item.get('_panes'));
     }      
   },
   deregister: function(item) {
-    console.log('DEregistering item: %s', item.get('elementId'));
     const registeredItems = this.get('_registeredItems');
     registeredItems.removeObject(item);
   }

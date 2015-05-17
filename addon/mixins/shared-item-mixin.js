@@ -55,25 +55,16 @@ let SharedItem = Mixin.create({
     });
   }),
 
-  // Unpacking packed hash
+  // Unpack aspectPanes & keyAspectPanes hashes into item 
   _unpackProperties:  on('init', function() {
     const aspectPanes = this.get('aspectPanes');
-    const keyAspectPanes = this.get('keyAspectPanes');
+    const keyAspectPanes = new A(this.get('keyAspectPanes'));
     if(aspectPanes) {
       keys(aspectPanes).forEach( key => {
         this.set(key, aspectPanes[key]);
       });
-      this.set('_keyAspectPanes', keyAspectPanes ? keyAspectPanes : new A(keys(aspectPanes))); 
-    } else {
-      const aspectPanes = this.get('_aspectPanes'); // get full list supported by this item type
-      let keyAspectPanes = new A([]);
-      new A(aspectPanes).filter( item => {
-        if(this[item]) {
-          keyAspectPanes.push(item);
-        }
-      });
-      this.set('_keyAspectPanes', keyAspectPanes);
     }
+    this.set('_keyAspectPanes', keyAspectPanes);
   }), 
   
   /**
@@ -112,7 +103,7 @@ let SharedItem = Mixin.create({
    */
   _cpInitialisation: on('init', function() {
     const props = this.get('_cpProperties'); // jshint ignore:line
-    const aspectPanes = this.get('_aspectPanes'); // jshint ignore:line
+    // const aspectPanes = this.get('_aspectPanes'); // jshint ignore:line
     
     // TODO: implement
   }),
@@ -129,15 +120,15 @@ let SharedItem = Mixin.create({
 	// ---------------------------------------------
 	// NOTE: 'map' is a dereferenced hash of mappings; an item can use either a map or individual property assignments
 	// of the variety item.fooMap = 'mappedTo'; 
-  _defineAspectMappings: on('init', observer('_aspectPanes', function() {
+  _defineAspectMappings: on('init', function() {
     const aspectPanes = this.get('_aspectPanes');
     for (let aspectPane of aspectPanes) {
       if(this._getMap(aspectPane)) {
         let cp = computed.readOnly(this._getMap(aspectPane));
-        defineProperty(this, aspectPane, cp);        
+        defineProperty(this, aspectPane, cp);
       }
     }
-  })),
+  }),
 
 	_getMap: function(property) {
     return this.get(`map${capitalize(property)}`) || this.get(`map.${property}`);
@@ -157,7 +148,7 @@ let SharedItem = Mixin.create({
   /**
    * Registers the item with a parent list (if one exists)
    */
-  _register: on('didInsertElement', function() {
+  _register: on('afterRender', function() {
     const list = this.get('list');
     if(this.get('list.register')) {
       list.register(this);

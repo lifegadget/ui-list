@@ -154,7 +154,8 @@ test('unpacking the aspectPanes property', function(assert) {
       subHeading: 'angry lion-like prowler',
       badge:8,
       icon: 'check-square-o'
-    }
+    },
+    keyAspectPanes: ['title','subHeading','badge','icon']
   });
   assert.equal(component.get('title'), 'Tiger', 'title unpacked');
   assert.equal(component.get('subHeading'), 'angry lion-like prowler', 'subHeading unpacked');
