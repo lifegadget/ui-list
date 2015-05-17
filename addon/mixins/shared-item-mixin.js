@@ -76,10 +76,10 @@ let SharedItem = Mixin.create({
     const panes = this.get('_panes');
     let aspectPanes = [];
     if(aspects && panes) {
-      for (let aspect of aspects) {
-        aspectPanes.push(aspect);
-        for (let pane of panes) {
-          aspectPanes.push(aspect + capitalize(pane));
+      for (let aspect in aspects) {
+        aspectPanes.push(aspects[aspect]);
+        for (let pane in panes) {
+          aspectPanes.push(aspects[aspect] + capitalize(panes[pane]));
         }
       }      
     }
