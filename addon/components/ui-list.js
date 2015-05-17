@@ -92,10 +92,10 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     const panes = this.get('_panes');
     let aspectPanes = [];
     if(aspects && panes) {
-      for (let aspect of aspects) {
+      for (let aspect in aspects) {
         aspectPanes.push(aspect);
-        for (let pane of panes) {
-          aspectPanes.push(aspect + capitalize(pane));
+        for (let pane in panes) {
+          aspectPanes.push(aspects[aspect] + capitalize(panes[pane]));
         }
       }      
     }
