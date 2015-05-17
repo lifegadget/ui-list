@@ -57,13 +57,13 @@ let SharedItem = Mixin.create({
 
   // Unpacking packed hash
   _unpackProperties:  on('init', function() {
-    const packed = this.get('packed');
-    const packedProperties = this.get('packedProperties');
-    if(packed) {
-      keys(packed).forEach( key => {
-        this.set(key, packed[key]);
+    const aspectPanes = this.get('aspectPanes');
+    const keyAspectPanes = this.get('keyAspectPanes');
+    if(aspectPanes) {
+      keys(aspectPanes).forEach( key => {
+        this.set(key, aspectPanes[key]);
       });
-      this.set('_keyAspectPanes', packedProperties ? packedProperties : new A(keys(packed))); 
+      this.set('_keyAspectPanes', keyAspectPanes ? keyAspectPanes : new A(keys(aspectPanes))); 
     } else {
       const aspectPanes = this.get('_aspectPanes'); // get full list supported by this item type
       let keyAspectPanes = new A([]);

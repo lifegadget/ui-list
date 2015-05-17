@@ -141,7 +141,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     // -------------------------------
     const aspectPanes = this.get('_aspectPanes');
     const listProperties = this.get('_listProperties');
-    let packedProperties = {};
+    let keyAspectPanes = {};
     
     // Iterate over Items
     // --------------------------------
@@ -156,7 +156,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
         }
       });
       // Aspects, Panes, and Maps
-      item.packed = item.packed ? item.packed : {};
+      item.aspectPanes = item.aspectPanes ? item.aspectPanes : {};
       aspectPanes.forEach( ap => {
         // map where map exists
         if(this._getMap(ap)) {
@@ -164,17 +164,17 @@ export default Ember.Component.extend(Ember.SortableMixin,{
         }
         // put property into packed property if non-null
         if(item[ap]) {
-          item.packed[ap] = item[ap];
-          packedProperties[ap] = true;
+          item.aspectPanes[ap] = item[ap];
+          keyAspectPanes[ap] = true;
         }
       });
       
       return item;
     });
     // add inter-aspect packed properties to each item
-    packedProperties = keys(packedProperties);
+    keyAspectPanes = keys(keyAspectPanes);
     filteredContent.forEach( item => {
-      item.packedProperties = packedProperties;
+      item.keyAspectPanes = keyAspectPanes;
     });
     
     return filteredContent;

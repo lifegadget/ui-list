@@ -158,25 +158,26 @@ test('content is set from items', function(assert) {
     
 });
 
-test('test that “packed” object included in content', function(assert) {
+test('aspectPanes and keyAspectPanes properties set', function(assert) {
   let component = this.subject();
   component.set('items', [
     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
     Ember.Object.create({when: 3, title: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
     Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"})
   ]);
-  assert.equal(
-    component.get('content.0.packed.title'), 
-    component.get('content.0.title'),
-    "a mapped title should be in content as well as packed object off of content/item"
-  );
-  assert.equal(
-    component.get('content.1.packed.title'), 
-    component.get('content.1.title'),
-    "a direct reference to title should be in content as well as packed object off of content/item"
-  );
-  
+  component.set('map', {
+    title: 'foo',
+    subHeading: 'bar'
+  });  
+  assert.equal(component.get('items').length, 3, "INIT: items array loaded");
+  assert.equal(typeOf(component.get('map')), 'object', "INIT: a map hash has been set: " + JSON.stringify(component.get('map')));
+    
+  assert.equal(component.get('content.0.aspectPanes.title'), 'Groceries', 'packed property has mapped title property');
+  assert.equal(component.get('content.0.aspectPanes.badge'), 1, 'packed property has un-mapped badge property');
+  const keyAspectPanes = component.get('content.0.keyAspectPanes');
+  assert.ok($(keyAspectPanes).not(['title','subHeading','icon','badge']).length === 0 && $(['title','subHeading','icon','badge']).not(keyAspectPanes).length === 0, 'packedProperties are correct');
 });
+
 
 test('listProperties propagated to items', function(assert) {
   let component = this.subject();
@@ -260,25 +261,6 @@ test('observing a property change in items', function(assert) {
   },50);
 });
 
-test('packed and packedProperties  set', function(assert) {
-  let component = this.subject({});
-  component.set('items', [
-    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
-    Ember.Object.create({when: 3, title: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
-    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"})
-  ]);
-  component.set('map', {
-    title: 'foo',
-    subHeading: 'bar'
-  });  
-  assert.equal(component.get('items').length, 3, "INIT: items array loaded");
-  assert.equal(typeOf(component.get('map')), 'object', "INIT: a map hash has been set: " + JSON.stringify(component.get('map')));
-    
-  assert.equal(component.get('content.0.packed.title'), 'Groceries', 'packed property has mapped title property');
-  assert.equal(component.get('content.0.packed.badge'), 1, 'packed property has un-mapped badge property');
-  const packedProperties = component.get('content.0.packedProperties');
-  assert.ok($(packedProperties).not(['title','subHeading','icon','badge']).length === 0 && $(['title','subHeading','icon','badge']).not(packedProperties).length === 0, 'packedProperties are correct');
-});
 
 test('Squeezed property proxied down to items', function(assert) {
   let component = this.subject();

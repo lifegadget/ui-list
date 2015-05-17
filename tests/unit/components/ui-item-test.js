@@ -147,9 +147,9 @@ test('size property - function/callback', function(assert) {
   }, 5);
 });
 
-test('unpacking the packed property', function(assert) {
+test('unpacking the aspectPanes property', function(assert) {
   let component = this.subject({
-    packed: {
+    aspectPanes: {
       title: 'Tiger',
       subHeading: 'angry lion-like prowler',
       badge:8,
