@@ -8,13 +8,16 @@
           <li>Layout and property definition of <code>aspects</code> and <code>panes</code></li>
           <li>The relative <code>size</code> of each item</li>
           <li>The <code>style</code> family it belongs to</li>
+          <li>It provides a CSS class for a <code>mood</code> and CSS styling for some common mood types</li>
+          <li>Can be displayed as individual item or join up with other items as part of a <strong>list</strong>; it knows how to behave appropriately in either context</li>
+          <li>Provides as set of aliases to map common <em>aspects</em> into the most likely <em>pane</em></li>
         </ul>
         
         This control does not have:
         <ul>
           <li>
             This being the most basic item-type it only responds with click action type (aka, no fancy slide out actions or other visual effects for
-            these items). Check out 'actionable items' for that.             
+            these items).             
           </li>
         </ul>
     </desc>
@@ -34,26 +37,30 @@
 </examples>
 {{! ----------------------------------------------------------- }}
 <desc>
-    There are few things to note in the basic example above but they all map back to the idea of an "aspect". All the parameters in this basic example
-    are just setting the primary properties of various <em>aspects</em>. To be "fully qualified" an aspect must be placed into a "pane". A pane is an <em>area</em> 
-    of the item and with the basic <code>ui-item</code> component the only panes are "left", "right", and "center".
+    Content -- when fully qualified for an item -- always has both an "aspect" and "pane". In the example above the <code>badgeRight</code> is a clear example 
+    of this. It states that it should use the "badge" aspect and place it into the "right" pane. In the other two examples we are noticing a feature of 
+    items ... where there are strong patterns as to where a particular piece of content (aka, an aspect) might go then an "alias" is setup to default the 
+    aspect type to a given pane. In this example the <code>title</code> reference is more explicitly <code>titleCenter</code> but since that almost always 
+    where the title will go an alias has been setup. 
 </desc>
 <desc>
-  With all this talk of fully qualified aspects needing a pane you might be rightly unsure why only badge is being explict about which pane it should be 
-  placed in. For "badge" it is being placed to the "right" pane. What about the other two?
+    The <code>ui-item</code> component has the following configuration:
+    
     <ul>
-        <li>
-            The <code>icon</code> property is an alias to the <code>iconLeft</code> property. The alias is setup  
-            because its very common to have an icon in this pane.
-        </li>
-        <li>
-            Similarly the <code>title</code> property is assumed to refer to the <code>titleCenter</code> property. 
-        </li>
-        <li>
-            The <code>badgeRight</code> property is is our shining example of a fully qualified aspect/pane pair. Truth be told, we could have just stated
-            this as <code>badge</code> because there is an alias for the badge that places it into the right pane by default.
-        </li>
+      <li>
+        Panes:
+        <ul>
+          <li>left, center, right</li>
+        </ul>
+      </li>
+      <li>
+        Aspects Aliases:
+        <ul>
+          <li>image (left), icon (left), title(center), subHeading(center), badge(right)</li>
+        </ul>
+      </li>
     </ul>
+    of the item and with the basic <code>ui-item</code> component the only panes are "left", "right", and "center".
 </desc>
 
 <h4>Advanced Example: Mapping, Size, Skin, and Mood</h4>
