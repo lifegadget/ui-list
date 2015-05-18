@@ -32,3 +32,6 @@ install:
 
 script:
   - ember try $EMBER_TRY_SCENARIO test
+
+notifications:
+  slack: lifegadget:mtokkpY5lTA2adgCqWtgCGln
