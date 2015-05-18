@@ -135,12 +135,12 @@ let SharedItem = Mixin.create({
   // Default Values
   _setDefaultValues: on('init', function() {
     const aspectPanes = this.get('_aspectPanes');
-    for (let item of aspectPanes) {
+    aspectPanes.forEach( item => {
       const defaultKey = 'default' + capitalize(item);
       if(!this.get(item) && this[defaultKey]) {
         this.set(item, this[defaultKey]);
       }
-    }    
+    });
   }),
   
   /**

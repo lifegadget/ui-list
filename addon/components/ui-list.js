@@ -24,7 +24,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
    * The function of this computed properties is simply to add or remove observation points for the individual properties
    * of a given an array element (aka, an item)
    */
-  items: on('init', computed( {
+  items: computed( {
     set: function(key, value) {
       const watcher = this.get('_watcher');
       // release all old observations
@@ -48,7 +48,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
       // initial state / getter
       return new A([]);
     }
-  })),
+  }),
   filter: null,
   _filter: computed('filter', function() {
     const filter = this.get('filter');
@@ -88,16 +88,16 @@ export default Ember.Component.extend(Ember.SortableMixin,{
    * just bring together the resultant array of aspectPanes which can be targetted/configured by a user
    */
   _aspectPanes: on('init', computed('_aspects','_panes',function() {
-    const aspects = this.get('_aspects');
-    const panes = this.get('_panes');
+    const aspects = new A(this.get('_aspects'));
+    const panes = new A(this.get('_panes'));
     let aspectPanes = [];
     if(aspects && panes) {
-      for (let aspect in aspects) {
-        aspectPanes.push(aspects[aspect]);
-        for (let pane in panes) {
-          aspectPanes.push(aspects[aspect] + capitalize(panes[pane]));
-        }
-      }      
+      aspects.forEach( aspect => {
+        aspectPanes.push(aspect);
+        panes.forEach( pane => {
+          aspectPanes.push(aspect + capitalize(pane));
+        });   
+      }); 
     }
     
     return aspectPanes;
