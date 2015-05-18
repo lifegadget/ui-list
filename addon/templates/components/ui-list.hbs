@@ -1,11 +1,12 @@
 {{#each arrangedContent as |item|}}
     {{ui-item 
-        packed=item.packed
-        observedAspects=observedAspects
+        list=this
+        aspectPanes=item.aspectPanes
+        keyAspectPanes=keyAspectPanes
         size=size 
         style=style
         mood=mood
-        register=registration
+        squeezed=squeezed
     }}
 {{/each}}
 
