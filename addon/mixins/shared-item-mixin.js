@@ -119,13 +119,13 @@ let SharedItem = Mixin.create({
 	// NOTE: 'map' is a dereferenced hash of mappings; an item can use either a map or individual property assignments
 	// of the variety item.fooMap = 'mappedTo'; 
   _defineAspectMappings: on('init', function() {
-    const aspectPanes = this.get('_aspectPanes');
-    for (let aspectPane of aspectPanes) {
+    const aspectPanes = new A(this.get('_aspectPanes'));
+    aspectPanes.forEach( aspectPane => {
       if(this._getMap(aspectPane)) {
         let cp = computed.readOnly(this._getMap(aspectPane));
         defineProperty(this, aspectPane, cp);
       }
-    }
+    })
   }),
 
 	_getMap: function(property) {
