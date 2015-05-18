@@ -221,43 +221,39 @@ map: {
 <desc>
     <strong>Notes on ui-list example:</strong>
     <ul>
-        <li>
-            <strong>Content</strong> of any sort -- icons, titles, subHeadings, badges, etc. -- will be proxied into the item components through one of two means:
-            <ol>
-                <li>
-                    Dynamically: 
-                    <ul>
-                        <li>If the incoming properties are already named appropriately (aka, the item property names) then you're all set</li>
-                        <li>If not then use the <code>map</code> property to translate your incoming property names to the item properties (e.g, "icon", "badgeLeft", etc.)</li>
-                        <li>
-                            Of course you only need to map those properties which are in need of mapping. For instance, the above example maps 
-                            <em>title</em> and <em>subHeading</em> but since <em>icon</em> is already correctly named it leaves it as is.
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    Statically: 
-                    <ul>
-                        <li>
-                            a static mapping for all items can be set directly by stating the value as a direct parameter. 
-                        </li>
-                        <li>
-                            For instance if you want all icons to be a "beer" (and why wouldn't you) then this achieved 
-                            with <code>\{{ui-list icon='beer'}}</code>
-                        </li>
-                        <li>
-                            Because a static mapping overrides a dynamic one, you can also set a property to <em>false</em> to ensure it is suppressed. 
-                        </li>
-                    </ul>
-                </li>
-                
-            </ol>
-        </li>
-        <li>
-            <strong>Vertical margins</strong> between items are determined by size but also modified by the 
-            <code>.compressed</code> css class which is proxied
-            by the property by the same name on the <code>ui-list</code> component.
-        </li>
+      <li>
+        <strong>Mapping</strong>
+        <ul>
+          <li>maps can be set as a single has as demonstrated above using a "map" property, or</li>
+          <li>
+            maps can also be set on a property by property basis by prefixing the target name with "map". For instance, if you wanted to just
+            map an input parameter of "foo" to the list property <code>title</code> then you could set \{{ui-list mapTitle='foo'}}
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>AspectPanes</strong>
+        <ul>
+          <li>Properties like <code>title</code>, <code>icon</code>, etc. are considered "aspectPanes"</li>
+          <li>When setting these properties you can set them as a static value or a bound variable which resolves to a static/scalar value</li>
+          <li>You can also pass in a function which will be passed to the item to resolve when the state of the item changes</li>
+        </ul>
+      </li>
+      <li>
+        <strong>List Properties</strong>
+        <ul>
+          <li>Properties like <code>mood</code>, <code>size</code>, etc. are properties which are owned by the list</li>
+          <li>
+            In all cases, though the properties are "owned" at the list level, that just means they are common to all item types and that 
+            they do <em>not</em> hold a discrete value for each "item".
+          </li>
+          <li>These properties -- like AspectPanes -- can be static/scalar values or functions.</li>
+          <li>
+            For properties like <code>size</code> and <code>style</code> it is typically expected that they are statically set as a scalar
+            value whereas in contrast <code>mood</code> is very likely to be a function which is reacting to the state of the item.
+          </li>
+        </ul>
+      </li>
     </ul>
 </desc>
 
