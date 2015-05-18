@@ -66,9 +66,10 @@ export default Ember.Controller.extend({
   
   loadEmberData: on('init', function() {
     let items = new A(this.get('items'));
-    let index = 1;
-    items.forEach( item => {
-      this.store.push('activity', {id: index++, foo: item.foo, bar: item.bar, icon: item.icon, badge: item.badge});
+    items.forEach( (item,index) => {
+      let pojo = JSON.parse(JSON.stringify(item));
+      pojo.id = index;
+      this.store.push('activity', pojo);
     });
   })
 
