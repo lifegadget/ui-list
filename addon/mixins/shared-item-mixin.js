@@ -125,7 +125,7 @@ let SharedItem = Mixin.create({
         let cp = computed.readOnly(this._getMap(aspectPane));
         defineProperty(this, aspectPane, cp);
       }
-    })
+    });
   }),
 
 	_getMap: function(property) {
