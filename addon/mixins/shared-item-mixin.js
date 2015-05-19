@@ -58,7 +58,6 @@ let SharedItem = Mixin.create({
   // Unpack aspectPanes
   _unpackProperties:  on('init', function() {
     const aspectPanes = this.get('aspectPanes');
-    const keyAspectPanes = new A(this.get('keyAspectPanes'));
     if(aspectPanes) {
       keys(aspectPanes).forEach( key => {
         this.set(key, aspectPanes[key]);

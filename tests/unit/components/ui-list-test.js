@@ -257,8 +257,6 @@ test('listProperties propagated to items', function(assert) {
       done2();
     },5);
   },5);
-
-
 });
 
 test('observing a property change in items', function(assert) {
@@ -302,14 +300,12 @@ test('Squeezed property proxied down to items', function(assert) {
   run.later( () => {
     assert.ok(!component.get('squeezed'), 'INIT: the list component should have squeezed property off');
     assert.equal(component.get('_registeredItems.length'), 2, 'INIT: there should be two items registered in the list');
-    console.log('registered: %o', component.get('_registeredItems'));
     assert.equal(component.get('_registeredItems').filter( item => { return item.get('squeezed'); } ).length, 0, 'INIT: neither item should have squeezed turned on');
     component.set('squeezed', true);
     done();
     run.later( () => {
       const results = component.get('_registeredItems').filter( item => { return item.get('squeezed'); } );
       assert.equal(results.length, 2, 'all items should have squeezed turned on');
-      console.log('results are: %o', results);
       done2();
     },25);
   },25);
@@ -323,7 +319,6 @@ test('Items are registered, mapped and appear in DOM', function(assert) {
     mapSubHeading: 'bar'
   });
   let done = assert.async();
-  let done2 = assert.async();
   component.set('items', [
     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
     Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),

@@ -158,11 +158,8 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     const possibleAspectPanes = new A(this.get('aspectPanes'));
     const mappedFrom = this.get('_mappedFrom');
     let aspectPanes = keys(this.get('mappedProperties'));
-    console.log('aspectPanes: %o', aspectPanes);
-    console.log('mappedFROM!!!!!!!!: %o', mappedFrom);
     let otherProperties = new A([]);
     this.get('content').forEach( item => {
-      console.log('item: %s', item.get('foo'));
       aspectPanes = aspectPanes.concat(
         keys(item).filter( itemProp => {
             return possibleAspectPanes.contains(itemProp);
