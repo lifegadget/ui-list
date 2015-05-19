@@ -154,13 +154,15 @@ export default Ember.Component.extend(Ember.SortableMixin,{
    * Keeps track of what properties are set across items so that items components can be more 
    * conservative on their observer usage
    */
-  _itemSetProperties: computed('content','mappedProperties', function() {
+  _itemSetProperties: on('beforeRender',computed('items', function() {
     const possibleAspectPanes = new A(this.get('aspectPanes'));
     const mappedFrom = this.get('_mappedFrom');
     let aspectPanes = keys(this.get('mappedProperties'));
     console.log('aspectPanes: %o', aspectPanes);
+    console.log('mappedFROM!!!!!!!!: %o', mappedFrom);
     let otherProperties = new A([]);
     this.get('content').forEach( item => {
+      console.log('item: %s', item.get('foo'));
       aspectPanes = aspectPanes.concat(
         keys(item).filter( itemProp => {
             return possibleAspectPanes.contains(itemProp);
@@ -176,7 +178,7 @@ export default Ember.Component.extend(Ember.SortableMixin,{
       aspectPanes: new A(aspectPanes).uniq(),
       otherProperties: new A(otherProperties).uniq()
     };    
-  }),
+  })),
   _isMappedProperty: function(prop) {
     const mp = this.get('mappedProperties');
     const mappedFrom = this.get('_mappedFrom');

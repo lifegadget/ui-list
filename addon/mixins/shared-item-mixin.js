@@ -55,7 +55,7 @@ let SharedItem = Mixin.create({
     });
   }),
 
-  // Unpack aspectPanes & keyAspectPanes hashes into item 
+  // Unpack aspectPanes
   _unpackProperties:  on('init', function() {
     const aspectPanes = this.get('aspectPanes');
     const keyAspectPanes = new A(this.get('keyAspectPanes'));
@@ -64,7 +64,6 @@ let SharedItem = Mixin.create({
         this.set(key, aspectPanes[key]);
       });
     }
-    this.set('_keyAspectPanes', keyAspectPanes);
   }), 
   
   /**

@@ -311,9 +311,72 @@ test('Squeezed property proxied down to items', function(assert) {
       assert.equal(results.length, 2, 'all items should have squeezed turned on');
       console.log('results are: %o', results);
       done2();
-    },50);
-  },50);
+    },25);
+  },25);
 });
+
+test('Items are registered, mapped and appear in DOM', function(assert) {
+  let component = this.subject({
+    map: {
+     title: 'foo' 
+    },
+    mapSubHeading: 'bar'
+  });
+  let done = assert.async();
+  let done2 = assert.async();
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  this.render();
+  run.later( () => {
+    // sanity tests on registered items
+    assert.equal(component.get('_registeredItems.length'), 3, 'there should be three item components which have registered themselves.');
+    let foey = component.get('_registeredItems').map(item=>{ return item.get('foo');});
+    let arrangedFoey = new A(component.get('arrangedContent').map(item=>{ return item.get('foo');}));
+    assert.ok(
+      foey.every(item => { return arrangedFoey.contains(item);} ),
+      'Foo properties were equivalent between list\'s arrangedContent and the registered item components: ' + JSON.stringify(foey)
+    );
+    let icon = component.get('_registeredItems').map(item=>{ return item.get('icon');});
+    let arrangedIcon = new A(component.get('arrangedContent').map(item=>{ return item.get('icon');}));
+    assert.ok(
+      foey.every(item => { return arrangedFoey.contains(item);} ),
+      'Icon properties were equivalent between list\'s arrangedContent and the registered item components: ' + JSON.stringify(icon)
+    );
+    assert.deepEqual(
+      new A(component.get('_registeredItems').map( item => { return item.get('type'); })).uniq(),
+      ['ui-item'], 
+      'all registered items should be of type ui-item.'
+    );
+    // Test mappings at the Item level
+    assert.equal(
+      component.get('_registeredItems').findBy('foo','Groceries').get('title'),
+      'Groceries',
+      'The foo property should have an alias to title in the item component (via a map hash prop on list)'
+    );
+    assert.equal(
+      component.get('_registeredItems').findBy('bar','visit sick uncle Joe').get('subHeading'),
+      'visit sick uncle Joe',
+      'The bar property should have an alias to subHeading in the item component (via a direct property mapping proxied from list)'
+    );
+    // DOM checking
+    assert.equal(
+      component.$('.center-pane .title').length,
+      3,
+      'The DOM should have 3 items with "titles" in it'
+    );
+    assert.equal(
+      component.$('.right-pane .badge').length,
+      2,
+      'The DOM should have 2 items with "badges" in it'
+    );
+
+    done();
+  },150);
+});
+
 
 // test('Ember Data derived data source', function(assert) {
 //   let component = this.subject();

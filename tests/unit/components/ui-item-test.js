@@ -152,7 +152,7 @@ test('unpacking the aspectPanes property', function(assert) {
     aspectPanes: {
       title: 'Tiger',
       subHeading: 'angry lion-like prowler',
-      badge:8,
+      badge: 8,
       icon: 'check-square-o'
     },
     keyAspectPanes: ['title','subHeading','badge','icon']
@@ -161,9 +161,6 @@ test('unpacking the aspectPanes property', function(assert) {
   assert.equal(component.get('subHeading'), 'angry lion-like prowler', 'subHeading unpacked');
   assert.equal(component.get('badge'), 8, 'badge unpacked');
   assert.equal(component.get('icon'), 'check-square-o', 'icon unpacked');
-  
-  assert.equal(typeOf(component.get('_keyAspectPanes')), 'array', 'private _keyAspectPanes set as an array');
-  assert.ok(component.get('_keyAspectPanes').contains('title'), '_keyAspectPanes recognizes title as one of its properties');
 });
 
 test('default values', function(assert) {

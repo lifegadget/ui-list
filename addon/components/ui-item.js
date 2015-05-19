@@ -8,6 +8,7 @@ import SharedItem from 'ui-list/mixins/shared-item-mixin';
 export default Component.extend(SharedItem,{
   // Item Meta
   layout: layout,
+  type: 'ui-item',
   tagName: 'div',
   disabled: false,
   iconRight: 'chevron-right',
