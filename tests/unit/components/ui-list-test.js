@@ -1,5 +1,5 @@
 import Ember from 'ember';
-const { computed, observer, $, A, run, on, typeOf, debug } = Ember;    // jshint ignore:line
+const { computed, observer, $, A, run, on, typeOf, debug, keys } = Ember;    // jshint ignore:line
 import {
   moduleForComponent,
   test
@@ -144,40 +144,93 @@ test('content is set from items', function(assert) {
     component.get('content.0.badge'), 
     "badge should have been copied over to 'content' array"
   );
-  // check new bindings
   assert.equal(
-    component.get('content.0.foo'), 
-    component.get('content.0.title'),
-    "title should have taken mapped value from 'foo' and reside in 'content' array"
+    component.get('items.1.icon'), 
+    component.get('content.1.icon'), 
+    "icon should have been copied over to 'content' array"
   );
-  assert.equal(
-    component.get('content.0.bar'), 
-    component.get('content.0.subHeading'),
-    "subHeading should have taken mapped value from 'bar' and reside in 'content' array"
-  );
-    
 });
 
-test('aspectPanes and keyAspectPanes properties set', function(assert) {
+test('mappedProperties set from map hash', function(assert) {
+  let component = this.subject();
+  let initialMap = {
+    title: 'foo',
+    subHeading: 'bar'
+  };
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  component.set('map', initialMap);
+  assert.equal(component.get('mappedProperties'), initialMap, 'mapped properties are setup on initialization of map property');
+  let mappedFrom = component.get('_mappedFrom');
+  assert.equal(mappedFrom.length, 2, '_mappedFrom is correct length');
+  assert.ok(mappedFrom.contains('foo'), '_mappedFrom contains foo');
+  assert.ok(mappedFrom.contains('bar'), '_mappedFrom contains bar');
+});
+
+test('mappedProperties set only with map properties', function(assert) {
+  let component = this.subject({
+    mapTitle: 'foo',
+    mapSubHeading: 'bar'
+  });
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  assert.equal(component.get('mappedProperties.title'), 'foo', 'foo map setup map property');
+  assert.equal(component.get('mappedProperties.subHeading'), 'bar', 'bar map setup map property');
+  // NOTE: this stupid form of testing is based on QUnit doing some pretty odd things right now with testing the array in more direct fashion. Annoying!
+  let mappedFrom = component.get('_mappedFrom');
+  assert.equal(mappedFrom.length, 2, '_mappedFrom is correct length');
+  assert.ok(mappedFrom.contains('foo'), '_mappedFrom contains foo');
+  assert.ok(mappedFrom.contains('bar'), '_mappedFrom contains bar');
+});
+
+test('mappedProperties with combined map property and map hash', function(assert) {
+  let component = this.subject({
+    mapSilly: 'walk'
+  });
+  let initialMap = {
+    title: 'foo',
+    subHeading: 'bar'
+  };
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  component.set('map', initialMap);
+  assert.equal(component.get('mappedProperties.title'), 'foo', 'foo map setup map property');
+  assert.equal(component.get('mappedProperties.subHeading'), 'bar', 'bar map setup map property');
+  assert.equal(component.get('mappedProperties.silly'), 'walk', 'silly map setup map property');
+  // NOTE: this stupid form of testing is based on QUnit doing some pretty odd things right now with testing the array in more direct fashion. Annoying!
+  let mappedFrom = component.get('_mappedFrom');
+  assert.equal(mappedFrom.length, 3, '_mappedFrom is correct length');
+  assert.ok(mappedFrom.contains('foo'), '_mappedFrom contains foo');
+  assert.ok(mappedFrom.contains('bar'), '_mappedFrom contains bar');
+  assert.ok(mappedFrom.contains('walk'), '_mappedFrom contains walk');
+});
+
+
+test('aspectPanes is set', function(assert) {
   let component = this.subject();
   component.set('items', [
     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
     Ember.Object.create({when: 3, title: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
-    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"})
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", silly: true})
   ]);
   component.set('map', {
     title: 'foo',
     subHeading: 'bar'
-  });  
-  assert.equal(component.get('items').length, 3, "INIT: items array loaded");
-  assert.equal(typeOf(component.get('map')), 'object', "INIT: a map hash has been set: " + JSON.stringify(component.get('map')));
-    
-  assert.equal(component.get('content.0.aspectPanes.title'), 'Groceries', 'packed property has mapped title property');
-  assert.equal(component.get('content.0.aspectPanes.badge'), 1, 'packed property has un-mapped badge property');
-  const keyAspectPanes = component.get('content.0.keyAspectPanes');
-  assert.ok($(keyAspectPanes).not(['title','subHeading','icon','badge']).length === 0 && $(['title','subHeading','icon','badge']).not(keyAspectPanes).length === 0, 'packedProperties are correct');
+  });
+  const aspectPanes = new A(component.get('aspectPanes'));
+  assert.ok(aspectPanes.contains('iconRight'), 'iconRight should be set by default');
+  assert.ok(aspectPanes.contains('title'), 'title should be set by default');
+  assert.ok(aspectPanes.contains('subHeading'), 'subHeading should be set by default');
 });
-
 
 test('listProperties propagated to items', function(assert) {
   let component = this.subject();
@@ -206,30 +259,6 @@ test('listProperties propagated to items', function(assert) {
   },5);
 
 
-});
-
-test('inline business logic resolved', function(assert) {
-  let component = this.subject();
-  component.set('items', [
-    {
-      when: 2, 
-      badge: 1,
-      badgePlus: function(item) { return item.get('badge') + 1; }
-    },
-    {
-      when: 3, 
-      badge: 6,
-      badgePlus: function(item) { return item.get('badge') + 1; }
-    }
-  ]);
-  component.set('badgePlus', function(item) {
-    return item.badge++;
-  });
-  assert.equal(
-    component.get('content.0.badgePlus'),
-    component.get('content.0.badge') + 1, 
-    "the badgePlus property should have resolved to a discrete scalar"
-  );
 });
 
 test('observing a property change in items', function(assert) {
@@ -286,15 +315,22 @@ test('Squeezed property proxied down to items', function(assert) {
   },50);
 });
 
-// test('Non model properties are usable', function(assert) {
+// test('Ember Data derived data source', function(assert) {
 //   let component = this.subject();
 //   let done = assert.async();
 //   const items = A([
 //     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
-//     Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6})
-//   ]));
-//   items.forEach( item => {
-//     this.store.push('activity', {id: index++, foo: item.foo, bar: item.bar, icon: item.icon, badge: item.badge});
+//     Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+//     Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+//   ]);
+//   // load into ED
+//   items.forEach( (item,index) => {
+//     let pojo = JSON.parse(JSON.stringify(item));
+//     pojo.id = index;
+//     this.store.push('activity', pojo);
 //   });
+//   // pull from ED
+//   console.log('test object: %o', this);
 //   done();
+//
 // })

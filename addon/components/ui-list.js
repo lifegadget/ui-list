@@ -2,6 +2,8 @@ import Ember from 'ember';
 import ObserveAll from 'ember-cli-observe-all/mixins/observe-all';
 const { computed, observer, $, A, run, on, typeOf, keys, defineProperty, debug, merge } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
+const camelize = Ember.String.camelize;
+
 import layout from '../templates/components/ui-list';
 
 export default Ember.Component.extend(Ember.SortableMixin,{
@@ -105,32 +107,30 @@ export default Ember.Component.extend(Ember.SortableMixin,{
   _itemProperties: null,
   _listProperties: ['size','mood','style','squeezed'],
   mappedProperties: computed(function() {
-    const mapHash = this.get('map') || {};
-    const mapProps = keys(this).filter( prop => {
+    const mapHash = typeOf(this.get('map')) === 'object' ? this.get('map') : {};
+    const mapProps = new A(keys(this).filter( prop => {
       return prop.length > 3 && prop.slice(0,3) === 'map' && prop !== 'mapBinding';
-    }) || {};
-    return merge(mapHash, mapProps);
+    }));
+    mapProps.forEach( propertyMap => {
+      const key = camelize(propertyMap.slice(3));
+      mapHash[key] = this.get(propertyMap);
+    });
+    return mapHash;
   }),
   _mappedFrom: computed('mappedProperties', function() {
     const mp = this.get('mappedProperties');
+    
     return new A(keys(mp).map(item => {
       return mp[item];
     }));
   }),
 
   /**
-   * Content is immutable copy of items with the following enhancements:
-   *
-   *   1. Items are filtered based on the the 'filter' property
-   *   2. Any functions() assigned to aspectPanes are resolved and replaced with resolved values
-   *   2. aspect/panes properties are packaged up as hash and passed to the item as a single property 'packed'
-   *   3. itemProperties are also packaged up as a hash and passed to the item as a single property 'itemProperties'
+   * Content is immutable copy of items with the ability to be filtered
    */
   content: computed('items.[]','filter','items.@each._propertyChanged', function() {
     const content = new A(this.get('items'));
     const filter = this.get('filter');
-    let   keyAspectPanes = {}; // aka, those which are set somewhere in the list
-    let   otherProperties = {}; // aka, those props which are set but NOT aspectPanes
     // FILTER
     // -------------------------------
     let filteredContent = null;
@@ -147,52 +147,36 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     default:
       filteredContent = content;
     }
-
-    // Iterate and:
-    // a) add aspectPanes property (hash)
-    // b) add options property (non aspectPane properties in hash)
-    // c) add defaults property (hash of default Values)
-    // c) determine cross-item keyAspectPanes and keyOptions
-    filteredContent.forEach( item => {
-      keys(item).forEach( prop => {
-        switch(this._propertyType(prop)) {
-        case "aspectPane":
-          keyAspectPanes[prop] = true;
-          break;
-        case "mapped":
-          keyAspectPanes[this._isMappedProperty(prop)] = true;
-          break;
-        case "option":
-          otherProperties[prop] = true;
-          break;
-        default:
-          // ignored
-          break;
-        }
-      });
-
-      return item;
-    });
-    // add inter-aspect packed properties to each item
-    // this.set('keyAspectPanes', keys(keyAspectPanes));
-    // this.set('otherProperties', keys(otherProperties));
-
+    
     return filteredContent;
   }),
-  keyAspectPanes: [],
-  otherProperties: [],
-  _propertyType: function(prop) {
-    const aspectPanes = new A(this.get('aspectPanes'));
-    if(aspectPanes.contains(prop)) {
-      return 'aspectPane';
-    } else if (prop.slice(0,1) === '_') {
-      return 'ignore';
-    } else if (this._isMappedProperty(prop)) {
-      return 'mapped';
-    } else {
-      return 'option';
-    }
-  },
+  /**
+   * Keeps track of what properties are set across items so that items components can be more 
+   * conservative on their observer usage
+   */
+  _itemSetProperties: computed('content','mappedProperties', function() {
+    const possibleAspectPanes = new A(this.get('aspectPanes'));
+    const mappedFrom = this.get('_mappedFrom');
+    let aspectPanes = keys(this.get('mappedProperties'));
+    console.log('aspectPanes: %o', aspectPanes);
+    let otherProperties = new A([]);
+    this.get('content').forEach( item => {
+      aspectPanes = aspectPanes.concat(
+        keys(item).filter( itemProp => {
+            return possibleAspectPanes.contains(itemProp);
+        })
+      );
+      otherProperties = otherProperties.concat(
+        keys(item).filter( itemProp => {
+          return !possibleAspectPanes.contains(itemProp) && itemProp.slice(0,1) !== '_' && !mappedFrom.contains(itemProp);
+        })
+      );
+    });
+    return {
+      aspectPanes: new A(aspectPanes).uniq(),
+      otherProperties: new A(otherProperties).uniq()
+    };    
+  }),
   _isMappedProperty: function(prop) {
     const mp = this.get('mappedProperties');
     const mappedFrom = this.get('_mappedFrom');
