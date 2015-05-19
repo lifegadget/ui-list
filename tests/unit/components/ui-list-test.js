@@ -20,7 +20,7 @@ test('it renders', function(assert) {
   // Renders the component to the page
   this.render();
   assert.equal(component._state, 'inDOM');
-}); 
+});
 
 test('items are enumerable', function(assert) {
   let component = this.subject();
@@ -261,7 +261,6 @@ test('observing a property change in items', function(assert) {
   },50);
 });
 
-
 test('Squeezed property proxied down to items', function(assert) {
   let component = this.subject();
   let done = assert.async();
@@ -286,3 +285,16 @@ test('Squeezed property proxied down to items', function(assert) {
     },50);
   },50);
 });
+
+// test('Non model properties are usable', function(assert) {
+//   let component = this.subject();
+//   let done = assert.async();
+//   const items = A([
+//     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+//     Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6})
+//   ]));
+//   items.forEach( item => {
+//     this.store.push('activity', {id: index++, foo: item.foo, bar: item.bar, icon: item.icon, badge: item.badge});
+//   });
+//   done();
+// })

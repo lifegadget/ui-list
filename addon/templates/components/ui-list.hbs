@@ -1,7 +1,9 @@
 {{#each arrangedContent as |item|}}
     {{ui-item 
         list=this
-        aspectPanes=item.aspectPanes
+        aspectPanes=item
+        map=mappedProperties
+        defaultValues=defaultValues
         keyAspectPanes=keyAspectPanes
         size=size 
         style=style
