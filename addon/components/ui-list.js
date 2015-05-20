@@ -6,7 +6,7 @@ const camelize = Ember.String.camelize;
 
 import layout from '../templates/components/ui-list';
 
-export default Ember.Component.extend(Ember.SortableMixin,{
+var UiList = Ember.Component.extend(Ember.SortableMixin,{
   sort: null,
   sortProperties: on('init', computed('sort', function() {
     let sort = this.get('sort');
@@ -200,3 +200,6 @@ export default Ember.Component.extend(Ember.SortableMixin,{
     registeredItems.removeObject(item);
   }
 });
+
+UiList[Ember.NAME_KEY] = 'ui-list';
+export default UiList;

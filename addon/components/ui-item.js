@@ -5,7 +5,7 @@ const { Component, computed, observer, $, A, run, on, inject } = Ember;    // js
 import layout from '../templates/components/ui-item';
 import SharedItem from 'ui-list/mixins/shared-item-mixin';
 
-export default Component.extend(SharedItem,{
+var UiItem = Component.extend(SharedItem,{
   // Item Meta
   layout: layout,
   type: 'ui-item',
@@ -27,3 +27,6 @@ export default Component.extend(SharedItem,{
   
   responsive: inject.service()
 });
+
+UiItem[Ember.NAME_KEY] = 'ui-item';
+export default UiItem;

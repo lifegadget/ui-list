@@ -147,15 +147,14 @@ test('size property - function/callback', function(assert) {
   }, 5);
 });
 
-test('unpacking the aspectPanes property', function(assert) {
+test('unpacking the data property', function(assert) {
   let component = this.subject({
-    aspectPanes: {
+    data: {
       title: 'Tiger',
       subHeading: 'angry lion-like prowler',
       badge: 8,
       icon: 'check-square-o'
-    },
-    keyAspectPanes: ['title','subHeading','badge','icon']
+    }
   });
   assert.equal(component.get('title'), 'Tiger', 'title unpacked');
   assert.equal(component.get('subHeading'), 'angry lion-like prowler', 'subHeading unpacked');

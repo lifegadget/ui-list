@@ -1,5 +1,5 @@
 import Ember from 'ember';
-const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, keys } = Ember;    // jshint ignore:line
+const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, keys, get } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 
 let SharedItem = Mixin.create({  
@@ -55,13 +55,20 @@ let SharedItem = Mixin.create({
     });
   }),
 
-  // Unpack aspectPanes
+  // Unpack data property from a list
   _unpackProperties:  on('init', function() {
-    const aspectPanes = this.get('aspectPanes');
-    if(aspectPanes) {
-      keys(aspectPanes).forEach( key => {
-        this.set(key, aspectPanes[key]);
+    const ignoredProperties = new A(['toString']);
+    const isEmberData = typeOf(get(this, 'data.data')) === 'object' ? true : false;
+    const data = typeOf(get(this, 'data.data')) === 'object' ? this.get('data.data') : this.get('data');
+    if(data) {
+      keys(data).forEach( key => {
+        if (key.substr(0,1) !== '_' && !ignoredProperties.contains(key)) {
+          this.set(key, data[key]);          
+        }
       });
+    } 
+    if(isEmberData) {
+      console.log('source was ember-data, data properties were: %o', keys(this.get('data')));
     }
   }), 
   
