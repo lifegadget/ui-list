@@ -215,7 +215,7 @@ test('mappedProperties with combined map property and map hash', function(assert
 });
 
 
-test('aspectPanes is set', function(assert) {
+test('availableAspectPanes is set', function(assert) {
   let component = this.subject();
   component.set('items', [
     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
@@ -226,7 +226,7 @@ test('aspectPanes is set', function(assert) {
     title: 'foo',
     subHeading: 'bar'
   });
-  const aspectPanes = new A(component.get('aspectPanes'));
+  const aspectPanes = new A(component.get('availableAspectPanes'));
   assert.ok(aspectPanes.contains('iconRight'), 'iconRight should be set by default');
   assert.ok(aspectPanes.contains('title'), 'title should be set by default');
   assert.ok(aspectPanes.contains('subHeading'), 'subHeading should be set by default');
@@ -367,28 +367,40 @@ test('Items are registered, mapped and appear in DOM', function(assert) {
       2,
       'The DOM should have 2 items with "badges" in it'
     );
-
     done();
-  },150);
+  },100);
 });
 
 
-// test('Ember Data derived data source', function(assert) {
-//   let component = this.subject();
-//   let done = assert.async();
-//   const items = A([
-//     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
-//     Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
-//     Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
-//   ]);
-//   // load into ED
-//   items.forEach( (item,index) => {
-//     let pojo = JSON.parse(JSON.stringify(item));
-//     pojo.id = index;
-//     this.store.push('activity', pojo);
-//   });
-//   // pull from ED
-//   console.log('test object: %o', this);
-//   done();
-//
-// })
+test('Test that decorator properties make it through to items', function(assert) {
+  const component = this.subject();
+  const Decorator = Ember.ObjectProxy.extend({
+    opinion: computed('foo', function() {
+      return this.get('foo') === 'Groceries' ? 'yup' : 'nope';
+    })
+  }); 
+  // Set 
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  // Decorate
+  component.set('items', component.get('items').map(item => {
+    return Decorator.create({content:item});
+  }));
+  // Look for decorations
+  assert.equal(component.get('items.0.opinion'), 'yup', 'the opinion CP should exist and produce a proper response' );
+  assert.equal(component.get('items.1.opinion'), 'nope', 'the opinion CP should exist and produce a proper response' );
+  console.log(component.get('items.0'));
+  // Now look in the Item component
+  let done = assert.async();
+  run.later( () => {
+    assert.equal(
+      component.get('_registeredItems').findBy('foo','Groceries').get('title'),
+      'Groceries',
+      'The item component also HAS the the ornamented "opinion" property and it set to the correct value'
+    );
+    done();
+  },100);
+});

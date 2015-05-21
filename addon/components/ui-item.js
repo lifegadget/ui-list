@@ -15,12 +15,13 @@ var UiItem = Component.extend(SharedItem,{
   _aspects: ['title','subHeading','icon','image','badge'],
   _panes: ['left','center', 'right'],
   // Defaulting panes for various Aspects
-  icon: computed.alias('iconLeft'),
-  badge: computed.alias('badgeRight'),
-  image: computed.alias('imageLeft'),
-  title: computed.alias('titleCenter'),
-  subHeading: computed.alias('subHeadingCenter'),
-  
+  paneAliases: {
+    icon: 'iconLeft',
+    badge: 'badgeRight',
+    image: 'imageLeft',
+    title: 'titleCenter',
+    subHeading: 'subHeadingCenter'
+  },  
   titleExists: computed.notEmpty('title'),
   subHeadingExists: computed.notEmpty('subHeading'),
   twoLinedMessage: computed.and('titleExists','subHeadingExists'),

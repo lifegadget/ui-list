@@ -89,7 +89,7 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
    * The specific Item components should define which aspects and panes they support, this
    * just bring together the resultant array of aspectPanes which can be targetted/configured by a user
    */
-  aspectPanes: computed('_aspects','_panes',function() {
+  availableAspectPanes: computed('_aspects','_panes',function() {
     const aspects = new A(this.get('_aspects'));
     const panes = new A(this.get('_panes'));
     let aspectPanes = [];
@@ -102,7 +102,7 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
       });
     }
 
-    return aspectPanes;
+    return new A(aspectPanes);
   }),
   _itemProperties: null,
   _listProperties: ['size','mood','style','squeezed'],
@@ -155,7 +155,7 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
    * conservative on their observer usage
    */
   _itemSetProperties: on('beforeRender',computed('items', function() {
-    const possibleAspectPanes = new A(this.get('aspectPanes'));
+    const possibleAspectPanes = this.get('availableAspectPanes');
     const mappedFrom = this.get('_mappedFrom');
     let aspectPanes = keys(this.get('mappedProperties'));
     let otherProperties = new A([]);
