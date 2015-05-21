@@ -89,14 +89,15 @@ let SharedItem = Mixin.create({
     const dataSource = isEmberData ? get(this, 'data.data') : get(this,'data');
     let   reflector = dataSource ? keys(dataSource) : [];
     const data = get(this, 'data');
-    // NOTE: this whole ED nonsense can be removed if we can get the ProxyMixin working again but until then we
-    // need to detect decorated properties somehow as the Ember.keys() method does not properly reflect ED arrays
+    // NOTE: this whole ED nonsense can be removed if we can get the ProxyMixin working again but 
+		// until then we need to detect decorated properties somehow as the Ember.keys() method does 
+		// not properly reflect ED arrays
     if(isEmberData) {
         let decorators = [];
         for (let property in data) {
           if(property.substr(0,1) !== '_') {
-            console.log('prop: %s', property);
-            if(!data.hasOwnProperty(property) && property.substr(0,1) !== '_' && typeOf(data[property]) === 'object') {
+            if(!data.hasOwnProperty(property) && property.substr(0,1) !== '_' && data[property] === 'object') {
+	            console.log('prop: %s', property);
               decorators.push(property);
             }            
           }
