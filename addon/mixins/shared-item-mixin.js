@@ -2,17 +2,34 @@ import Ember from 'ember';
 const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, keys, get, merge } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 
+
 let SharedItem = Mixin.create({
+
+  actionHandler: function (action,options={}) {
+    const list = this.get('list');
+    this._actionEffects(action,options);
+    if(get(list,'actionManager')) {
+      console.log('action manager: %s', action);
+      list.actionManager(action, this, options);
+    } else {
+      console.log('local action: %s', action);
+      this.sendAction(action, this, options);
+    }
+  },
+  _actionEffects: function(action,options) { // jshint ignore: line
+    // default handler does nothing, up to specific type to add functionality
+  },
+
   // Convenience Aliases and Defaults
   mood: 'default',
   style: 'default',
   size: 'default',
   skin: computed.alias('style'),
   color: computed.alias('mood'),
-  
+
   // COMPUTED PROPERTIES
   // -------------------------
-  
+
   // Classy stuff
   classNames: ['ui-list','item'],
   classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood','squeezed' ],
@@ -36,7 +53,7 @@ let SharedItem = Mixin.create({
       run( ()=> {
         size = size(this);
       });
-    }    
+    }
     return !size || size === 'default' ? '' : size;
   }),
   _mood: computed('mood','title','subHeading','badge','icon','image','style', 'size', function() {
@@ -48,9 +65,9 @@ let SharedItem = Mixin.create({
     }
     return !mood || mood === 'default' ? '' : `mood-${mood}`;
   }),
-  
+
   /**
-   * The specific Item components should define which aspects and panes they support, this 
+   * The specific Item components should define which aspects and panes they support, this
    * just bring together the resultant array of aspectPanes which could be targetted/configured by a user
    */
   _aspectPanes: computed('_aspects','_panes',function() {
@@ -63,10 +80,10 @@ let SharedItem = Mixin.create({
         aspectPanes.push(aspect + capitalize(pane));
       });
     });
-    
+
     return aspectPanes;
   }),
-  
+
 
   /**
    * INITIALIZE ITEM COMPONENT
@@ -83,27 +100,26 @@ let SharedItem = Mixin.create({
   _unpackData: function() {
     const ignoredProperties = new A(['toString','toArray', 'isTruthy']);
     const isEmberData = typeOf(get(this, 'data.data')) === 'object' ? true : false;
+    const isDecorated = isEmberData && this.get('data.isTruthy') ? true : false;
     const notPrivate = property => { return property.substr(0,1) !== '_'; };
     const notIgnored = property => { return !ignoredProperties.contains(property); };
     const safeProperties = property => { return notPrivate(property) && notIgnored(property); };
     const dataSource = isEmberData ? get(this, 'data.data') : get(this,'data');
     let   reflector = dataSource ? keys(dataSource) : [];
     const data = get(this, 'data');
-    // NOTE: this whole ED nonsense can be removed if we can get the ProxyMixin working again but 
-		// until then we need to detect decorated properties somehow as the Ember.keys() method does 
-		// not properly reflect ED arrays
-    if(isEmberData) {
+    // NOTE: this whole ED nonsense can be removed if we can get the ProxyMixin working again but until then we
+    // need to detect decorated properties somehow as the Ember.keys() method does not properly reflect ED arrays
+    if(isDecorated) {
         let decorators = [];
         for (let property in data) {
           if(property.substr(0,1) !== '_') {
-            if(!data.hasOwnProperty(property) && property.substr(0,1) !== '_' && data[property] === 'object') {
-	            console.log('prop: %s', property);
+            if(!data.hasOwnProperty(property) && property.substr(0,1) !== '_' && typeOf(data[property]) === 'object') {
               decorators.push(property);
-            }            
+            }
           }
         }
         reflector = reflector.concat(decorators);
-    };
+    }
     reflector.filter(safeProperties).forEach( key => {
       // create CP on root and point back to attribute on data hash
       let cp = computed.readOnly(`data.${key}`);
@@ -128,7 +144,7 @@ let SharedItem = Mixin.create({
       }
     });
   },
-  
+
   /**
    * setup up logical flags to indicate the existance of content on a per pane basis
    */
@@ -144,25 +160,25 @@ let SharedItem = Mixin.create({
       this.notifyPropertyChange(property);
     });
   },
-  
+
 
   /**
-   * Responsible for allowing the private CP's that sit as sidecars to 
+   * Responsible for allowing the private CP's that sit as sidecars to
    * API props which take scalars OR function callbacks. The issue at hand is
-   * that scale inputs in the API are simple to handle but if a function is 
-   * recieved the function itself will be dependent on an unknown set of variables 
+   * that scale inputs in the API are simple to handle but if a function is
+   * recieved the function itself will be dependent on an unknown set of variables
    * in the item and the CP needs to respond to each of them.
-   * 
+   *
    * The strategy for doing this is to combine all aspectPanes which are set to non-null values
    * at construction, and then whatever properties are contained in _itemCoreProperties, _itemMetaProperties,
-   * and finally all _cpProperties. These properties are setup as an 
+   * and finally all _cpProperties. These properties are setup as an
    * mutex observer which signals change to the CP. From the perspective of the CP, it is only necessary
    * to watch the mutex property for changes.
    */
   _cpInitialisation: on('init', function() {
     const props = this.get('_cpProperties'); // jshint ignore:line
     // const aspectPanes = this.get('_aspectPanes'); // jshint ignore:line
-    
+
     // TODO: implement
   }),
   _cpProperties: ['style','mood','size'],
@@ -170,7 +186,7 @@ let SharedItem = Mixin.create({
   // Initialize "Dereferenced Computed Properties"
 	// ---------------------------------------------
 	// NOTE: 'map' is a dereferenced hash of mappings; an item can use either a map or individual property assignments
-	// of the variety item.fooMap = 'mappedTo'; 
+	// of the variety item.fooMap = 'mappedTo';
   _defineAspectMappings: function() {
     const aspectPanes = new A(this.get('_aspectPanes'));
     aspectPanes.forEach( aspectPane => {
@@ -183,7 +199,7 @@ let SharedItem = Mixin.create({
 	_getMap: function(property) {
     return this.get(`map${capitalize(property)}`) || this.get(`map.${property}`);
 	},
-  
+
   // Default Values
   _setDefaultValues: function() {
     const aspectPanes = this.get('_aspectPanes');
@@ -194,7 +210,7 @@ let SharedItem = Mixin.create({
       }
     });
   },
-  
+
   /**
    * Registers the item with a parent list (if one exists)
    */

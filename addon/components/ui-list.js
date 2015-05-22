@@ -16,7 +16,7 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
         sort = [sort];
       }
     }
-    
+
     return typeOf(sort) === 'array' ? sort : null;
   })),
   sortAscending: true,
@@ -119,7 +119,7 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
   }),
   _mappedFrom: computed('mappedProperties', function() {
     const mp = this.get('mappedProperties');
-    
+
     return new A(keys(mp).map(item => {
       return mp[item];
     }));
@@ -147,11 +147,11 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
     default:
       filteredContent = content;
     }
-    
+
     return filteredContent;
   }),
   /**
-   * Keeps track of what properties are set across items so that items components can be more 
+   * Keeps track of what properties are set across items so that items components can be more
    * conservative on their observer usage
    */
   _itemSetProperties: on('beforeRender',computed('items', function() {
@@ -174,7 +174,7 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
     return {
       aspectPanes: new A(aspectPanes).uniq(),
       otherProperties: new A(otherProperties).uniq()
-    };    
+    };
   })),
   _isMappedProperty: function(prop) {
     const mp = this.get('mappedProperties');
@@ -198,6 +198,22 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
   deregister: function(item) {
     const registeredItems = this.get('_registeredItems');
     registeredItems.removeObject(item);
+  },
+
+  // ACTIONS
+  // ------------------------------------
+
+  /**
+   * Manages actions on behalf of the items it is managing
+   * @param  {String}
+   * @param  {Object}
+   * @param  {Object}
+   * @return {Object}
+   */
+  actionManager: function(action, item, options={}) {
+    this.sendAction(action, item, options);
+
+    return true;
   }
 });
 

@@ -1,7 +1,6 @@
 import Ember from 'ember';
 const { Component, computed, observer, $, A, run, on, inject } = Ember;    // jshint ignore:line
 
-
 import layout from '../templates/components/ui-item';
 import SharedItem from 'ui-list/mixins/shared-item-mixin';
 
@@ -21,13 +20,20 @@ var UiItem = Component.extend(SharedItem,{
     image: 'imageLeft',
     title: 'titleCenter',
     subHeading: 'subHeadingCenter'
-  },  
+  },
   titleExists: computed.notEmpty('title'),
   subHeadingExists: computed.notEmpty('subHeading'),
   twoLinedMessage: computed.and('titleExists','subHeadingExists'),
-  
-  responsive: inject.service()
+
+  responsive: inject.service(),
+
+  // actions
+  actions: {
+    paneAction: function(action, pane) {
+      this.actionHandler(action,{pane: pane});
+    }
+  }
+
 });
 
-UiItem[Ember.NAME_KEY] = 'ui-item';
 export default UiItem;

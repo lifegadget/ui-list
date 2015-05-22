@@ -1,6 +1,6 @@
 <div class="hpad left"></div>
 {{#if hasLeftPane}}
-  <div class="left-pane {{if twoLinedMessage 'two-lined-message'}}">
+  <div class="left-pane {{if twoLinedMessage 'two-lined-message'}}" {{action "paneAction" "left"}}>
       {{#if iconLeft}}{{ui-icon icon=iconLeft }}{{/if}}
       {{#if imageLeft}}{{ui-image src=imageLeft borderMask='circle'}}{{/if}}
       {{#if titleLeft}}{{titleLeft}}{{/if}}
@@ -13,7 +13,7 @@
   </div>
   <div class="hpad"></div>
 <div class="right-pane {{if badgeRight 'with-badge'}}">
-    {{#if badgeRight}}<span class="badge">{{badgeRight}}</span>{{/if}}   
+    {{#if badgeRight}}<span class="badge">{{badgeRight}}</span>{{/if}}
     {{#if iconRight}}{{ui-icon class="icon-right" icon=iconRight fw=false}}{{/if}}
 </div>
 <div class="hpad right"></div>
