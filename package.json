@@ -1,6 +1,6 @@
 {
   "name": "ui-list",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "List controls for ambitious Ember applications.",
   "directories": {
     "doc": "doc",
@@ -33,7 +33,6 @@
     "ember-disable-proxy-controllers": "^0.7.0",
     "ember-export-application-global": "^1.0.2",
     "ember-try": "0.0.4",
-    "phantomjs2": "^2.0.0",
     "ui-bs-button-choice": "0.0.11",
     "ui-button": "0.0.13",
     "ui-code-highlight": "0.0.5",
