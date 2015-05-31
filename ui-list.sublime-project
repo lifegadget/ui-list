@@ -1,0 +1,34 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "binary_file_patterns": [
+        ".DS_Store",
+        "dist/*",
+        "bower_components/*",
+        "node_modules/*",
+        "tmp/*",
+        ".divshot-cache/*",
+        "*.jpg",
+        "*.jpeg",
+        "*.png",
+        "*.gif",
+        "*.ttf",
+        "*.tga",
+        "*.dds",
+        "*.ico",
+        "*.eot",
+        "*.pdf",
+        "*.swf",
+        "*.jar",
+        "*.zip",
+        "*.min.js"
+      ],
+      "folder_exclude_patterns": [
+        ".divshot-cache",
+        ".git",
+        "tmp"
+      ]
+    }
+  ]
+}
