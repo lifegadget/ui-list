@@ -210,12 +210,14 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
    * @param  {Object}
    * @return {Object}
    */
-  actionManager: function(action, item, options={}) {
-    this.sendAction(action, item, options);
+  actionManager: function(item, options={}) {
+    console.log('actionManager options: %o', options);
+    this.sendAction('action', item, options);
 
     return true;
   }
 });
 
+// NAMED FOR EMBER INSPECTOR
 UiList[Ember.NAME_KEY] = 'ui-list';
 export default UiList;

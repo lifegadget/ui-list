@@ -7,12 +7,16 @@
   </div>
   <div class="hpad"></div>
 {{/if}}
-  <div class="center-pane {{if hasLeftPane 'with-left' 'no-left'}} {{if twoLinedMessage 'two-lined-message'}}">
+  <div class="center-pane
+    {{if hasLeftPane 'with-left' 'no-left'}}
+    {{if twoLinedMessage 'two-lined-message'}}"
+    {{action "paneAction" "center"}}
+  >
       {{#if title}}<span class='title'>{{title}}</span>{{/if}}
       <span class='sub-heading'><br/>{{subHeading}}</span>
   </div>
   <div class="hpad"></div>
-<div class="right-pane {{if badgeRight 'with-badge'}}">
+<div class="right-pane {{if badgeRight 'with-badge'}}" {{action "paneAction" "right"}}>
     {{#if badgeRight}}<span class="badge">{{badgeRight}}</span>{{/if}}
     {{#if iconRight}}{{ui-icon class="icon-right" icon=iconRight fw=false}}{{/if}}
 </div>

@@ -3,7 +3,7 @@
 <h4>Overview</h4>
 <div class="row">
     <desc>
-        The <code>ui-list</code> is the default list container. It does nothing more than list items with very basic styling for the container itself, 
+        The <code>ui-list</code> is the default list container. It does nothing more than list items with very basic styling for the container itself,
         it's main function is to proxy properties into the items it contains as well manage actions coming out of them.
     </desc>
     <desc>
@@ -100,9 +100,9 @@
       </table> -->
 
       <note>
-          <strong>Note:</strong> 
-          Currently the only <em>type</em> implemented is the basic <strong>ui-item</strong>. Also, the concept of <em>actions</em> are not implemented 
-          in the basic item type. 
+          <strong>Note:</strong>
+          Currently the only <em>type</em> implemented is the basic <strong>ui-item</strong>. Also, the concept of <em>actions</em> are not implemented
+          in the basic item type.
       </note>
 
     </desc>
@@ -116,31 +116,31 @@
             <td class="col-xs-12 col-sm-4 text-center align-top">
               <p>&nbsp;</p>
                 {{#if enableStaticChooser}}
-                  {{ui-list 
-                    items=items 
+                  {{ui-list
+                    items=items
                     filter=listFilter
-                    map=map 
-                    size=size 
-                    mood=mood 
-                    style=style 
-                    defaultIcon=defaultIcon 
-                    compressed=compressed 
+                    map=map
+                    size=size
+                    mood=mood
+                    style=style
+                    defaultIcon=defaultIcon
+                    compressed=compressed
                     squeezed=squeezed
-                    sort=sortBy 
+                    sort=sortBy
                     sortAscending=sortAscending
                   }}
                 {{else}}
-                  {{ui-list 
-                    items=items 
+                  {{ui-list
+                    items=items
                     filter=listFilter
-                    map=map 
-                    size=size 
-                    mood=sillyLogic 
-                    style=style 
-                    defaultIcon=defaultIcon 
-                    compressed=compressed 
+                    map=map
+                    size=size
+                    mood=sillyLogic
+                    style=style
+                    defaultIcon=defaultIcon
+                    compressed=compressed
                     squeezed=squeezed
-                    sort=sortBy  
+                    sort=sortBy
                     sortAscending=sortAscending
                   }}
                 {{/if}}
@@ -148,7 +148,7 @@
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
             <td class="hidden-xs col-sm-8">
                 <heading>CONTAINER PROPERTIES</heading>
-                
+
                 {{#code-block language="js"}}
 items: [
   {foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery", badge: 6},
@@ -163,12 +163,12 @@ map: {
 },
                 {{/code-block}}
                 {{code-reference ref=sillyLogic}}
-                
+
                 <heading>HANDLEBARS TEMPLATE</heading>
-                
+
                 {{#code-block language="handlebars" poll=100}}
-\{{ui-list 
-  items=items 
+\{{ui-list
+  items=items
   map=map
   {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
   size="{{size}}"
@@ -177,10 +177,10 @@ map: {
   squeezed=true{{/if}}{{#if sortBy}}
   sort="{{sortBy}}" {{else}}
   {{/if}}
-  
-}} 
+
+}}
                 {{/code-block}}
-                
+
             </td>
         </tr>
     </table>
@@ -207,10 +207,10 @@ map: {
                 {{/if}}
              </column>
             <column>
-                Skin / Style Family:<br/>        
+                Skin / Style Family:<br/>
                 {{ui-button-radio choices='default,plus,flat' selected=style size='small' stretch=true}}<br/>
-                Sort By: 
-                {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>        
+                Sort By:
+                {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>
                 {{ui-button-radio choices=sortOrders selected=sortBy size='small' stretch=true}}<br/>
             </column>
         </columns>
@@ -244,7 +244,7 @@ map: {
         <ul>
           <li>Properties like <code>mood</code>, <code>size</code>, etc. are properties which are owned by the list</li>
           <li>
-            In all cases, though the properties are "owned" at the list level, that just means they are common to all item types and that 
+            In all cases, though the properties are "owned" at the list level, that just means they are common to all item types and that
             they do <em>not</em> hold a discrete value for each "item".
           </li>
           <li>These properties -- like AspectPanes -- can be static/scalar values or functions.</li>
@@ -260,24 +260,23 @@ map: {
 
 <h4>Ember Data</h4>
 <desc>
-  Considering a lot of data lists come from Ember-Data the example below loads all the data from above into a model called "Activity" and then works in precisely 
+  Considering a lot of data lists come from Ember-Data the example below loads all the data from above into a model called "Activity" and then works in precisely
   the same way. Check out the data in the Ember Inspector and play around with it to see it update:
 </desc>
 
 <examples>
   <widget class='wide'>
     {{#if enableStaticChooser}}
-      {{ui-list 
-        items=model 
+      {{ui-list
+        items=model
         filter=listFilter
-        map=map 
-        size=size 
-        mood=mood 
-        style=style 
-        defaultIcon=defaultIcon  
-        compressed=compressed 
-        sort=sortBy 
-        filter=filterList 
+        map=map
+        size=size
+        mood=mood
+        style=style
+        defaultIcon=defaultIcon
+        compressed=compressed
+        sort=sortBy
         sortAscending=sortAscending
       }}
     {{else}}

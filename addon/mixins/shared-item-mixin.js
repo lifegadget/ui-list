@@ -5,15 +5,15 @@ const capitalize = Ember.String.capitalize;
 
 let SharedItem = Mixin.create({
 
-  actionHandler: function (action,options={}) {
+  actionHandler: function (pane,options={}) {
     const list = this.get('list');
-    this._actionEffects(action,options);
+    if(pane) {
+      options.pane = pane;
+    }
     if(get(list,'actionManager')) {
-      console.log('action manager: %s', action);
-      list.actionManager(action, this, options);
+      list.actionManager(this, options);
     } else {
-      console.log('local action: %s', action);
-      this.sendAction(action, this, options);
+      this.sendAction(this, options);
     }
   },
   _actionEffects: function(action,options) { // jshint ignore: line
