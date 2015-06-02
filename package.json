@@ -51,6 +51,7 @@
     "ui-responsive-toolbelt": "0.0.5"
   },
   "ember-addon": {
-    "configPath": "tests/dummy/config"
+    "configPath": "tests/dummy/config",
+    "demoURL": "http://development.ui-list.divshot.io/"
   }
 }
