@@ -1,15 +1,6 @@
 import Ember from 'ember';
 const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, keys, get, merge } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
-const xtend = (core, options, override=false) => {
-  for (var index in options) {
-    if(override || !core[index]) {
-      core[index] = options[index];
-    }
-  }
-
-  return core;
-};
 
 let SharedItem = Mixin.create({
   actionHandler: function (pane,options={}) {
