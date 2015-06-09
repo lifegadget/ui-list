@@ -10,95 +10,6 @@
       To understand <code>ui-list</code> as either an inline or block component you must understand it's parameters in terms of their scope:
     </desc>
     <desc>
-      <!-- <table class="row">
-        <tr>
-          <td class="col-xs-12 col-sm-6">
-            <heading>LIST SCOPE</heading>
-          </td>
-          <td class="col-xs-12 col-sm-6">
-            <heading>ITEM SCOPE</heading>
-          </td>
-        </tr>
-        {{! ----------------------------------------------------------- }}
-        <tr>
-          <td style="vertical-align:top">
-            <ul>
-              <li>
-                <code>items</code>
-                <ul>
-                  <li>this is the array/list data payload which will then be distributed to each item</li>
-                </ul>
-              </li>
-              <li>
-                <code>map</code>
-                <ul>
-                  <li>
-                    if the properties on the input object don't match up to the pane-areas the mapper will do a simple property mapping
-                  </li>
-                  <li>see how <code>foo</code> and <code>bar</code> are mapped to <em>title</em> and <em>subHeading</em> panes in the example below</li>
-                </ul>
-              </li>
-              <li>
-                <code>size</code>
-                <ul>
-                  <li>the size of items should always be consistent by item</li>
-                  <li>this doesn't prevent the item -- either through a style family or otherwise -- in adjusting its size</li>
-                  <li>
-                    as a "for instance" it could be imagined that an <em>active</em> item might be bigger, this is fine but the 'size'
-                    property would remain static and instead provide a macro-level control on size/scale to any underlying effects
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <code>style</code>
-                <ul>
-                  <li>all items should maintain the same style family</li>
-                </ul>
-              </li>
-              <li>
-                <code>type</code>
-                <ul>
-                  <li>specifies the component-type of the items; all items must be of same type</li>
-                  <li>
-                    for instance, if you set <em>type</em> to <strong>tabular</strong> then each item would be of component
-                    type <code>ui-tabular-item</code>
-                  </li>
-                  <li>by default type is null and therefore the item component used is <code>ui-item</code></li>
-                </ul>
-              </li>
-              <li>
-                <code>actionChoices</code>
-                <ul>
-                  <li>specifies an array of actions that each item will provide</li>
-                  <li>
-                    all items should expose the same actions but have the right to display or hide them appropriate to their specific implementation
-                  </li>
-                  <li>the base <code>ui-item</code> does not support actions</li>
-                </ul>
-              </li>
-            </ul>
-          </td>
-          {{! ----------------------------------------------------------- }}
-          <td class="col-xs-4" style="vertical-align:top">
-            <ul>
-              <li><code>mood</code>
-                <ul>
-                  <li>often used to visually segment items based on some sort of business logic</li>
-                  <li>yes it could be set statically, but typically it be run through a business rule</li>
-                  <li>in the example below notice how mood can be mapped to the <strong>sillyLogic</strong> function</li>
-                </ul>
-              </li>
-              <li>All <strong>AspectPanes</strong>
-                <ul>
-                  <li>each Aspect (e.g., icon, image, title), or </li>
-                  <li>each Aspect with an explicit Pane (e.g., iconRight, badgeLeft, etc.)</li>
-                </ul>
-              </li>
-            </ul>
-          </td>
-        </tr>
-      </table> -->
-
       <note>
           <strong>Note:</strong>
           Currently the only <em>type</em> implemented is the basic <strong>ui-item</strong>. Also, the concept of <em>actions</em> are not implemented
@@ -208,7 +119,7 @@ map: {
              </column>
             <column>
                 Skin / Style Family:<br/>
-                {{ui-button-radio choices='default,plus,flat' selected=style size='small' stretch=true}}<br/>
+                {{ui-button-radio choices='default,plus,flat,simple' selected=style size='small' stretch=true}}<br/>
                 Sort By:
                 {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>
                 {{ui-button-radio choices=sortOrders selected=sortBy size='small' stretch=true}}<br/>

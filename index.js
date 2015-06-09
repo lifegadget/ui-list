@@ -15,7 +15,8 @@ module.exports = {
     app.import('vendor/ui-list/ui-list.css');
     app.import('vendor/ui-list/ui-list-plus.css');
     app.import('vendor/ui-list/ui-list-flat.css');
-    
+    app.import('vendor/ui-list/ui-list-simple.css');
+
     // animations
     var defaultAnimations = [
       'attention_seekers/bounce.css',
@@ -75,7 +76,7 @@ module.exports = {
       });
     }
     if(!o.quiet) {
-      console.log('ui-list:%s, %s', faMessage, animateMessage); 
+      console.log('ui-list:%s, %s', faMessage, animateMessage);
     }
 
   }

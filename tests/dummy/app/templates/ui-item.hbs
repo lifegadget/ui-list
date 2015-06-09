@@ -12,12 +12,12 @@
           <li>Can be displayed as individual item or join up with other items as part of a <strong>list</strong>; it knows how to behave appropriately in either context</li>
           <li>Provides as set of aliases to map common <em>aspects</em> into the most likely <em>pane</em></li>
         </ul>
-        
+
         This control does not have:
         <ul>
           <li>
             This being the most basic item-type it only responds with click action type (aka, no fancy slide out actions or other visual effects for
-            these items).             
+            these items).
           </li>
         </ul>
     </desc>
@@ -32,20 +32,20 @@
     <sourcecode>
         {{#code-block language="handlebars"}}
 \{{ui-item icon='envelope' title='Went Running' badgeRight=4}}
-        {{/code-block}}         
+        {{/code-block}}
     </sourcecode>
 </examples>
 {{! ----------------------------------------------------------- }}
 <desc>
-    Content -- when fully qualified for an item -- always has both an "aspect" and "pane". In the example above the <code>badgeRight</code> is a clear example 
-    of this. It states that it should use the "badge" aspect and place it into the "right" pane. In the other two examples we are noticing a feature of 
-    items ... where there are strong patterns as to where a particular piece of content (aka, an aspect) might go then an "alias" is setup to default the 
-    aspect type to a given pane. In this example the <code>title</code> reference is more explicitly <code>titleCenter</code> but since that almost always 
-    where the title will go an alias has been setup. 
+    Content -- when fully qualified for an item -- always has both an "aspect" and "pane". In the example above the <code>badgeRight</code> is a clear example
+    of this. It states that it should use the "badge" aspect and place it into the "right" pane. In the other two examples we are noticing a feature of
+    items ... where there are strong patterns as to where a particular piece of content (aka, an aspect) might go then an "alias" is setup to default the
+    aspect type to a given pane. In this example the <code>title</code> reference is more explicitly <code>titleCenter</code> but since that almost always
+    where the title will go an alias has been setup.
 </desc>
 <desc>
     The <code>ui-item</code> component has the following configuration:
-    
+
     <ul>
       <li>
         Panes:
@@ -68,37 +68,37 @@
 <examples>
     <widget class="wide">
         <heading>With individual property mappers</heading>
-        {{ui-item 
-					icon=toggledIcon 
+        {{ui-item
+					icon=toggledIcon
           image=image
 					foo=foo
-					mapTitle='foo' 
-					bar=toggledSubHeading 
+					mapTitle='foo'
+					bar=toggledSubHeading
 					mapSubHeading="bar"
-					badge=toggledBadge 
-					size=size 
-					disabled=isDisabled 
-					style=style 
+					badge=toggledBadge
+					size=size
+					disabled=isDisabled
+					style=style
 					mood=_mood
           squeezed=squeezed
 				}}
         <br/>
-        
+
         <heading>With <code>map</code> property</heading>
-        {{ui-item 
+        {{ui-item
 					icon=toggledIcon
-          image=image 
+          image=image
 					foo=foo
-					bar=toggledSubHeading 
+					bar=toggledSubHeading
           map=mapper
-					badge=toggledBadge 
-					size=size 
-					disabled=isDisabled 
-					style=style 
+					badge=toggledBadge
+					size=size
+					disabled=isDisabled
+					style=style
 					mood=_mood
           squeezed=squeezed
 				}}
-        
+
     </widget>
     <sourcecode>
         {{#code-block language="handlebars" poll=150}}
@@ -121,7 +121,7 @@
 }}
         {{/code-block}}
         {{#code-block language='js'}}
-// where ... 
+// where ...
 mapper: {
   title: 'foo',
   subHeading: 'bar'
@@ -153,26 +153,26 @@ dynamicMoodFunction: function(item) {
             </column>
             <column>
                 <div class="row">
-                    Toggles<br/>                  
+                    Toggles<br/>
                     <div class="col-xs-6">
                         {{ui-toggle-button value=showSubHeading size='small'}} - SUB HEAD
-                        <p>&nbsp;</p>                      
+                        <p>&nbsp;</p>
                         {{ui-toggle-button value=isDisabled size='small'}} - DISABLED <br/>
-                        <p>&nbsp;</p>                      
+                        <p>&nbsp;</p>
                         {{ui-toggle-button value=showImage size='small' defaultValue=false}} - IMAGE <br/>
                     </div>
                     <div class="col-xs-6">
                         {{ui-toggle-button value=showBadge size='small'}} - BADGE   <br/>
-                        <p>&nbsp;</p>                      
+                        <p>&nbsp;</p>
                         {{ui-toggle-button value=showIcon size='small'}} - ICON<br/>
-                        <p>&nbsp;</p>                      
+                        <p>&nbsp;</p>
                         {{ui-toggle-button value=squeezed size='small' defaultValue=false}} - SQUEEZED <br/>
                     </div>
                 </div>
             </column>
             <column>
-                Skin / Style Family:<br/>        
-                {{ui-button-radio choices='default,plus,flat' selected=style size='small' stretch=true}}<br/>
+                Skin / Style Family:<br/>
+                {{ui-button-radio choices='default,plus,flat,simple' selected=style size='small' stretch=true}}<br/>
                 Item Size: <br/>
                 {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
             </column>
