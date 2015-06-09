@@ -1,5 +1,5 @@
 import Ember from 'ember';
-const { computed, observer, $, A, run, on, typeOf, debug } = Ember;    // jshint ignore:line
+const { computed, observer, $, A, run, on, typeOf, debug, keys } = Ember;    // jshint ignore:line
 import {
   moduleForComponent,
   test
@@ -20,7 +20,7 @@ test('it renders', function(assert) {
   // Renders the component to the page
   this.render();
   assert.equal(component._state, 'inDOM');
-}); 
+});
 
 test('items are enumerable', function(assert) {
   let component = this.subject();
@@ -54,29 +54,29 @@ test('only valid filters are settable', function(assert) {
   component.set('filter', ['when', 6 ]);
   assert.equal(
     JSON.stringify(component.get('_filter')),
-    JSON.stringify(['when', 6 ]), 
+    JSON.stringify(['when', 6 ]),
     'a two element array should be considered valid'
   );
   component.set('filter', ['when', 6, 7 ]); // invalid syntax
   assert.notEqual(
     JSON.stringify(component.get('_filter')),
-    JSON.stringify(['when', 6, 7 ]), 
+    JSON.stringify(['when', 6, 7 ]),
     'a three element array should NOT be considered valid'
   );
   // valid object
   const validObject = {key: 'when', value: 6};
-  component.set('filter', validObject); 
+  component.set('filter', validObject);
   assert.equal(
     JSON.stringify(component.get('_filter')),
-    JSON.stringify(validObject), 
+    JSON.stringify(validObject),
     'a valid key/value object should be fine as a filter'
   );
   // invalid object
   const invalidObject = {when: 6};
-  component.set('filter', invalidObject); 
+  component.set('filter', invalidObject);
   assert.notEqual(
     JSON.stringify(component.get('_filter')),
-    JSON.stringify(invalidObject), 
+    JSON.stringify(invalidObject),
     'an invalid object should be ignored'
   );
   // scalars
@@ -107,7 +107,7 @@ test('content is filtered', function(assert) {
   assert.equal(component.get('content').length, 1, 'content should have only 1 item in it after filtering');
   assert.equal(component.get('content.0.icon'), 'cab', 'property remaining should be equal to the filtered value');
   component.set('filter', null);
-  assert.equal(component.get('content').length, 6, 'content array should have all items once filter has been removed');  
+  assert.equal(component.get('content').length, 6, 'content array should have all items once filter has been removed');
   component.set('filter', { key:'icon', value: 'cab' });
   assert.equal(typeOf(component.get('filter.key')), 'string', 'setting filter with object: {name/value}');
   assert.equal(component.get('content').length, 1, 'content should have only 1 item in it after filtering (w/ object)');
@@ -115,7 +115,7 @@ test('content is filtered', function(assert) {
   component.set('filter', item => { return item.get('badge') > 0; });
   assert.equal(component.get('content').length, 2, 'After filtering with function for items with badges there should be 2 remaining');
   component.set('filter', null);
-  assert.equal(component.get('content').length, 6, 'content array should have all items once filter has been removed (again)');  
+  assert.equal(component.get('content').length, 6, 'content array should have all items once filter has been removed (again)');
 });
 
 test('content is set from items', function(assert) {
@@ -135,49 +135,102 @@ test('content is set from items', function(assert) {
   assert.equal(component.get('items').length, component.get('content').length, "content and items should always be equal length");
   // validate simple property transfer
   assert.equal(
-    component.get('items.0.foo'), 
-    component.get('content.0.foo'), 
+    component.get('items.0.foo'),
+    component.get('content.0.foo'),
     "foo should have been copied over to 'content' array"
   );
   assert.equal(
-    component.get('items.0.badge'), 
-    component.get('content.0.badge'), 
+    component.get('items.0.badge'),
+    component.get('content.0.badge'),
     "badge should have been copied over to 'content' array"
   );
-  // check new bindings
   assert.equal(
-    component.get('content.0.foo'), 
-    component.get('content.0.title'),
-    "title should have taken mapped value from 'foo' and reside in 'content' array"
+    component.get('items.1.icon'),
+    component.get('content.1.icon'),
+    "icon should have been copied over to 'content' array"
   );
-  assert.equal(
-    component.get('content.0.bar'), 
-    component.get('content.0.subHeading'),
-    "subHeading should have taken mapped value from 'bar' and reside in 'content' array"
-  );
-    
 });
 
-test('aspectPanes and keyAspectPanes properties set', function(assert) {
+test('mappedProperties set from map hash', function(assert) {
+  let component = this.subject();
+  let initialMap = {
+    title: 'foo',
+    subHeading: 'bar'
+  };
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  component.set('map', initialMap);
+  assert.equal(component.get('mappedProperties'), initialMap, 'mapped properties are setup on initialization of map property');
+  let mappedFrom = component.get('_mappedFrom');
+  assert.equal(mappedFrom.length, 2, '_mappedFrom is correct length');
+  assert.ok(mappedFrom.contains('foo'), '_mappedFrom contains foo');
+  assert.ok(mappedFrom.contains('bar'), '_mappedFrom contains bar');
+});
+
+test('mappedProperties set only with map properties', function(assert) {
+  let component = this.subject({
+    mapTitle: 'foo',
+    mapSubHeading: 'bar'
+  });
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  assert.equal(component.get('mappedProperties.title'), 'foo', 'foo map setup map property');
+  assert.equal(component.get('mappedProperties.subHeading'), 'bar', 'bar map setup map property');
+  // NOTE: this stupid form of testing is based on QUnit doing some pretty odd things right now with testing the array in more direct fashion. Annoying!
+  let mappedFrom = component.get('_mappedFrom');
+  assert.equal(mappedFrom.length, 2, '_mappedFrom is correct length');
+  assert.ok(mappedFrom.contains('foo'), '_mappedFrom contains foo');
+  assert.ok(mappedFrom.contains('bar'), '_mappedFrom contains bar');
+});
+
+test('mappedProperties with combined map property and map hash', function(assert) {
+  let component = this.subject({
+    mapSilly: 'walk'
+  });
+  let initialMap = {
+    title: 'foo',
+    subHeading: 'bar'
+  };
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  component.set('map', initialMap);
+  assert.equal(component.get('mappedProperties.title'), 'foo', 'foo map setup map property');
+  assert.equal(component.get('mappedProperties.subHeading'), 'bar', 'bar map setup map property');
+  assert.equal(component.get('mappedProperties.silly'), 'walk', 'silly map setup map property');
+  // NOTE: this stupid form of testing is based on QUnit doing some pretty odd things right now with testing the array in more direct fashion. Annoying!
+  let mappedFrom = component.get('_mappedFrom');
+  assert.equal(mappedFrom.length, 3, '_mappedFrom is correct length');
+  assert.ok(mappedFrom.contains('foo'), '_mappedFrom contains foo');
+  assert.ok(mappedFrom.contains('bar'), '_mappedFrom contains bar');
+  assert.ok(mappedFrom.contains('walk'), '_mappedFrom contains walk');
+});
+
+
+test('availableAspectPanes is set', function(assert) {
   let component = this.subject();
   component.set('items', [
     Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
     Ember.Object.create({when: 3, title: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
-    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"})
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", silly: true})
   ]);
   component.set('map', {
     title: 'foo',
     subHeading: 'bar'
-  });  
-  assert.equal(component.get('items').length, 3, "INIT: items array loaded");
-  assert.equal(typeOf(component.get('map')), 'object', "INIT: a map hash has been set: " + JSON.stringify(component.get('map')));
-    
-  assert.equal(component.get('content.0.aspectPanes.title'), 'Groceries', 'packed property has mapped title property');
-  assert.equal(component.get('content.0.aspectPanes.badge'), 1, 'packed property has un-mapped badge property');
-  const keyAspectPanes = component.get('content.0.keyAspectPanes');
-  assert.ok($(keyAspectPanes).not(['title','subHeading','icon','badge']).length === 0 && $(['title','subHeading','icon','badge']).not(keyAspectPanes).length === 0, 'packedProperties are correct');
+  });
+  const aspectPanes = new A(component.get('availableAspectPanes'));
+  assert.ok(aspectPanes.contains('iconRight'), 'iconRight should be set by default');
+  assert.ok(aspectPanes.contains('title'), 'title should be set by default');
+  assert.ok(aspectPanes.contains('subHeading'), 'subHeading should be set by default');
 });
-
 
 test('listProperties propagated to items', function(assert) {
   let component = this.subject();
@@ -204,32 +257,6 @@ test('listProperties propagated to items', function(assert) {
       done2();
     },5);
   },5);
-
-
-});
-
-test('inline business logic resolved', function(assert) {
-  let component = this.subject();
-  component.set('items', [
-    {
-      when: 2, 
-      badge: 1,
-      badgePlus: function(item) { return item.get('badge') + 1; }
-    },
-    {
-      when: 3, 
-      badge: 6,
-      badgePlus: function(item) { return item.get('badge') + 1; }
-    }
-  ]);
-  component.set('badgePlus', function(item) {
-    return item.badge++;
-  });
-  assert.equal(
-    component.get('content.0.badgePlus'),
-    component.get('content.0.badge') + 1, 
-    "the badgePlus property should have resolved to a discrete scalar"
-  );
 });
 
 test('observing a property change in items', function(assert) {
@@ -240,7 +267,7 @@ test('observing a property change in items', function(assert) {
         assert.equal(component.get('content.0.foo'),'Food', "the 'content' array should have the updated value from 'items'");
         assert.equal('foo', property, 'the changed property "foo" was detected');
         this.done = true;
-        done(); 
+        done();
       }
     });
   assert.ok(component._propertyChangedCallback, 'change callback appears to exist');
@@ -256,11 +283,10 @@ test('observing a property change in items', function(assert) {
     if(!this.done) {
       assert.equal(component.get('content.0.foo'),'Food', "the 'content' array should have the updated value from 'items'");
       assert.ok(false,"failed to observe change to 'foo' property");
-      done();      
+      done();
     }
   },50);
 });
-
 
 test('Squeezed property proxied down to items', function(assert) {
   let component = this.subject();
@@ -274,15 +300,108 @@ test('Squeezed property proxied down to items', function(assert) {
   run.later( () => {
     assert.ok(!component.get('squeezed'), 'INIT: the list component should have squeezed property off');
     assert.equal(component.get('_registeredItems.length'), 2, 'INIT: there should be two items registered in the list');
-    console.log('registered: %o', component.get('_registeredItems'));
     assert.equal(component.get('_registeredItems').filter( item => { return item.get('squeezed'); } ).length, 0, 'INIT: neither item should have squeezed turned on');
     component.set('squeezed', true);
     done();
     run.later( () => {
       const results = component.get('_registeredItems').filter( item => { return item.get('squeezed'); } );
       assert.equal(results.length, 2, 'all items should have squeezed turned on');
-      console.log('results are: %o', results);
       done2();
-    },50);
-  },50);
+    },25);
+  },25);
+});
+
+test('Items are registered, mapped and appear in DOM', function(assert) {
+  let component = this.subject({
+    map: {
+     title: 'foo'
+    },
+    mapSubHeading: 'bar'
+  });
+  let done = assert.async();
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  this.render();
+  run.later( () => {
+    // sanity tests on registered items
+    assert.equal(component.get('_registeredItems.length'), 3, 'there should be three item components which have registered themselves.');
+    let foey = component.get('_registeredItems').map(item=>{ return item.get('foo');});
+    let arrangedFoey = new A(component.get('arrangedContent').map(item=>{ return item.get('foo');}));
+    assert.ok(
+      foey.every(item => { return arrangedFoey.contains(item);} ),
+      'Foo properties were equivalent between list\'s arrangedContent and the registered item components: ' + JSON.stringify(foey)
+    );
+    let icon = component.get('_registeredItems').map(item=>{ return item.get('icon');});
+    let arrangedIcon = new A(component.get('arrangedContent').map(item=>{ return item.get('icon');}));
+    assert.ok(
+      foey.every(item => { return arrangedFoey.contains(item);} ),
+      'Icon properties were equivalent between list\'s arrangedContent and the registered item components: ' + JSON.stringify(icon)
+    );
+    assert.deepEqual(
+      new A(component.get('_registeredItems').map( item => { return item.get('type'); })).uniq(),
+      ['ui-item'],
+      'all registered items should be of type ui-item.'
+    );
+    // Test mappings at the Item level
+    assert.equal(
+      component.get('_registeredItems').findBy('foo','Groceries').get('title'),
+      'Groceries',
+      'The foo property should have an alias to title in the item component (via a map hash prop on list)'
+    );
+    assert.equal(
+      component.get('_registeredItems').findBy('bar','visit sick uncle Joe').get('subHeading'),
+      'visit sick uncle Joe',
+      'The bar property should have an alias to subHeading in the item component (via a direct property mapping proxied from list)'
+    );
+    // DOM checking
+    assert.equal(
+      component.$('.center-pane .title').length,
+      3,
+      'The DOM should have 3 items with "titles" in it'
+    );
+    assert.equal(
+      component.$('.right-pane .badge').length,
+      2,
+      'The DOM should have 2 items with "badges" in it'
+    );
+    done();
+  },100);
+});
+
+
+test('Test that decorator properties make it through to items', function(assert) {
+  const component = this.subject();
+  const Decorator = Ember.ObjectProxy.extend({
+    opinion: computed('foo', function() {
+      return this.get('foo') === 'Groceries' ? 'yup' : 'nope';
+    })
+  });
+  // Set
+  component.set('items', [
+    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
+    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
+    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer", walk: true})
+  ]);
+  // Decorate
+  component.set('items', component.get('items').map(item => {
+    return Decorator.create({content:item});
+  }));
+  // Look for decorations
+  assert.equal(component.get('items.0.opinion'), 'yup', 'the opinion CP should exist and produce a proper response' );
+  assert.equal(component.get('items.1.opinion'), 'nope', 'the opinion CP should exist and produce a proper response' );
+  // Now look in the Item component
+  let done = assert.async();
+  run.later( () => {
+    assert.ok(component.get('_registeredItems'), 'List\'s registered items array has been populated');
+    // assert.equal(component.get('_registeredItems.length'), 3, 'there should be three registered items.');
+    // assert.equal(
+    //   component.get('_registeredItems').findBy('foo','Groceries').get('title'),
+    //   'Groceries',
+    //   'The item component also HAS the the ornamented "opinion" property and it set to the correct value'
+    // );
+    done();
+  },150);
 });

@@ -1,8 +1,11 @@
 {{#each arrangedContent as |item|}}
     {{ui-item 
         list=this
-        aspectPanes=item.aspectPanes
-        keyAspectPanes=keyAspectPanes
+        data=item
+        map=mappedProperties
+        _mappedFrom=_mappedFrom
+        defaultValues=defaultValues
+        _itemSetProperties=_itemSetProperties
         size=size 
         style=style
         mood=mood

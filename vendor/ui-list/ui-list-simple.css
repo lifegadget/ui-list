@@ -1,0 +1,39 @@
+/* simple STYLING OVERLAY */
+
+.ui-list.item.style-simple {
+  border-radius: 0px;
+  border: 1px dotted lightgrey;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+.ui-list .item:last-of-type {
+  border-bottom: none !important;
+}
+
+/* Squeeze further to edges as no horizontal borders */
+.ui-list .hpad.left,
+.ui-list .hpad.right {
+  width: 10px;
+}
+.ui-list.tiny .hpad.left,
+.ui-list.tiny .hpad.right {
+  width: 6px;
+}
+.ui-list.small .hpad.left,
+.ui-list.small .hpad.right {
+  width: 8px;
+}
+/* SQUEEZED*/
+.ui-list.item.squeezed.style-simple .hpad.left,
+.ui-list.item.squeezed.style-simple .hpad.right {
+  width: 5px;
+}
+.ui-list.tiny.squeezed.style-simple .hpad.left,
+.ui-list.item.squeezed.style-simple .hpad.right {
+  width: 1px;
+}
+.ui-list.small.item.squeezed.style-simple .hpad.left,
+.ui-list.item.squeezed.style-simple .hpad.right {
+  width: 3px;
+}

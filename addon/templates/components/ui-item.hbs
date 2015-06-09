@@ -1,19 +1,30 @@
 <div class="hpad left"></div>
 {{#if hasLeftPane}}
-  <div class="left-pane {{if twoLinedMessage 'two-lined-message'}}">
+  <div class="left-pane {{if twoLinedMessage 'two-lined-message'}}" {{action "paneAction" "left"}}>
       {{#if iconLeft}}{{ui-icon icon=iconLeft }}{{/if}}
       {{#if imageLeft}}{{ui-image src=imageLeft borderMask='circle'}}{{/if}}
-      {{#if titleLeft}}{{titleLeft}}{{/if}}
+      {{#if titleLeft}}<span class="title">{{{titleLeft}}}</span>{{/if}}
   </div>
   <div class="hpad"></div>
 {{/if}}
-  <div class="center-pane {{if hasLeftPane 'with-left' 'no-left'}} {{if twoLinedMessage 'two-lined-message'}}">
-      {{#if title}}<span class='title'>{{title}}</span>{{/if}}
-      <span class='sub-heading'><br/>{{subHeading}}</span>
+  <div class="center-pane
+    {{if hasLeftPane 'with-left' 'no-left'}}
+    {{if twoLinedMessage 'two-lined-message'}}"
+    {{action "paneAction" "center"}}
+  >
+      {{#if title}}<span class='title'>{{{title}}}</span>{{/if}}
+      <span class='sub-heading'><br/>{{{subHeading}}}</span>
   </div>
   <div class="hpad"></div>
-<div class="right-pane {{if badgeRight 'with-badge'}}">
-    {{#if badgeRight}}<span class="badge">{{badgeRight}}</span>{{/if}}   
+<div class="right-pane {{if badgeRight 'with-badge'}}" {{action "paneAction" "right"}}>
+    {{#if badgeRight}}<span class="badge">{{badgeRight}}</span>{{/if}}
+    {{#if titleRight}}<span class='title'>{{title}}</span>{{/if}}
+    {{#if subHeadingRight}}
+      {{#if titleRight}}<span class="divider"> | </span>{{/if}}
+      <span class='sub-heading'>
+        {{subHeadingRight}}
+      </span>
+    {{/if}}
     {{#if iconRight}}{{ui-icon class="icon-right" icon=iconRight fw=false}}{{/if}}
 </div>
 <div class="hpad right"></div>

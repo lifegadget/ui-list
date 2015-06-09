@@ -210,3 +210,19 @@
 .ui-list.mood-error.enabled .badge {
     background-color: hsl(2, 64%, 20%);
 }
+/* aged */
+.ui-list.mood-aged.enabled {
+    color: hsl(0, 0%, 40%);
+    border-color: hsl(0, 0%, 85%);
+}
+.ui-list.mood-aged.enabled .badge {
+    background-color: hsl(0, 0%, 50%);
+}
+/* ancient */
+.ui-list.mood-ancient.enabled {
+    color: hsl(0, 0%, 50%);
+    border-color: hsl(0, 0%, 90%);
+}
+.ui-list.mood-ancient.enabled .badge {
+    background-color: hsl(0, 0%, 60%);
+}
