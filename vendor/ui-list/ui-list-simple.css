@@ -7,7 +7,7 @@
   border-right: none;
   border-top: none;
 }
-.ui-list .item:last-of-type {
+.ui-list .item.style-simple:last-of-type {
   border-bottom: none !important;
 }
 
