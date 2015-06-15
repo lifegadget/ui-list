@@ -30,7 +30,7 @@ let SharedItem = Mixin.create({
 
   // Classy stuff
   classNames: ['ui-list','item'],
-  classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood','squeezed' ],
+  classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood','squeezed','selected' ],
 
   // Stylish stuff
   squeezed: false,

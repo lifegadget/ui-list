@@ -10,6 +10,7 @@ var UiItem = Component.extend(SharedItem,{
   type: 'ui-item',
   tagName: 'div',
   disabled: false,
+  selected: false,
   iconRight: 'chevron-right',
   _aspects: ['title','subHeading','icon','image','badge'],
   _panes: ['left','center', 'right'],
@@ -24,8 +25,6 @@ var UiItem = Component.extend(SharedItem,{
   titleExists: computed.notEmpty('title'),
   subHeadingExists: computed.notEmpty('subHeading'),
   twoLinedMessage: computed.and('titleExists','subHeadingExists'),
-
-  responsive: inject.service(),
 
   // actions
   actions: {

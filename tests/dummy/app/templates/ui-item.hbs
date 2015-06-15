@@ -94,6 +94,7 @@
 					badge=toggledBadge
 					size=size
 					disabled=isDisabled
+          selected=isSelected
 					style=style
 					mood=_mood
           squeezed=squeezed
@@ -150,14 +151,17 @@ dynamicMoodFunction: function(item) {
                   {{ui-button-radio choices='default,success,info,warning,error,aged,ancient' selected=mood size='tiny' defaultValue='default'}}
                   <br/>
                 {{/if}}
+                <p>&nbsp;</p>
+                State Characteristics:<br/>
+                {{ui-toggle-button value=isDisabled size='small'}} - DISABLED  &nbsp;&nbsp;&nbsp;
+                {{ui-toggle-button value=isSelected size='small'}} - SELECTED <br/>
+
             </column>
             <column>
                 <div class="row">
                     Toggles<br/>
                     <div class="col-xs-6">
                         {{ui-toggle-button value=showSubHeading size='small'}} - SUB HEAD
-                        <p>&nbsp;</p>
-                        {{ui-toggle-button value=isDisabled size='small'}} - DISABLED <br/>
                         <p>&nbsp;</p>
                         {{ui-toggle-button value=showImage size='small' defaultValue=false}} - IMAGE <br/>
                     </div>
