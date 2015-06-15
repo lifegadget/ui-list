@@ -37,3 +37,12 @@
 .ui-list.item.squeezed.style-simple .hpad.right {
   width: 3px;
 }
+
+/* Selected */
+.ui-list.item.style-simple.selected {
+  border: 1px dotted #303030;
+  background-color: #FCFCFC;
+}
+.ui-list .item.style-simple.selected:last-of-type {
+  border-bottom: 1px dotted #303030 !important;
+}

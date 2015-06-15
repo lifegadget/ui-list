@@ -21,7 +21,7 @@
     width: 8px;
 }
 /* SQUEEZED*/
-.ui-list.item.squeezed.style-flat .hpad.left, 
+.ui-list.item.squeezed.style-flat .hpad.left,
 .ui-list.item.squeezed.style-flat .hpad.right {
     width: 5px;
 }
@@ -32,4 +32,9 @@
 .ui-list.small.item.squeezed.style-flat .hpad.left,
 .ui-list.item.squeezed.style-flat .hpad.right {
     width: 3px;
+}
+
+/* Selected */
+.ui-list.item.style-flat.selected {
+  background-color: #F3F3F3;
 }

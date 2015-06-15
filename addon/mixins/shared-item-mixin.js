@@ -188,7 +188,7 @@ let SharedItem = Mixin.create({
   /**
    * Registers the item with a parent list (if one exists)
    */
-  _register: on('init', function() {
+  _register: on('afterRender', function() {
     const list = this.get('list');
     if(this.get('list.register')) {
       list.register(this);
