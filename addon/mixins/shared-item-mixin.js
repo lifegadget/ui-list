@@ -3,15 +3,12 @@ const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, keys, 
 const capitalize = Ember.String.capitalize;
 
 let SharedItem = Mixin.create({
-  actionHandler: function (pane,options={}) {
+  _tellGroup: function (action,options={}) {
     const list = this.get('list');
-    if(pane) {
-      options.pane = pane;
-    }
-    if(get(list,'actionManager')) {
-      list.actionManager(this, options);
+    if(get(list,'_itemListener')) {
+      list._itemListener(action, this, options); // tell group listener
     } else {
-      this.sendAction(this, options);
+      this.sendAction(action, this, options); // broadcast to container
     }
   },
   _actionEffects: function(action,options) { // jshint ignore: line
@@ -81,7 +78,6 @@ let SharedItem = Mixin.create({
 
     return aspectPanes;
   }),
-
 
   /**
    * INITIALIZE ITEM COMPONENT
@@ -161,28 +157,6 @@ let SharedItem = Mixin.create({
     });
   },
 
-
-  /**
-   * Responsible for allowing the private CP's that sit as sidecars to
-   * API props which take scalars OR function callbacks. The issue at hand is
-   * that scale inputs in the API are simple to handle but if a function is
-   * recieved the function itself will be dependent on an unknown set of variables
-   * in the item and the CP needs to respond to each of them.
-   *
-   * The strategy for doing this is to combine all aspectPanes which are set to non-null values
-   * at construction, and then whatever properties are contained in _itemCoreProperties, _itemMetaProperties,
-   * and finally all _cpProperties. These properties are setup as an
-   * mutex observer which signals change to the CP. From the perspective of the CP, it is only necessary
-   * to watch the mutex property for changes.
-   */
-  _cpInitialisation: on('init', function() {
-    const props = this.get('_cpProperties'); // jshint ignore:line
-    // const aspectPanes = this.get('_aspectPanes'); // jshint ignore:line
-
-    // TODO: implement
-  }),
-  _cpProperties: ['style','mood','size'],
-
   // Initialize "Dereferenced Computed Properties"
 	// ---------------------------------------------
 	// NOTE: 'map' is a dereferenced hash of mappings; an item can use either a map or individual property assignments
@@ -214,7 +188,7 @@ let SharedItem = Mixin.create({
   /**
    * Registers the item with a parent list (if one exists)
    */
-  _register: on('afterRender', function() {
+  _register: on('init', function() {
     const list = this.get('list');
     if(this.get('list.register')) {
       list.register(this);

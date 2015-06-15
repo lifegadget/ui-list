@@ -135,13 +135,13 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
     // -------------------------------
     let filteredContent = null;
     switch(typeOf(filter)) {
-    case "function":
+    case 'function':
       filteredContent = content.filter(filter, this);
       break;
-    case "object":
+    case 'object':
       filteredContent = content.filterBy(filter.key,filter.value);
       break;
-    case "array":
+    case 'array':
       filteredContent = content.filterBy(filter[0],filter[1]);
       break;
     default:
@@ -200,19 +200,11 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
     registeredItems.removeObject(item);
   },
 
-  // ACTIONS
-  // ------------------------------------
-
   /**
-   * Manages actions on behalf of the items it is managing
-   * @param  {String}
-   * @param  {Object}
-   * @param  {Object}
-   * @return {Object}
+   * Receives actions from items it is managing
    */
-  actionManager: function(item, options={}) {
-    console.log('actionManager options: %o', options);
-    this.sendAction('action', item, options);
+  _itemListener: function(action, item, options={}) {
+    this.sendAction('action', action, options);
 
     return true;
   }
