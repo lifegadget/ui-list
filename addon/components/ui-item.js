@@ -29,7 +29,7 @@ var UiItem = Component.extend(SharedItem,{
   // actions
   actions: {
     paneClick: function(pane) {
-      this._tellGroup('paneClick', {pane: pane});
+      this._tellList('paneClick', {pane: pane});
     }
   }
 

@@ -4,7 +4,6 @@ import UiList from '../components/ui-list';
 
 export default UiList.extend({
   layout: layout,
-
   selected: null,
   /**
    * Receives messages from register items
@@ -23,6 +22,7 @@ export default UiList.extend({
       }
       this.set('selected', item);
       item.set('selected', true);
+      this.sendAction('onSelected', item, options);
     }
 
     return true;

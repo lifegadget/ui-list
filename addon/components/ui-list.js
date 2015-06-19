@@ -19,6 +19,12 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
 
     return typeOf(sort) === 'array' ? sort : null;
   })),
+  // arrangedContent: computed.alias('content'),
+  itemType: computed('type', function() {
+    const type = this.get('type');
+
+    return type ? type : 'UiItem';
+  }),
   sortAscending: true,
   layout: layout,
   tagName: 'div',

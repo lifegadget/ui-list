@@ -3,12 +3,12 @@ const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, keys, 
 const capitalize = Ember.String.capitalize;
 
 let SharedItem = Mixin.create({
-  _tellGroup: function (action,options={}) {
+  _tellList: function (action,...args) {
     const list = this.get('list');
     if(get(list,'_itemListener')) {
-      list._itemListener(action, this, options); // tell group listener
+      list._itemListener(action, ...args); // tell group listener
     } else {
-      this.sendAction(action, this, options); // broadcast to container
+      this.sendAction(action, this, ...args); // broadcast to container
     }
   },
   _actionEffects: function(action,options) { // jshint ignore: line
@@ -117,8 +117,9 @@ let SharedItem = Mixin.create({
     reflector = reflector.concat(this.get('_aspectPanes'));
     reflector.filter(safeProperties).forEach( key => {
       // create CP on root and point back to attribute on data hash
-      let cp = computed.readOnly(`data.${key}`);
-      if(this.get(`data.${key}`)) {
+      const cp = computed.readOnly(`data.${key}`);
+      const propValue = this.get(`data.${key}`);
+      if(propValue || propValue === false) {
         defineProperty(this, key, cp);
       }
     });

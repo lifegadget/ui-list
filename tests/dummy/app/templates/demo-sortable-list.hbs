@@ -1,0 +1,77 @@
+<h3>Component::<code>ui-sortable-list</code></h3>
+
+<h4>Overview</h4>
+<div class="row">
+    <desc>
+        A sortable list derives from <code>ui-list</code> but adds the ability to manually sort items via a drag and drop interface. When a re-sort takes place the <code>onReindex</code> action is sent up the container with the newly sorted array.
+    </desc>
+</div>
+{{! ------------------------------------------------------------------------------------------------------------------------- }}
+<h4>Example</h4>
+
+<div class="col-xs-9 col-sm-4">
+  {{ui-sortable-list
+    items=items
+    onReindex='sortChanged'
+
+    filter=listFilter
+    map=map
+    size=size
+    mood=mood
+    style=style
+    defaultIcon=defaultIcon
+    compressed=compressed
+    squeezed=squeezed
+    sort=sortBy
+    sortAscending=sortAscending
+  }}
+</div>
+<br/>
+<div class="col-xs-3 col-sm-8">
+  \{{ui-sortable-list<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp; items=items<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp; map=map<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp; {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp; size="{{size}}"<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp; style="{{style}}"{{#if compressed}}<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp; compressed=true{{/if}}{{#if squeezed}}<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp; squeezed=true{{/if}}{{#if sortBy}}<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp; sort="{{sortBy}}" {{else}}<br/>
+    {{/if}}<br/>
+  }}
+</div>
+
+
+{{! ------------------------------------------------------------------------------------------------------------------------- }}
+<p class="downer">&nbsp;</p>
+
+<configuration class="downer">
+    <icon>{{icon-cog size="2x"}}</icon>
+    <config>
+        <columns>
+            <column>
+                List Size: <br/>
+                {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
+                Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
+                Horizontally Squeezed: {{ui-toggle-button value=squeezed on='squeezed' off='normal' size='small'}}<br/>
+                Filter: {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false size='small'}}
+            </column>
+            <column>
+                Mood: <br/>
+                {{ui-button-radio choices='static,sillyLogic' selected=moodStrategy size='small' stretch=true}}<br/>
+                {{#if enableStaticChooser}}
+                Static Moods:<br/>
+                  {{ui-button-radio choices='default,success,info,warning,error' selected=mood disable=disableStaticChooser size='small' defaultValue='default'}}
+                {{/if}}
+             </column>
+            <column>
+                Skin / Style Family:<br/>
+                {{ui-button-radio choices='default,plus,flat,simple' selected=style size='small' stretch=true}}<br/>
+                Sort By:
+                {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>
+                {{ui-button-radio choices=sortOrders selected=sortBy size='small' stretch=true}}<br/>
+            </column>
+        </columns>
+    </config>
+</configuration>
+{{! ------------------------------------------------------------------------------------------------------------------------- }}
