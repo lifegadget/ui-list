@@ -6,7 +6,7 @@ const camelize = Ember.String.camelize;
 
 import layout from '../templates/components/ui-list';
 
-var UiList = Ember.Component.extend(Ember.SortableMixin,{
+var UiList = Ember.Component.extend({
   sort: null,
   sortProperties: on('init', computed('sort', function() {
     let sort = this.get('sort');
@@ -19,7 +19,7 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
 
     return typeOf(sort) === 'array' ? sort : null;
   })),
-  // arrangedContent: computed.alias('content'),
+  arrangedContent: computed.alias('content'),
   itemType: computed('type', function() {
     const type = this.get('type');
 
