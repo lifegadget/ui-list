@@ -1,6 +1,6 @@
 {
   "name": "ui-list",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "List controls for ambitious Ember applications.",
   "directories": {
     "doc": "doc",
@@ -15,11 +15,25 @@
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Ken Snyder<ken@ken.net>",
   "license": "MIT",
+    "files": [
+      "Brocfile.js",
+      "LICENSE.md",
+      "README.md",
+      "addon",
+      "app",
+      "bower.json",
+      "config",
+      "index.js",
+      "package.json",
+      "testem.json",
+      "vendor"
+    ],
+    "main": "index.js",
   "devDependencies": {
     "broccoli-asset-rev": "^2.0.2",
-    "ember-cli": "^0.2.7",
+    "ember-cli": "^1.13.7",
     "ember-cli-app-version": "0.3.3",
     "ember-cli-autoprefixer": "0.4.1",
     "ember-cli-content-security-policy": "0.4.0",
@@ -45,6 +59,7 @@
     "ember-cli-babel": "^5.0.0",
     "ember-cli-htmlbars": "0.7.6",
     "ember-cli-observe-all": "0.0.2",
+    "ember-new-computed": "^1.0.1",
     "merge": "^1.2.0",
     "ui-icon": "0.0.12",
     "ui-image": "0.0.3",

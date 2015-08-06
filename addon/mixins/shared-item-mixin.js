@@ -3,15 +3,12 @@ const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, keys, 
 const capitalize = Ember.String.capitalize;
 
 let SharedItem = Mixin.create({
-  actionHandler: function (pane,options={}) {
+  _tellList: function (action,...args) {
     const list = this.get('list');
-    if(pane) {
-      options.pane = pane;
-    }
-    if(get(list,'actionManager')) {
-      list.actionManager(this, options);
+    if(get(list,'_itemListener')) {
+      list._itemListener(action, ...args); // tell group listener
     } else {
-      this.sendAction(this, options);
+      this.sendAction(action, this, ...args); // broadcast to container
     }
   },
   _actionEffects: function(action,options) { // jshint ignore: line
@@ -82,7 +79,6 @@ let SharedItem = Mixin.create({
     return aspectPanes;
   }),
 
-
   /**
    * INITIALIZE ITEM COMPONENT
    */
@@ -121,8 +117,9 @@ let SharedItem = Mixin.create({
     reflector = reflector.concat(this.get('_aspectPanes'));
     reflector.filter(safeProperties).forEach( key => {
       // create CP on root and point back to attribute on data hash
-      let cp = computed.readOnly(`data.${key}`);
-      if(this.get(`data.${key}`)) {
+      const cp = computed.readOnly(`data.${key}`);
+      const propValue = this.get(`data.${key}`);
+      if(propValue || propValue === false) {
         defineProperty(this, key, cp);
       }
     });
@@ -160,28 +157,6 @@ let SharedItem = Mixin.create({
       this.notifyPropertyChange(property);
     });
   },
-
-
-  /**
-   * Responsible for allowing the private CP's that sit as sidecars to
-   * API props which take scalars OR function callbacks. The issue at hand is
-   * that scale inputs in the API are simple to handle but if a function is
-   * recieved the function itself will be dependent on an unknown set of variables
-   * in the item and the CP needs to respond to each of them.
-   *
-   * The strategy for doing this is to combine all aspectPanes which are set to non-null values
-   * at construction, and then whatever properties are contained in _itemCoreProperties, _itemMetaProperties,
-   * and finally all _cpProperties. These properties are setup as an
-   * mutex observer which signals change to the CP. From the perspective of the CP, it is only necessary
-   * to watch the mutex property for changes.
-   */
-  _cpInitialisation: on('init', function() {
-    const props = this.get('_cpProperties'); // jshint ignore:line
-    // const aspectPanes = this.get('_aspectPanes'); // jshint ignore:line
-
-    // TODO: implement
-  }),
-  _cpProperties: ['style','mood','size'],
 
   // Initialize "Dereferenced Computed Properties"
 	// ---------------------------------------------
