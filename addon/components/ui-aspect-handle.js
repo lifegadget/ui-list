@@ -5,5 +5,11 @@ export default Ember.Component.extend({
   layout: layout,
   tagName: 'span',
   classNames: ['ui-aspect-handle'],
-  value: null
+  value: null,
+  mouseDown: function(event) {
+    this.sendAction('onMouseDown', event);
+  },
+  touchStart: function(event) {
+    this.sendAction('onTouchStart', event);
+  }
 });

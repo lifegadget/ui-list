@@ -165,6 +165,7 @@ export default Mixin.create({
     @method mouseDown
   */
   mouseDown(event) {
+    console.log('mouseDown');
     this._startDrag(event);
   },
 
@@ -172,6 +173,7 @@ export default Mixin.create({
     @method touchStart
   */
   touchStart(event) {
+    console.log('touchStart');
     this._startDrag(event);
   },
 

@@ -10,4 +10,13 @@ export default UiList.extend(SortableItem,{
   handleRight: 'bars',
   handle: '.ui-aspect-handle',
   _aspects: ['title','subHeading','icon','image','badge','handle'],
+  actions: {
+    mouseDown: function(event) {
+      console.log('received event: ', event);
+      this._startDrag(event);
+    },
+    touchStart: function(event) {
+      this._startDrag(event);
+    }
+  }
 });

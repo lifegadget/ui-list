@@ -26,7 +26,7 @@
       </span>
     {{/if}}
     {{#if iconRight}}{{ui-icon class="icon-right" icon=iconRight fw=false}}{{/if}}
-    {{#if handleRight}}{{ui-aspect-handle value=handleRight}}{{/if}}
+    {{#if handleRight}}{{ui-aspect-handle value=handleRight onMouseDown="mouseDown" onTouchStart="touchStart"}}{{/if}}
 </div>
 <div class="hpad right"></div>
 {{yield}}
