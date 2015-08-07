@@ -1,7 +1,8 @@
 import Ember from 'ember';
+const {keys} = Object;
 const {
   computed, observer, $, A, run, on, typeOf, debug, ObjectProxy, // jshint ignore:line
-  defineProperty, keys, get, set, inject, isEmpty                // jshint ignore:line
+  defineProperty, get, set, inject, isEmpty                // jshint ignore:line
 } = Ember;
 const NO_MODEL = {};
 const a = A;
