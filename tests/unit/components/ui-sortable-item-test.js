@@ -2,7 +2,7 @@ import { moduleForComponent, test } from 'ember-qunit';
 
 moduleForComponent('ui-sortable-item', 'Unit | Component | ui sortable item', {
   // Specify the other units that are required for this test
-  // needs: ['component:foo', 'helper:bar'],
+  needs: ['component:ui-aspect-handle', 'component:ui-icon'],
   unit: true
 });
 
