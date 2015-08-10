@@ -71,6 +71,11 @@ export default Ember.Controller.extend({
       pojo.id = index;
       this.store.push('activity', pojo);
     });
-  })
+  }),
+  actions: {
+    sortChanged: function() {
+      console.log('Sort order changed');
+    }
+  }
 
 });

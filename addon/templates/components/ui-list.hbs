@@ -1,16 +1,18 @@
+{{#if isBlock}}
+  {{yield}}
+{{else}}
 {{#each arrangedContent as |item|}}
-    {{ui-item 
+    {{component itemType
         list=this
         data=item
         map=mappedProperties
         _mappedFrom=_mappedFrom
         defaultValues=defaultValues
         _itemSetProperties=_itemSetProperties
-        size=size 
+        size=size
         style=style
         mood=mood
         squeezed=squeezed
     }}
 {{/each}}
-
-{{yield}}
+{{/if}}

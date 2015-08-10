@@ -1,12 +1,13 @@
 import Ember from 'ember';
 import ObserveAll from 'ember-cli-observe-all/mixins/observe-all';
-const { computed, observer, $, A, run, on, typeOf, keys, defineProperty, debug, merge } = Ember;    // jshint ignore:line
+const {keys} = Object;
+const { computed, observer, $, A, run, on, typeOf, defineProperty, debug, merge } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 const camelize = Ember.String.camelize;
 
 import layout from '../templates/components/ui-list';
 
-var UiList = Ember.Component.extend(Ember.SortableMixin,{
+var UiList = Ember.Component.extend({
   sort: null,
   sortProperties: on('init', computed('sort', function() {
     let sort = this.get('sort');
@@ -19,10 +20,16 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
 
     return typeOf(sort) === 'array' ? sort : null;
   })),
+  arrangedContent: computed.alias('content'),
+  itemType: computed('type', function() {
+    const type = this.get('type');
+
+    return type ? type : 'UiItem';
+  }),
   sortAscending: true,
   layout: layout,
   tagName: 'div',
-  type: 'UiItem', // the type of Item contained by this list
+  type: 'ui-item', // the type of Item contained by this list
   classNames: ['ui-list','list-container'],
   classNameBindings: ['compressed'],
   compressed: false, // horizontal space compression between items (provided via CSS),
@@ -135,13 +142,13 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
     // -------------------------------
     let filteredContent = null;
     switch(typeOf(filter)) {
-    case "function":
+    case 'function':
       filteredContent = content.filter(filter, this);
       break;
-    case "object":
+    case 'object':
       filteredContent = content.filterBy(filter.key,filter.value);
       break;
-    case "array":
+    case 'array':
       filteredContent = content.filterBy(filter[0],filter[1]);
       break;
     default:
@@ -200,19 +207,11 @@ var UiList = Ember.Component.extend(Ember.SortableMixin,{
     registeredItems.removeObject(item);
   },
 
-  // ACTIONS
-  // ------------------------------------
-
   /**
-   * Manages actions on behalf of the items it is managing
-   * @param  {String}
-   * @param  {Object}
-   * @param  {Object}
-   * @return {Object}
+   * Receives actions from items it is managing
    */
-  actionManager: function(item, options={}) {
-    console.log('actionManager options: %o', options);
-    this.sendAction('action', item, options);
+  _itemListener: function(action, item, options={}) {
+    this.sendAction('action', action, options);
 
     return true;
   }

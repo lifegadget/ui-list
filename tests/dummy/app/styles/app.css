@@ -159,7 +159,7 @@ configuration,
     border-bottom: 1px solid #C4C4C4;
     border-right: 1px solid #C4C4C4;
     border-radius: 5px;
-    
+
     padding-bottom: 1em;
     padding-top: 1em;
     margin-bottom: 1em;
@@ -190,7 +190,7 @@ columns {
     display: -ms-flex;
     display: -o-flex;
     display: flex;
-    
+
     -webkit-flex-wrap: wrap;
     -moz-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
@@ -202,8 +202,8 @@ column {
     -moz-flex-grow: 3;
     -ms-flex-grow: 3;
     -o-flex-grow: 3;
-    flex-grow: 3; 
-    
+    flex-grow: 3;
+
     min-width: 300px;
 }
 column br {
@@ -271,7 +271,7 @@ examples widget.wide {
 }
 @media (max-width: 767px) {
     examples widget {
-        width: 100%;        
+        width: 100%;
     }
 }
 
@@ -283,10 +283,10 @@ examples sourcecode {
     flex-grow: 3;
     padding:0;
     margin-bottom:0;
-} 
+}
 @media (max-width: 767px) {
     examples sourcecode {
-        display: none !important;        
+        display: none !important;
     }
 }
 
@@ -339,4 +339,8 @@ ul.components {
 
 text-centered {
     text-align: center;
+}
+
+.downer {
+  margin-top: 15px;
 }

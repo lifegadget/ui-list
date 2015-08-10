@@ -28,8 +28,8 @@ var UiItem = Component.extend(SharedItem,{
 
   // actions
   actions: {
-    paneAction: function(action, pane) {
-      this.actionHandler(action, {pane: pane});
+    paneClick: function(pane) {
+      this._tellList('paneClick', {pane: pane});
     }
   }
 
