@@ -6,25 +6,25 @@ export default Ember.Controller.extend({
   queryParams: ['mood','size','style','compressed'],
 
   items: [
-    Ember.Object.create({when: 2, foo: "Groceries", bar: "hungry, hungry, hippo", icon: "shopping-cart", badge: 1}),
-    Ember.Object.create({when: 3, foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 6}),
-    Ember.Object.create({when: 4, foo: "Pub", bar: "it's time for some suds", icon: "beer"}),
-    Ember.Object.create({when: 5, foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"}),
-    Ember.Object.create({when: 6, foo: "Had Coffee", bar: "need to chill out after that beer", icon: "coffee"}),
-    Ember.Object.create({when: 1, foo: "Ate Breakfast", bar: "start of every good morning", icon: "cutlery"})
+    Ember.Object.create({when: 2, foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'shopping-cart', badge: 1}),
+    Ember.Object.create({when: 3, foo: 'Hospital', bar: 'visit sick uncle Joe', icon: 'ambulance', badge: 6}),
+    Ember.Object.create({when: 4, foo: 'Pub', bar: 'it\'s time for some suds', icon: 'beer'}),
+    Ember.Object.create({when: 5, foo: 'Took Cab', bar: 'took a cab, drinking not driving', icon: 'cab'}),
+    Ember.Object.create({when: 6, foo: 'Had Coffee', bar: 'need to chill out after that beer', icon: 'coffee'}),
+    Ember.Object.create({when: 1, foo: 'Ate Breakfast', bar: 'start of every good morning', icon: 'cutlery'})
   ],
   emberItems: [
-    {foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery", badge: 6},
-    {foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 1},
-    {foo: "Pub", bar: "it's time for some suds", icon: "beer"},
-    {foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"},
-    {foo: "Had Coffee", bar: "need to chill out after that beer", icon: "coffee"}
+    {foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'cutlery', badge: 6},
+    {foo: 'Hospital', bar: 'visit sick uncle Joe', icon: 'ambulance', badge: 1},
+    {foo: 'Pub', bar: 'it\'s time for some suds', icon: 'beer'},
+    {foo: 'Took Cab', bar: 'took a cab, drinking not driving', icon: 'cab'},
+    {foo: 'Had Coffee', bar: 'need to chill out after that beer', icon: 'coffee'}
   ],
   map: {
     title: 'foo',
     subHeading: 'bar'
   },
-  sillyLogic: function(item,list) {
+  sillyLogic: function(item) {
     let badge = item.get('badge');
     let moodiness = badge && badge > 5 ? 'error' : 'warning';
     return badge ? moodiness : null;

@@ -2,7 +2,7 @@ import { moduleForComponent, test } from 'ember-qunit';
 
 moduleForComponent('ui-aspect-handle', 'Unit | Component | ui aspect handle', {
   // Specify the other units that are required for this test
-  // needs: ['component:foo', 'helper:bar'],
+  needs: ['component:ui-icon'],
   unit: true
 });
 

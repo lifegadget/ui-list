@@ -6,7 +6,7 @@ const { computed, observer, $, A, run, on, typeOf } = Ember;    // jshint ignore
 export default Ember.Route.extend({
 
   model: function() {
-    return this.store.all('activity');
+    return this.store.peekAll('activity');
   }
 
 });

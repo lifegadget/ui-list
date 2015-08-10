@@ -1,8 +1,5 @@
 import Ember from 'ember';
-const {
-  computed, observer, $, A, run, on, typeOf, debug, ObjectProxy, // jshint ignore:line
-  defineProperty, keys, get, set, inject, isEmpty                // jshint ignore:line
-} = Ember;
+const { computed, $, A, run, defineProperty, get, set, inject, isEmpty } = Ember;                // jshint ignore:line
 const NO_MODEL = {};
 const a = A;
 export default Ember.Mixin.create({

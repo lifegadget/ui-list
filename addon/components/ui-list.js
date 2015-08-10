@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import ObserveAll from 'ember-cli-observe-all/mixins/observe-all';
-const { computed, observer, $, A, run, on, typeOf, keys, defineProperty, debug, merge } = Ember;    // jshint ignore:line
+const {keys} = Object;
+const { computed, observer, $, A, run, on, typeOf, defineProperty, debug, merge } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 const camelize = Ember.String.camelize;
 
@@ -28,7 +29,7 @@ var UiList = Ember.Component.extend({
   sortAscending: true,
   layout: layout,
   tagName: 'div',
-  type: 'UiItem', // the type of Item contained by this list
+  type: 'ui-item', // the type of Item contained by this list
   classNames: ['ui-list','list-container'],
   classNameBindings: ['compressed'],
   compressed: false, // horizontal space compression between items (provided via CSS),

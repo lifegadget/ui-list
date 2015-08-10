@@ -51,25 +51,25 @@
         <columns>
             <column>
                 List Size: <br/>
-                {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
+                {{ui-buttons cardinality='1:1' buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}<br/>
                 Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
                 Horizontally Squeezed: {{ui-toggle-button value=squeezed on='squeezed' off='normal' size='small'}}<br/>
                 Filter: {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false size='small'}}
             </column>
             <column>
                 Mood: <br/>
-                {{ui-button-radio choices='static,sillyLogic' selected=moodStrategy size='small' stretch=true}}<br/>
+                {{ui-buttons cardinality='1:1' buttons='static,sillyLogic' value=moodStrategy size='small' stretch=true}}<br/>
                 {{#if enableStaticChooser}}
                 Static Moods:<br/>
-                  {{ui-button-radio choices='default,success,info,warning,error' selected=mood disable=disableStaticChooser size='small' defaultValue='default'}}
+                  {{ui-buttons cardinality='1:1' buttons='default,success,info,warning,error' value=mood disable=disableStaticChooser size='small' defaultValue='default'}}
                 {{/if}}
              </column>
             <column>
                 Skin / Style Family:<br/>
-                {{ui-button-radio choices='default,plus,flat,simple' selected=style size='small' stretch=true}}<br/>
+                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=style size='small' stretch=true}}<br/>
                 Sort By:
                 {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>
-                {{ui-button-radio choices=sortOrders selected=sortBy size='small' stretch=true}}<br/>
+                {{ui-buttons cardinality='1:1' buttons=sortOrders selected=sortBy size='small' stretch=true}}<br/>
             </column>
         </columns>
     </config>

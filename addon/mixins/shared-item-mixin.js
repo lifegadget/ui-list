@@ -1,5 +1,6 @@
 import Ember from 'ember';
-const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, keys, get, merge } = Ember;    // jshint ignore:line
+const {keys} = Object;
+const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, get, merge } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 
 let SharedItem = Mixin.create({

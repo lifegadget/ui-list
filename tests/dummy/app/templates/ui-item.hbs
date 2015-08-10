@@ -148,7 +148,7 @@ dynamicMoodFunction: function(item) {
                       title is 'Monkey' otherwise it's 'warning'
                     </em>
                 {{else}}
-                  {{ui-button-radio choices='default,success,info,warning,error,aged,ancient' selected=mood size='tiny' defaultValue='default'}}
+                  {{ui-buttons cardinality='1:1' buttons='default,success,info,warning,error,aged,ancient' value=mood size='tiny' defaultValue='default'}}
                   <br/>
                 {{/if}}
                 <p>&nbsp;</p>
@@ -176,9 +176,9 @@ dynamicMoodFunction: function(item) {
             </column>
             <column>
                 Skin / Style Family:<br/>
-                {{ui-button-radio choices='default,plus,flat,simple' selected=style size='small' stretch=true}}<br/>
+                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=style size='small' stretch=true}}<br/>
                 Item Size: <br/>
-                {{ui-button-radio choices='tiny,small,default,large,huge' selected=size size='small' defaultValue='default'}}<br/>
+                {{ui-buttons cardinality='1:1' buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}<br/>
             </column>
         </columns>
     </config>
