@@ -4,5 +4,4 @@ languages:
   PHP: false
   Python: false
 exclude_paths:
-- "tests/unit/components/ui-item-test.js"
-- "tests/unit/components/ui-list-test.js"
+- "tests/**/*
