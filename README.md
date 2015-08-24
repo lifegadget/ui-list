@@ -1,4 +1,4 @@
-# ui-list ![ ](https://travis-ci.org/lifegadget/ui-list.svg) [![npm version](https://badge.fury.io/js/ui-list.svg)](http://badge.fury.io/js/ui-list) 
+# ui-list ![ ](https://travis-ci.org/lifegadget/ui-list.svg) [![npm version](https://badge.fury.io/js/ui-list.svg)](http://badge.fury.io/js/ui-list) [![Code Climate](https://codeclimate.com/github/lifegadget/ui-list/badges/gpa.svg)](https://codeclimate.com/github/lifegadget/ui-list)
 > List controls for ambitious Ember applications.
 
 ## Overview ##
