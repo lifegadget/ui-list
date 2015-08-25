@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import ObserveAll from 'ember-cli-observe-all/mixins/observe-all';
-const {keys} = Object;
-const { computed, observer, $, A, run, on, typeOf, defineProperty, debug, merge } = Ember;    // jshint ignore:line
+const { keys, create } = Object; // jshint ignore:line
+const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 const camelize = Ember.String.camelize;
 
@@ -35,7 +35,7 @@ var UiList = Ember.Component.extend({
   compressed: false, // horizontal space compression between items (provided via CSS),
   _watcher: Ember.Object.extend(ObserveAll).create(),
   /**
-   * The function of this computed properties is simply to add or remove observation points for the individual properties
+   * adds or remove observation points for the individual properties
    * of a given an array element (aka, an item)
    */
   items: on('init', computed( {
@@ -69,20 +69,20 @@ var UiList = Ember.Component.extend({
   _filter: computed('filter', function() {
     const filter = this.get('filter');
     switch(typeOf(filter)) {
-      case "object":
+      case 'object':
         if(!filter.key || !filter.value) {
           debug('Attempted to set a filter object but did not set key and value properties: ' + JSON.stringify(filter));
           return null;
         }
         break;
-      case "array":
+      case 'array':
         if(filter.length !== 2) {
           debug('Attempted to set a filter as an array with the wrong number of parameters: ' + JSON.stringify(filter));
           return null;
         }
         break;
-      case "string":
-      case "number":
+      case 'string':
+      case 'number':
         debug('Invalid attempt to set list filter as a scalar value');
         return null;
     }
@@ -112,7 +112,7 @@ var UiList = Ember.Component.extend({
     return new A(aspectPanes);
   }),
   _itemProperties: null,
-  _listProperties: ['size','mood','style','squeezed'],
+  _listProperties: ['size','mood','skin','squeezed'],
   mappedProperties: computed(function() {
     const mapHash = typeOf(this.get('map')) === 'object' ? this.get('map') : {};
     const mapProps = new A(keys(this).filter( prop => {
@@ -192,7 +192,9 @@ var UiList = Ember.Component.extend({
 
   // REGISTRATION
   // ----------------------------------
-  _registeredItems: new A([]),
+  _registeredItems: computed(function() {
+    return new A([]);
+  }),
   register: function(item) {
     const registeredItems = this.get('_registeredItems');
     registeredItems.pushObject(item);
@@ -205,6 +207,11 @@ var UiList = Ember.Component.extend({
   deregister: function(item) {
     const registeredItems = this.get('_registeredItems');
     registeredItems.removeObject(item);
+  },
+  findRegisteredItem(id) {
+    return this.get('_registeredItems').filter( item => {
+      return get(item, 'elementId') === id;
+    });
   },
 
   /**

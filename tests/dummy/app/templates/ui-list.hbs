@@ -1,3 +1,4 @@
+{{#demo-css}}
 <h3>Component::<code>ui-list</code></h3>
 
 <h4>Overview</h4>
@@ -13,46 +14,56 @@
 {{! ------------------------------------------------------------------------------------------ }}
 <h4>Example</h4>
 
-<div class="examples">
-    <table class="row">
-        <tr>
-            <td class="col-xs-12 col-sm-4 text-center align-top">
-              <p>&nbsp;</p>
-                {{#if enableStaticChooser}}
-                  {{ui-list
-                    items=items
-                    filter=listFilter
-                    map=map
-                    size=size
-                    mood=mood
-                    style=style
-                    defaultIcon=defaultIcon
-                    compressed=compressed
-                    squeezed=squeezed
-                    sort=sortBy
-                    sortAscending=sortAscending
-                  }}
-                {{else}}
-                  {{ui-list
-                    items=items
-                    filter=listFilter
-                    map=map
-                    size=size
-                    mood=sillyLogic
-                    style=style
-                    defaultIcon=defaultIcon
-                    compressed=compressed
-                    squeezed=squeezed
-                    sort=sortBy
-                    sortAscending=sortAscending
-                  }}
-                {{/if}}
-            </td>
-{{! ------------------------------------------------------------------------------------------ }}
-            <td class="hidden-xs col-sm-8">
-                <heading>CONTAINER PROPERTIES</heading>
-
-                {{#code-block language="js"}}
+<row>
+  <widget class="wide">
+      {{#if enableStaticChooser}}
+        {{ui-list
+          items=items
+          filter=listFilter
+          map=map
+          size=size
+          mood=mood
+          skin=skin
+          defaultIcon=defaultIcon
+          compressed=compressed
+          squeezed=squeezed
+          sort=sortBy
+          sortAscending=sortAscending
+        }}
+      {{else}}
+        {{ui-list
+          items=items
+          filter=listFilter
+          map=map
+          size=size
+          mood=sillyLogic
+          skin=skin
+          defaultIcon=defaultIcon
+          compressed=compressed
+          squeezed=squeezed
+          sort=sortBy
+          sortAscending=sortAscending
+        }}
+      {{/if}}
+  </widget>
+  <code>
+    &nbsp;<br/>
+    {{display-component componentName='ui-list'
+      items=':items'
+      filter=':listFilter'
+      map=':map'
+      size=size
+      mood=':sillyLogic'
+      skin=skin
+      defaultIcon=defaultIcon
+      compressed=compressed
+      squeezed=squeezed
+      sort=sortBy
+      sortAscending=sortAscending
+    }}
+  </code>
+  <description>
+    <pre style="font-size:smaller">
 items: [
   {foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery", badge: 6},
   {foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 1},
@@ -64,30 +75,10 @@ map: {
   title: 'foo',
   subHeading: 'bar'
 },
-                {{/code-block}}
-                {{code-reference ref=sillyLogic}}
+    </pre>
+  </description>
+</row>
 
-                <heading>HANDLEBARS TEMPLATE</heading>
-
-                {{#code-block language="handlebars" poll=100}}
-\{{ui-list
-  items=items
-  map=map
-  {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
-  size="{{size}}"
-  style="{{style}}"{{#if compressed}}
-  compressed=true{{/if}}{{#if squeezed}}
-  squeezed=true{{/if}}{{#if sortBy}}
-  sort="{{sortBy}}" {{else}}
-  {{/if}}
-
-}}
-                {{/code-block}}
-
-            </td>
-        </tr>
-    </table>
-</div>
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
 <p>&nbsp;</p>
 <configuration>
@@ -111,7 +102,7 @@ map: {
              </column>
             <column>
                 Skin / Style Family:<br/>
-                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=style size='small' stretch=true}}<br/>
+                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=skin size='small' stretch=true}}<br/>
                 Sort By:
                 {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>
                 {{ui-buttons cardinality='1:1' buttons='Natural:::null,Badge,Title' value=sortBy size='small' stretch=true}}<br/>
@@ -121,7 +112,7 @@ map: {
 </configuration>
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
 
-<desc>
+{{!-- <desc>
     <strong>Notes on ui-list example:</strong>
     <ul>
       <li>
@@ -165,9 +156,9 @@ map: {
 <desc>
   Considering a lot of data lists come from Ember-Data the example below loads all the data from above into a model called "Activity" and then works in precisely
   the same way. Check out the data in the Ember Inspector and play around with it to see it update:
-</desc>
+</desc> --}}
 
-<examples>
+{{!-- <examples>
   <widget class='wide'>
     {{#if enableStaticChooser}}
       {{ui-list
@@ -209,5 +200,6 @@ map: {
 
     {{/code-block}}
   </sourcecode>
-</examples>
+</examples> --}}
 
+{{/demo-css}}

@@ -1,10 +1,12 @@
 import Ember from 'ember';
-const { Component, computed, observer, $, A, run, on, inject } = Ember;    // jshint ignore:line
+const { keys, create } = Object; // jshint ignore:line
+const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
 
 import layout from '../templates/components/ui-item';
 import SharedItem from 'ui-list/mixins/shared-item-mixin';
+import HeritableProperties from 'ui-list/mixins/heritable-properties'; // props which list can override
 
-var UiItem = Component.extend(SharedItem,{
+var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,{
   // Item Meta
   layout: layout,
   type: 'ui-item',
@@ -29,7 +31,7 @@ var UiItem = Component.extend(SharedItem,{
   // actions
   actions: {
     paneClick: function(pane) {
-      this._tellList('paneClick', {pane: pane});
+      this._tellList('paneClick', this, {pane: pane});
     }
   }
 

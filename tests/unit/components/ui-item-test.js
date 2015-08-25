@@ -6,7 +6,7 @@ import {
   test
 } from 'ember-qunit';
 
-moduleForComponent('ui-item', {
+moduleForComponent('ui-item', 'Unit | Component | ui-item', {
   // Specify the other units that are required for this test
   needs: ['component:ui-icon','component:ui-image']
 });
@@ -41,14 +41,14 @@ test('mapped property works with map hash', function(assert) {
   assert.equal(component.get('title'), mantra);
 });
 
-test('size, mood, and style private properties set', function(assert) {
+test('size, mood, and skin private properties set', function(assert) {
   let component = this.subject();
   component.set('size', 'large');
   assert.equal(component.get('_size'), 'large');
   component.set('mood', 'success');
   assert.equal(component.get('_mood'), 'mood-success');
-  component.set('style', 'flat');
-  assert.equal(component.get('_style'), 'style-flat');
+  component.set('skin', 'flat');
+  assert.equal(component.get('_skin'), 'skin-flat');
 });
 
 test('mood property - static values', function(assert) {
@@ -57,7 +57,7 @@ test('mood property - static values', function(assert) {
     subHeading: 'who doesn\'t love monkeys?',
     mood: null
   });
-  
+
   this.render();
   run(() => {
     assert.equal(component.get('_mood'),'','null mood should convert to empty string');
@@ -75,10 +75,10 @@ test('mood property - static values', function(assert) {
       run.later( () => {
         assert.ok(!this.$().hasClass('mood-foobar'), '"mood-foobar" css class no longer set' );
         assert.ok(this.$().hasClass('mood-success'), '"mood-success" css class found: [' + this.$().attr('class') + ']' );
-        done2();  
+        done2();
       },5);
     }, 15);
-    
+
   });
 });
 
@@ -105,7 +105,7 @@ test('size property - static values', function(assert) {
     subHeading: 'who doesn\'t love monkeys?',
     size: null
   });
-  
+
   this.render();
   run(() => {
     assert.equal(component.get('_size'),'','null size should convert to empty string');
@@ -128,7 +128,7 @@ test('size property - static values', function(assert) {
       }, 5);
     },5);
 	});
-  
+
 });
 
 test('size property - function/callback', function(assert) {
@@ -199,10 +199,10 @@ test('test squeezed CSS toggle', function(assert) {
     done1();
     component.set('squeezed', true);
     run.later( () => {
-      assert.equal( component.$().hasClass('squeezed'), true, 'squeezed property is toggled on with the item property'); 
-      done2();     
+      assert.equal( component.$().hasClass('squeezed'), true, 'squeezed property is toggled on with the item property');
+      done2();
     },5);
   }, 5);
-  
-  
+
+
 });

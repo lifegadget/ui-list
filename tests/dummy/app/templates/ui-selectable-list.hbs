@@ -1,44 +1,75 @@
+{{#demo-css}}
 <h3>Component::<code>ui-selectable-list</code></h3>
 
 <h4>Overview</h4>
 <div class="row">
     <desc>
-        A selectable list is much like a normal <code>ui-list</code> but when the <b>paneAction</b> event fires it "selects" the item visually. It then fires the <b>selected</b> event.
+        A selectable list is much like a normal <prop>ui-list</prop> but certain items can be "selected". This is illustrated visually via CSS classes where the item is marked with the "selected" class. Default styling of course can be overwritten.
     </desc>
 </div>
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
-<h4>Example</h4>
 
-<div class="col-xs-9 col-sm-4">
-  {{ui-selectable-list
-    items=items
-    filter=listFilter
-    map=map
-    size=size
-    mood=mood
-    style=style
-    defaultIcon=defaultIcon
-    compressed=compressed
-    squeezed=squeezed
-    sort=sortBy
-    sortAscending=sortAscending
-  }}
-</div>
-<br/>
-<div class="col-xs-3 col-sm-8">
-  \{{ui-selectable-list<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; items=items<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; map=map<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; size="{{size}}"<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; style="{{style}}"{{#if compressed}}<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; compressed=true{{/if}}{{#if squeezed}}<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; squeezed=true{{/if}}{{#if sortBy}}<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; sort="{{sortBy}}" {{else}}<br/>
-    {{/if}}<br/>
-  }}
-</div>
-
+<h4>Interactive Demo</h4>
+<row>
+  <widget class="wide">
+      {{ui-selectable-list
+        items=items
+        filter=listFilter
+        map=map
+        size=size
+        mood=mood
+        skin=skin
+        min=min
+        max=max
+        onSelect='onSelect'
+        onError='onError'
+      }}
+  </widget>
+  <code>
+  &nbsp;<br/>
+    {{display-component componentName='ui-selectable-list'
+      items=':items'
+      filter=listFilter
+      map=':map'
+      size=size
+      mood=mood
+      skin=skin
+      min=min
+      max=max
+      onSelect='onSelect'
+      onError='onError'
+    }}
+  </code>
+  <description>
+    <h4>Cardinality</h4>
+  <p>
+    An important part of a selectable list is cardinality (aka, how many in the list can be selected). By default the asnwer to this question a minimum of 0 and a maximum of 1. In this mode the selection behaves like a radio-choice moving the selection along to the latest item.
+  </p>
+  <p>
+    The cardinality are determined by the <prop>min</prop> and <prop>max</prop> properties. Play around with the below to better understand how they work:
+  </p>
+  <controls>
+    <control>
+      <span>min</span>
+      <span>{{radio-buttons buttons='0:::0,1:::1' defaultValue=0 value=min}}</span>
+      <span>max</span>
+      <span>{{radio-buttons buttons='0:::0,1:::1,2:::2,10:::10' defaultValue=1 value=max}}</span>
+    </control>
+  </controls>
+  <h4>Actions Up</h4>
+  <p>
+    Also note there are two actions you can subscribe to:
+    <ul>
+      <li>
+        <b>onSelect</b>(<i>action,item,options</i>) - tells you when either a selection or deselection takes place
+      </li>
+      <li>
+        <b>onError</b>(<i>code,item,options</i>) - it a constraint violation is reached an error will be sent
+      </li>
+    </ul>
+  </p>
+  </description>
+</row>
 
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
 <p class="downer">&nbsp;</p>
@@ -50,26 +81,17 @@
             <column>
                 List Size: <br/>
                 {{ui-buttons cardinality='1:1' buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}<br/>
-                Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
-                Horizontally Squeezed: {{ui-toggle-button value=squeezed on='squeezed' off='normal' size='small'}}<br/>
-                Filter: {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false size='small'}}
             </column>
             <column>
-                Mood: <br/>
-                {{ui-buttons cardinality='1:1' buttons='static,sillyLogic' value=moodStrategy size='small' stretch=true}}<br/>
-                {{#if enableStaticChooser}}
-                Static Moods:<br/>
+                Mood:<br/>
                   {{ui-buttons cardinality='1:1' buttons='default,success,info,warning,error' value=mood disable=disableStaticChooser size='small' defaultValue='default'}}
-                {{/if}}
              </column>
             <column>
                 Skin / Style Family:<br/>
-                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=style size='small' stretch=true}}<br/>
-                Sort By:
-                {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>
-                {{ui-buttons cardinality='1:1' buttons='Natural:::null,Badge,Title' selected=sortBy size='small' stretch=true}}<br/>
+                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=skin size='small' stretch=true}}<br/>
+                <br/>
             </column>
         </columns>
     </config>
 </configuration>
-{{! ------------------------------------------------------------------------------------------------------------------------- }}
+{{/demo-css}}
