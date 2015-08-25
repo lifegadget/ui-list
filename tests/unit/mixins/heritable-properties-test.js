@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import HeritablePropertiesMixin from '../../../mixins/heritable-properties';
+import HeritablePropertiesMixin from 'ui-list/mixins/heritable-properties';
 import { module, test } from 'qunit';
 
 module('Unit | Mixin | heritable properties');
