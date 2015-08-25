@@ -1,6 +1,6 @@
 {
   "name": "ui-list",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "List controls for ambitious Ember applications.",
   "directories": {
     "doc": "doc",
