@@ -3,7 +3,7 @@ const {keys} = Object;
 const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, get, merge } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 
-let SharedItem = Mixin.create({
+let SharedItem = Ember.Mixin.create({
   _tellList: function (action,...args) {
     const list = this.get('list');
     if(get(list,'_itemListener')) {
@@ -16,51 +16,11 @@ let SharedItem = Mixin.create({
     // default handler does nothing, up to specific type to add functionality
   },
 
-  // Convenience Aliases and Defaults
-  mood: 'default',
-  style: 'default',
-  size: 'default',
-  skin: computed.alias('style'),
-  color: computed.alias('mood'),
-
   // COMPUTED PROPERTIES
   // -------------------------
-
   // Classy stuff
   classNames: ['ui-list','item'],
-  classNameBindings: ['_size','_style','disabled:disabled:enabled', '_mood','squeezed','selected' ],
-
-  // Stylish stuff
-  squeezed: false,
-  _styleDependencies: ['_componentWidth', '_componentHeight', '_windowWidth', '_windowHeight','size'],
-  _style: computed('style','_styleDependencies', function() {
-    let style = this.get('style');
-    if (typeOf(style) === 'function') {
-      run( ()=> {
-        style = style(this);
-      });
-    }
-    return !style || style === 'default' ? '' : `style-${style}`;
-  }),
-  _sizeDependencies: ['_componentWidth', '_componentHeight', '_windowWidth', '_windowHeight','_cpMutex'],
-  _size: computed('size', 'title','responsive.mutex', function() {
-    let size = this.get('size');
-    if (typeOf(size) === 'function') {
-      run( ()=> {
-        size = size(this);
-      });
-    }
-    return !size || size === 'default' ? '' : size;
-  }),
-  _mood: computed('mood','title','subHeading','badge','icon','image','style', 'size', function() {
-    let mood = this.get('mood');
-    if (typeOf(mood) === 'function') {
-      run( ()=> {
-        mood = mood(this);
-      });
-    }
-    return !mood || mood === 'default' ? '' : `mood-${mood}`;
-  }),
+  classNameBindings: ['selected'],
 
   /**
    * The specific Item components should define which aspects and panes they support, this
@@ -190,7 +150,7 @@ let SharedItem = Mixin.create({
   /**
    * Registers the item with a parent list (if one exists)
    */
-  _register: on('afterRender', function() {
+  _register: on('init', function() {
     const list = this.get('list');
     if(this.get('list.register')) {
       list.register(this);
@@ -204,5 +164,5 @@ let SharedItem = Mixin.create({
   })
 });
 
-SharedItem[Ember.NAME_KEY] = 'Item Mixin';
+SharedItem[Ember.NAME_KEY] = 'Shared Item Props';
 export default SharedItem;

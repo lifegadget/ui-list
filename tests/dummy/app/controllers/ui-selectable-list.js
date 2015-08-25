@@ -2,8 +2,9 @@ import Ember from 'ember';
 const { computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
 
 export default Ember.Controller.extend({
+  flashMessages: Ember.inject.service(),
 
-  queryParams: ['mood','size','style','compressed'],
+  queryParams: ['mood','size','skin','compressed'],
 
   items: [
     Ember.Object.create({when: 2, foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'shopping-cart', badge: 1}),
@@ -45,7 +46,6 @@ export default Ember.Controller.extend({
     return this.get('isFiltered') ? FilterFunc : null;
   }),
 
-
   toggledBadge: on('init',computed('showBadge', function() {
     return this.get('showBadge') ? 4 : null;
   })),
@@ -59,18 +59,23 @@ export default Ember.Controller.extend({
     return this.get('showSubHeading') ? 'ran 12mi in London' : null;
   })),
   mood: 'default',
-  style: 'default',
+  skin: 'default',
   size: 'default',
   compressed: false,
   defaultIcon: 'envelope',
+  actions: {
+    onSelect: function(action, item) {
+      const flashMessages = Ember.get(this, 'flashMessages');
+      flashMessages.success(`onSelect Event: ${action} on ${item.elementId}`);
+    },
+    onError: function(code, item) {
+      const flashMessages = Ember.get(this, 'flashMessages');
+      const title = Ember.get(item, 'title');
+      flashMessages.warning(`onError event: ${code} when interacting with "${title}"`);
+    }
+  },
+  min: 0,
+  max: 1
 
-  loadEmberData: on('init', function() {
-    let items = new A(this.get('items'));
-    items.forEach( (item,index) => {
-      let pojo = JSON.parse(JSON.stringify(item));
-      pojo.id = index;
-      this.store.push('activity', pojo);
-    });
-  })
 
 });

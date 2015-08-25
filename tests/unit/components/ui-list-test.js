@@ -5,7 +5,7 @@ import {
   test
 } from 'ember-qunit';
 
-moduleForComponent('ui-list', {
+moduleForComponent('ui-list', 'Unit | Component | ui-list', {
   // Specify the other units that are required for this test
   needs: ['component:ui-item','component:ui-icon']
 });
@@ -232,7 +232,7 @@ test('availableAspectPanes is set', function(assert) {
   assert.ok(aspectPanes.contains('subHeading'), 'subHeading should be set by default');
 });
 
-test('listProperties propagated to items', function(assert) {
+test('list managed properties propagated down to items (size, skin, mood, squeezed)', function(assert) {
   let component = this.subject();
   let done = assert.async();
   let done2 = assert.async();
@@ -245,15 +245,18 @@ test('listProperties propagated to items', function(assert) {
   run.later(() => {
     component.set('size','large');
     assert.equal(component.get('size'), 'large', 'INIT: size listProperty set to large');
-    component.set('style','flat');
-    assert.equal(component.get('style'), 'flat', 'INIT: style listProperty set to flat');
+    component.set('skin','flat');
+    assert.equal(component.get('skin'), 'flat', 'INIT: skin listProperty set to flat');
     component.set('mood','success');
     assert.equal(component.get('mood'), 'success', 'INIT: mood listProperty set to success');
+    component.set('squeezed',true);
+    assert.equal(component.get('squeezed'), true, 'INIT: squeezed set to true');
     done();
     run.later(() => {
-      assert.equal(component.get('_registeredItems').filter( item => { return item.get('size') === 'large'; } ).length, items.length, 'all items should have size set to large');
-      assert.equal(component.get('_registeredItems').filter( item => { return item.get('style') === 'flat'; } ).length, items.length, 'all items should have style set to flat');
-      assert.equal(component.get('_registeredItems').filter( item => { return item.get('mood') === 'success'; } ).length, items.length, 'all items should have mood set to success');
+      assert.equal(component.get('_registeredItems.0._size'), 'large', 'items should have size set to large');
+      assert.equal(component.get('_registeredItems.0._skin'), 'skin-flat', 'items should have skin set to flat');
+      assert.equal(component.get('_registeredItems.0._mood'), 'mood-success', 'items should have mood set to success');
+      assert.equal(component.get('_registeredItems.0._squeezed'), true, 'items should have squeezed set to true');
       done2();
     },5);
   },5);

@@ -1,6 +1,6 @@
 /* FLAT STYLING OVERLAY */
 
-.ui-list.item.style-flat {
+.ui-list.item.skin-flat {
     border-radius: 0px;
     border: 1px solid lightgrey;
     border-left: none;
@@ -21,20 +21,20 @@
     width: 8px;
 }
 /* SQUEEZED*/
-.ui-list.item.squeezed.style-flat .hpad.left,
-.ui-list.item.squeezed.style-flat .hpad.right {
+.ui-list.item.squeezed.skin-flat .hpad.left,
+.ui-list.item.squeezed.skin-flat .hpad.right {
     width: 5px;
 }
-.ui-list.tiny.squeezed.style-flat .hpad.left,
-.ui-list.item.squeezed.style-flat .hpad.right {
+.ui-list.tiny.squeezed.skin-flat .hpad.left,
+.ui-list.item.squeezed.skin-flat .hpad.right {
     width: 1px;
 }
-.ui-list.small.item.squeezed.style-flat .hpad.left,
-.ui-list.item.squeezed.style-flat .hpad.right {
+.ui-list.small.item.squeezed.skin-flat .hpad.left,
+.ui-list.item.squeezed.skin-flat .hpad.right {
     width: 3px;
 }
 
 /* Selected */
-.ui-list.item.style-flat.selected {
+.ui-list.item.skin-flat.selected {
   background-color: #F3F3F3;
 }
