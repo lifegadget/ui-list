@@ -196,8 +196,12 @@ var UiList = Ember.Component.extend({
     return new A([]);
   }),
   register: function(item) {
+    console.log('registering %o', item);
     const registeredItems = this.get('_registeredItems');
-    registeredItems.pushObject(item);
+    const registeredIds = new A(registeredItems.mapBy('elementId'));
+    if(!registeredIds.contains(get(item,'elementId'))) {
+      registeredItems.pushObject(item);
+    }
     // on first registered item, ask for meta information from item type
     if(registeredItems.length === 1) {
       this.set('_aspects', item.get('_aspects'));
