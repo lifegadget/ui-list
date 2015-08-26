@@ -6,8 +6,9 @@ const capitalize = Ember.String.capitalize;
 const camelize = Ember.String.camelize;
 
 import layout from '../templates/components/ui-list';
+import ListMessaging from '../mixins/list-messaging';
 
-var UiList = Ember.Component.extend({
+var UiList = Ember.Component.extend(ListMessaging,{
   sort: null,
   sortProperties: on('init', computed('sort', function() {
     let sort = this.get('sort');
@@ -188,43 +189,6 @@ var UiList = Ember.Component.extend({
     const mappedFrom = this.get('_mappedFrom');
 
     return mappedFrom.contains(prop) ? mp[prop] : false;
-  },
-
-  // REGISTRATION
-  // ----------------------------------
-  _registeredItems: computed(function() {
-    return new A([]);
-  }),
-  register: function(item) {
-    console.log('registering %o', item);
-    const registeredItems = this.get('_registeredItems');
-    const registeredIds = new A(registeredItems.mapBy('elementId'));
-    if(!registeredIds.contains(get(item,'elementId'))) {
-      registeredItems.pushObject(item);
-    }
-    // on first registered item, ask for meta information from item type
-    if(registeredItems.length === 1) {
-      this.set('_aspects', item.get('_aspects'));
-      this.set('_panes', item.get('_panes'));
-    }
-  },
-  deregister: function(item) {
-    const registeredItems = this.get('_registeredItems');
-    registeredItems.removeObject(item);
-  },
-  findRegisteredItem(id) {
-    return this.get('_registeredItems').filter( item => {
-      return get(item, 'elementId') === id;
-    });
-  },
-
-  /**
-   * Receives actions from items it is managing
-   */
-  _itemListener: function(action, item, options={}) {
-    this.sendAction('action', action, options);
-
-    return true;
   }
 });
 

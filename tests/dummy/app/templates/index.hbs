@@ -16,18 +16,18 @@
       <div class="col-xs-6 col-sm-4">
         <heading>LIST</heading>
         <ul class="components">
-          <li>{{#link-to 'ui-list'}}<code>ui-list</code>{{/link-to}}</li>
-          <li>{{#link-to 'ui-selectable-list'}}<code>ui-selectable-list</code>{{/link-to}}</li>
+          <li>{{#link-to 'demo-list'}}<code>ui-list</code>{{/link-to}}</li>
+          <li>{{#link-to 'demo-selectable-list'}}<code>ui-selectable-list</code>{{/link-to}}</li>
           <li>{{#link-to 'demo-sortable-list'}}<code>ui-sortable-list</code>{{/link-to}}</li>
         </ul>
       </div>
       <div class="col-xs-6 col-sm-4">
         <heading>ITEM</heading>
         <ul class="components">
-          <li>{{#link-to 'ui-item'}}<code>ui-item</code>{{/link-to}}</li>
+          <li>{{#link-to 'demo-item'}}<code>ui-item</code>{{/link-to}}</li>
           <li>{{#link-to 'demo-sortable-item'}}<code>ui-sortable-item</code>{{/link-to}}</li>
-          <li>{{#link-to 'ui-actionable-item'}}<code>ui-actionable-item</code>{{/link-to}}</li>
-          <li>{{#link-to 'ui-tabular-item'}}<code>ui-tabular-item</code>{{/link-to}}</li>
+          <li>{{#link-to 'demo-actionable-item'}}<code>ui-actionable-item</code>{{/link-to}}</li>
+          <li>{{#link-to 'demo-tabular-item'}}<code>ui-tabular-item</code>{{/link-to}}</li>
         </ul>
       </div>
       <div class="col-xs-6 col-sm-4">
@@ -53,7 +53,7 @@
 <desc>
   Here are some high level design diagrams which illustrate the thinking involved in these components:<br/>
   <centered>
-    {{ui-buttons cardinality='1:1' buttons=designImages selected=designImage}}
+    {{radio-buttons buttons='HL Design::hl-design,Key Attributes::key-attributes' value=designImage}}
   </centered>
   <indent>
     <a href="images/{{designImage}}.png" target="_new"><img src="images/{{designImage}}.png"></a>

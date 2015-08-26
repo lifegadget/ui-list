@@ -64,13 +64,13 @@ export default Ember.Controller.extend({
   compressed: false,
   defaultIcon: 'envelope',
 
-  loadEmberData: on('init', function() {
-    let items = new A(this.get('items'));
-    items.forEach( (item,index) => {
-      let pojo = JSON.parse(JSON.stringify(item));
-      pojo.id = index;
-      this.store.push('activity', pojo);
-    });
-  })
+  // loadEmberData: on('init', function() {
+  //   let items = new A(this.get('items'));
+  //   items.forEach( (item,index) => {
+  //     let pojo = JSON.parse(JSON.stringify(item));
+  //     pojo.id = index;
+  //     this.store.push('activity', pojo);
+  //   });
+  // })
 
 });

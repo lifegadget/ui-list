@@ -17,7 +17,6 @@ export default UiList.extend({
    * @return {Boolean}
    */
   _itemListener: function(action, item, options={}) {
-    this.sendAction('action', action, options);
     if(action === 'paneClick') {
       const {min,max} = this.getProperties('min','max');
       const selected = new A(this.get('_selected'));

@@ -20,8 +20,9 @@ const HeritableProperties = Ember.Mixin.create({
   }),
   // MOOD
   size: 'default',
-  _size: computed('size', 'title','responsive.mutex', function() {
-    let size = this.get('size');
+  _size: computed('size', 'list.size', function() {
+    let listSize = this.get('list.size');
+    let size = listSize ? listSize : this.get('size');
     if (typeOf(size) === 'function') {
       run( ()=> {
         size = size(this);
@@ -31,8 +32,9 @@ const HeritableProperties = Ember.Mixin.create({
   }),
   // MOOD
   mood: 'default',
-  _mood: computed('mood','title','subHeading','badge','icon','image','skin', 'size', function() {
-    let mood = this.get('mood');
+  _mood: computed('mood','list.mood', function() {
+    let listMood = this.get('list.mood');
+    let mood = listMood ? listMood : this.get('mood');
     if (typeOf(mood) === 'function') {
       run( ()=> {
         mood = mood(this);

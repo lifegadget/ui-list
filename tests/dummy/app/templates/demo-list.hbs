@@ -4,15 +4,12 @@
 <h4>Overview</h4>
 <div class="row">
     <desc>
-        The <code>ui-list</code> is the default list container. It does nothing more than list items with very basic styling for the container itself,
+        The <prop>ui-list</prop> is the default list container which all other list containers are derived from. It does nothing more than list items with very basic styling for the container itself,
         it's main function is to proxy properties into the items it contains as well manage actions coming out of them.
-    </desc>
-    <desc>
-      To understand <code>ui-list</code> as either an inline or block component you must understand it's parameters in terms of their scope:
     </desc>
 </div>
 {{! ------------------------------------------------------------------------------------------ }}
-<h4>Example</h4>
+<h4>Interactive Demo</h4>
 
 <row>
   <widget class="wide">
@@ -63,7 +60,11 @@
     }}
   </code>
   <description>
-    <pre style="font-size:smaller">
+    <h4>Inline Syntax</h4>
+    <p>
+      This list container uses the compact <i>inline</i> syntax and passes in an array of data for the <i>items</i> which it would like to have rendered. The data structures passed in are:
+    </p>
+    <pre style="font-size:6pt">
 items: [
   {foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery", badge: 6},
   {foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 1},
@@ -75,12 +76,16 @@ map: {
   title: 'foo',
   subHeading: 'bar'
 },
+sillyLogic() {
+  let badge = item.get('badge');
+  let moodiness = badge && badge > 5 ? 'error' : 'warning';
+  return badge ? moodiness : null;
+}
     </pre>
   </description>
 </row>
 
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
-<p>&nbsp;</p>
 <configuration>
     <icon>{{icon-cog size="2x"}}</icon>
     <config>
@@ -111,6 +116,50 @@ map: {
     </config>
 </configuration>
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
+
+<row>
+  <widget class='wide'>
+    {{#ui-list
+      filter=listFilter
+      size=size
+      mood=mood
+      skin=skin
+      compressed=compressed
+      squeezed=squeezed
+      sort=sortBy
+      sortAscending=sortAscending
+      as |list|
+    }}
+      {{#each items as |item|}}
+        {{ui-item title=item.foo subHeading=item.bar icon=item.icon badge=item.badge list=list}}
+      {{/each}}
+    {{/ui-list}}
+  </widget>
+  <code class='wide'>
+    &nbsp;<br/>
+    {{#display-component componentName='ui-list' as='list'
+      filter=listFilter
+      size=size
+      mood=mood
+      skin=skin
+      compressed=compressed
+      squeezed=squeezed
+      sort=sortBy
+      sortAscending=sortAscending
+    }}
+    {{#display-component componentName='each' _target='items' as='item' _indent=1}}
+        {{display-component componentName='ui-item' _indent=2 title=':item.foo' subHeading=':item.bar' icon=':item.icon' badge=':item.badge' list=':list'}}
+    {{/display-component}}
+
+    {{/display-component}}
+  </code>
+  <description>
+    <h4>Block Format</h4>
+    <p>
+      The block format allows you full control on how you'd like to style your items. If you use the <prop>ui-item</prop> or derived classes then passing the list's block parameter into the <prop>list</prop> property on the item will ensure that messaging between item and list is maintained.
+    </p>
+  </description>
+</row>
 
 {{!-- <desc>
     <strong>Notes on ui-list example:</strong>

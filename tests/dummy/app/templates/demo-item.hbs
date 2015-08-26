@@ -1,0 +1,134 @@
+{{#demo-css}}
+<h3>Component::<code>ui-item</code></h3>
+
+<h4>Overview</h4>
+<div class="row">
+    <desc>
+        The <prop>ui-item</prop> is the default list item. As the basis for all other items it defines a good number of key properties which include:
+        <ul>
+          <li>Layout and property definition of <prop>aspects</prop> and <prop>panes</prop></li>
+          <li>The relative <prop>size</prop> of each item</li>
+          <li>The <prop>skin</prop> to use for styling purposes</li>
+          <li>A <prop>mood</prop> which simply sets CSS styling for some common mood types made popular by bootstrap</li>
+          <li>Can be displayed as individual item or join up with other items as part of a <strong>list</strong>; it knows how to behave appropriately in either context</li>
+        </ul>
+    </desc>
+</div>
+
+<h4>Basic Example</h4>
+<row>
+  <widget>
+    {{ui-item
+      icon='envelope'
+      title='Your Email'
+      badgeRight=4
+    }}
+  </widget>
+  <code>
+    {{display-component componentName='ui-item'
+      icon='envelope'
+      title='Your Email'
+      badgeRight=4
+    }}
+  </code>
+  <description>
+    A very simple example but a few quick points not to be missed:
+    <ul>
+      <li><prop>icon</prop> and <prop>title</prop> are examples of <i>aspects</i> we'd like displayed but do not have any reference to <i>pane</i>; instead this item type has certain defaults and assumes where these should go. These two properties could also be assigned explictly with <prop>iconLeft</prop> and <prop>titleCenter</prop>.</li>
+      <li><prop>badgeRight</prop> is an example of stating both <i>aspect</i> and <i>pane</i></li>
+      <li>the rightward facing chevron is the <prop>ui-item</prop> component setting the default value of <prop>iconRight</prop> to 'chevron-right'. </li>
+    </ul>
+  </description>
+</row>
+<row>
+  <widget>
+    {{#ui-item size='tiny'}}
+      now for something completely different
+    {{/ui-item}}
+  </widget>
+  <code>
+    {{#display-component componentName='ui-item'}}
+      now for something completely different
+    {{/display-component}}
+  </code>
+  <description>
+    The block style format is also available and provides universal freedom in how you style your items. This style for <i>items</i> has not been tested as much as the inline style so please send in a PR if you find any snafus.
+  </description>
+</row>
+
+{{! ----------------------------------------------------------- }}
+<h4>Interactive Demo</h4>
+<row>
+  <widget>
+    {{ui-item
+      icon=toggledIcon
+      image=image
+      foo=foo
+      icon=icon
+      mapTitle='foo'
+      bar=bar
+      mapSubHeading="bar"
+      badge=toggledBadge
+      size=size
+      disabled=disabled
+      selected=selected
+      skin=skin
+      mood=mood
+      badge=badge
+      squeezed=squeezed
+    }}
+  </widget>
+  <code>
+    {{display-component componentName='ui-item'
+      icon=icon
+      image=image
+      foo=foo
+      mapTitle='foo'
+      bar=bar
+      mapSubHeading="bar"
+      badge=toggledBadge
+      size=size
+      disabled=disabled
+      selected=selected
+      skin=skin
+      mood=mood
+      badge=badge
+      squeezed=squeezed
+    }}
+  </code>
+  <description>
+    Use the controls below to manipulate the item:
+    <controls>
+      <control>
+        <span class='name'>foo -> title</span>
+        <span>{{text-input placeholder='title' value=foo}}</span>
+      </control>
+      <control>
+        <span class='name'>bar -> subHeading</span>
+        <span>{{text-input placeholder='subHeading' value=bar}}</span>
+      </control>
+      <control>
+        <span>mood</span>
+        <span>{{radio-buttons buttons='default,success,info,warning,error,aged,ancient' size='small' value=mood}}</span>
+      </control>
+      <control>
+        <span class='name'>skin</span>
+        <span>{{radio-buttons buttons='default,plus,flat,simple' value=skin size='small'}}</span>
+      </control>
+      <control>
+        <span class='name'>state</span>
+        <span>{{ui-toggle-button value=disabled size='small'}} - DISABLED</span>
+        <span>{{ui-toggle-button value=selected size='small'}} - SELECTED</span>
+        <span>{{ui-toggle-button value=squeezed size='small'}} - SQUEEZED</span>
+      </control>
+      <control>
+        <span class='name'>aspects</span>
+        <span>{{ui-toggle-button value=icon onValue='umbrella' size='small'}} - ICON</span>
+        <span>{{ui-toggle-button value=badge onValue=5 size='small'}} - BADGE</span>
+        <span>{{ui-toggle-button value=showImage onValue=5 size='small'}} - IMAGE</span>
+      </control>
+    </controls>
+  </description>
+</row>
+
+{{/demo-css}}
