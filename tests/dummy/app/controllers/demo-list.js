@@ -1,5 +1,7 @@
 import Ember from 'ember';
-const { computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
+const { keys, create } = Object; // jshint ignore:line
+const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
+
 
 export default Ember.Controller.extend({
 
@@ -36,16 +38,15 @@ export default Ember.Controller.extend({
     {name: 'Title', id: 'title'}
   ],
   sortAscending: true,
+  mood: 'default',
   moodStrategy: 'static',
-  enableStaticChooser: on('init',computed('moodStrategy', function() {
-    return this.get('moodStrategy') === 'static';
-  })),
+  moodFunction: computed('moodStrategy', function() {
+    return this.get('moodStrategy') === 'static' ? false : true;
+  }),
   listFilter: computed('isFiltered', function() {
     const FilterFunc = item => { return item.badge > 0; };
     return this.get('isFiltered') ? FilterFunc : null;
   }),
-
-
   toggledBadge: on('init',computed('showBadge', function() {
     return this.get('showBadge') ? 4 : null;
   })),
@@ -58,19 +59,9 @@ export default Ember.Controller.extend({
   toggledSubHeading: on('init',computed('showSubHeading', function() {
     return this.get('showSubHeading') ? 'ran 12mi in London' : null;
   })),
-  mood: 'default',
   style: 'default',
   size: 'default',
   compressed: false,
-  defaultIcon: 'envelope',
-
-  // loadEmberData: on('init', function() {
-  //   let items = new A(this.get('items'));
-  //   items.forEach( (item,index) => {
-  //     let pojo = JSON.parse(JSON.stringify(item));
-  //     pojo.id = index;
-  //     this.store.push('activity', pojo);
-  //   });
-  // })
+  defaultIcon: 'envelope'
 
 });

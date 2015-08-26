@@ -13,51 +13,67 @@
 
 <row>
   <widget class="wide">
-      {{#if enableStaticChooser}}
-        {{ui-list
-          items=items
-          filter=listFilter
-          map=map
-          size=size
-          mood=mood
-          skin=skin
-          defaultIcon=defaultIcon
-          compressed=compressed
-          squeezed=squeezed
-          sort=sortBy
-          sortAscending=sortAscending
-        }}
-      {{else}}
-        {{ui-list
-          items=items
-          filter=listFilter
-          map=map
-          size=size
-          mood=sillyLogic
-          skin=skin
-          defaultIcon=defaultIcon
-          compressed=compressed
-          squeezed=squeezed
-          sort=sortBy
-          sortAscending=sortAscending
-        }}
-      {{/if}}
+    {{#if moodFunction}}
+      {{ui-list
+        items=items
+        filter=listFilter
+        map=map
+        size=size
+        mood=sillyLogic
+        skin=skin
+        defaultIcon=defaultIcon
+        compressed=compressed
+        squeezed=squeezed
+        sort=sortBy
+        sortAscending=sortAscending
+      }}
+    {{else}}
+      {{ui-list
+        items=items
+        filter=listFilter
+        map=map
+        size=size
+        mood=staticMood
+        skin=skin
+        defaultIcon=defaultIcon
+        compressed=compressed
+        squeezed=squeezed
+        sort=sortBy
+        sortAscending=sortAscending
+      }}
+    {{/if}}
   </widget>
   <code>
     &nbsp;<br/>
-    {{display-component componentName='ui-list'
-      items=':items'
-      filter=':listFilter'
-      map=':map'
-      size=size
-      mood=':sillyLogic'
-      skin=skin
-      defaultIcon=defaultIcon
-      compressed=compressed
-      squeezed=squeezed
-      sort=sortBy
-      sortAscending=sortAscending
-    }}
+    {{#if moodFunction}}
+      {{display-component componentName='ui-list'
+        items=':items'
+        filter=listFilter
+        map=':map'
+        size=size
+        mood=sillyLogic
+        skin=skin
+        defaultIcon=defaultIcon
+        compressed=compressed
+        squeezed=squeezed
+        sort=sortBy
+        sortAscending=sortAscending
+      }}
+    {{else}}
+      {{display-component componentName='ui-list'
+        items=':items'
+        filter=listFilter
+        map=':map'
+        size=size
+        mood=staticMood
+        skin=skin
+        defaultIcon=defaultIcon
+        compressed=compressed
+        squeezed=squeezed
+        sort=sortBy
+        sortAscending=sortAscending
+      }}
+    {{/if}}
   </code>
   <description>
     <h4>Inline Syntax</h4>
@@ -76,7 +92,7 @@ map: {
   title: 'foo',
   subHeading: 'bar'
 },
-sillyLogic() {
+sillyLogic(item) {
   let badge = item.get('badge');
   let moodiness = badge && badge > 5 ? 'error' : 'warning';
   return badge ? moodiness : null;
@@ -92,17 +108,19 @@ sillyLogic() {
         <columns>
             <column>
                 List Size: <br/>
-                {{ui-buttons cardinality='1:1' buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}<br/>
+                {{radio-buttons buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}<br/>
                 Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
                 Horizontally Squeezed: {{ui-toggle-button value=squeezed on='squeezed' off='normal' size='small'}}<br/>
                 Filter: {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false size='small'}}
             </column>
-            <column>
+            <column style='flex-basis: 300px'>
                 Mood: <br/>
-                {{ui-buttons cardinality='1:1' buttons='static,sillyLogic' value=moodStrategy size='small' stretch=true}}<br/>
-                {{#if enableStaticChooser}}
+                {{radio-buttons buttons='static,sillyLogic' value=moodStrategy size='small'}}<br/>
+                {{#if moodFunction}}
+                  Mood is defined as a function at the list level (see above) which is proxied into each item. Because it is a function, it then engages dynamic observers to ensure that if inputs to the function change it is updated.
+                {{else}}
                 Static Moods:<br/>
-                  {{ui-buttons cardinality='1:1' buttons='default,success,info,warning,error' value=mood disable=disableStaticChooser size='small' defaultValue='default'}}
+                  {{radio-buttons buttons='default,success,info,warning,error' value=staticMood disable=disableStaticChooser size='small' defaultValue='default'}}
                 {{/if}}
              </column>
             <column>
@@ -119,28 +137,47 @@ sillyLogic() {
 
 <row>
   <widget class='wide'>
-    {{#ui-list
-      filter=listFilter
-      size=size
-      mood=mood
-      skin=skin
-      compressed=compressed
-      squeezed=squeezed
-      sort=sortBy
-      sortAscending=sortAscending
-      as |list|
-    }}
-      {{#each items as |item|}}
-        {{ui-item title=item.foo subHeading=item.bar icon=item.icon badge=item.badge list=list}}
-      {{/each}}
-    {{/ui-list}}
+  {{#if moodFunction}}
+      {{#ui-list
+        filter=listFilter
+        size=size
+        mood=sillyLogic
+        skin=skin
+        compressed=compressed
+        squeezed=squeezed
+        sort=sortBy
+        sortAscending=sortAscending
+        as |list|
+      }}
+        {{#each items as |item|}}
+          {{ui-item title=item.foo subHeading=item.bar icon=item.icon badge=item.badge list=list}}
+        {{/each}}
+      {{/ui-list}}
+  {{else}}
+      {{#ui-list
+        filter=listFilter
+        size=size
+        mood=staticMood
+        skin=skin
+        compressed=compressed
+        squeezed=squeezed
+        sort=sortBy
+        sortAscending=sortAscending
+        as |list|
+      }}
+    {{#each items as |item|}}
+      {{ui-item title=item.foo subHeading=item.bar icon=item.icon badge=item.badge list=list}}
+    {{/each}}
+  {{/ui-list}}
+  {{/if}}
+
   </widget>
   <code class='wide'>
     &nbsp;<br/>
     {{#display-component componentName='ui-list' as='list'
       filter=listFilter
       size=size
-      mood=mood
+      mood='mood'
       skin=skin
       compressed=compressed
       squeezed=squeezed
@@ -161,94 +198,16 @@ sillyLogic() {
   </description>
 </row>
 
-{{!-- <desc>
-    <strong>Notes on ui-list example:</strong>
-    <ul>
-      <li>
-        <strong>Mapping</strong>
-        <ul>
-          <li>maps can be set as a single has as demonstrated above using a "map" property, or</li>
-          <li>
-            maps can also be set on a property by property basis by prefixing the target name with "map". For instance, if you wanted to just
-            map an input parameter of "foo" to the list property <code>title</code> then you could set \{{ui-list mapTitle='foo'}}
-          </li>
-        </ul>
-      </li>
-      <li>
-        <strong>AspectPanes</strong>
-        <ul>
-          <li>Properties like <code>title</code>, <code>icon</code>, etc. are considered "aspectPanes"</li>
-          <li>When setting these properties you can set them as a static value or a bound variable which resolves to a static/scalar value</li>
-          <li>You can also pass in a function which will be passed to the item to resolve when the state of the item changes</li>
-        </ul>
-      </li>
-      <li>
-        <strong>List Properties</strong>
-        <ul>
-          <li>Properties like <code>mood</code>, <code>size</code>, etc. are properties which are owned by the list</li>
-          <li>
-            In all cases, though the properties are "owned" at the list level, that just means they are common to all item types and that
-            they do <em>not</em> hold a discrete value for each "item".
-          </li>
-          <li>These properties -- like AspectPanes -- can be static/scalar values or functions.</li>
-          <li>
-            For properties like <code>size</code> and <code>style</code> it is typically expected that they are statically set as a scalar
-            value whereas in contrast <code>mood</code> is very likely to be a function which is reacting to the state of the item.
-          </li>
-        </ul>
-      </li>
-    </ul>
-</desc>
+<h4>Heritable Properties and Sensitivity</h4>
+<p>
+  This is probably a terrible name but didn't have a lot of time to think about it. Basically it's a set of properties which are owned by the item but the list will take over responsibility for any items which it manages. Examples are <prop>mood</prop>, <prop>size</prop>, <prop>skin</prop>, and <prop>squeezed</prop>.
+</p>
+<p>
+  In most regards this is a <prop>ui-item</prop> discussion rather than a <prop>ui-list</prop> one but it is mentioned here for one reason ... each of these properties can be a discrete value or a function which determines what the value should be. The <b>sillyLogic</b> example is illustrative of this. When a function is detected it then uses "sensitivities" properties. These sensitivities are the properties that the function is observing to calculate its value. So in the case of sillyLogic we're triggering a mood off of the <i>badge</i> number. The configuration for this would be:
 
+  <code>moodSensitivities=['badge']</code>
 
-<h4>Ember Data</h4>
-<desc>
-  Considering a lot of data lists come from Ember-Data the example below loads all the data from above into a model called "Activity" and then works in precisely
-  the same way. Check out the data in the Ember Inspector and play around with it to see it update:
-</desc> --}}
-
-{{!-- <examples>
-  <widget class='wide'>
-    {{#if enableStaticChooser}}
-      {{ui-list
-        items=model
-        filter=listFilter
-        map=map
-        size=size
-        mood=mood
-        style=style
-        defaultIcon=defaultIcon
-        compressed=compressed
-        sort=sortBy
-        sortAscending=sortAscending
-      }}
-    {{else}}
-      {{ui-list items=model.content map=map size=size mood=sillyLogic style=style defaultIcon=defaultIcon  compressed=compressed sort=sortBy filter=filterList sortAscending=sortAscending}}
-    {{/if}}
-  </widget>
-  <sourcecode>
-  {{#code-block language="handlebars" poll=100}}
-
-
-
-
-
-\{{ui-list
-  items=model.content
-  map=map
-  {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}
-  size="{{size}}"
-  style="{{style}}"{{#if compressed}}
-  compressed=true{{/if}}
-}}
-
-
-
-
-
-
-    {{/code-block}}
-  </sourcecode>
-</examples> --}}
+  You'll notice that we didn't actually do that but that's because any function is <i>by default</i> given the following observable properties: <prop>mood</prop>, <prop>title</prop>, <prop>subHeading</prop>, and <prop>badge</prop>.
+</p>
 
 {{/demo-css}}

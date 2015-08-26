@@ -20,8 +20,7 @@ export default function() {
     // Collections
     this.get('/activities');
     this.get('/activities/:id');
-    this.get('/things');
-    this.get('/things/:id');
+    this.pretender.get('/*passthrough', this.pretender.passthrough);
 
     // this.get('/contacts', 'users');
     // this.get('/contacts', ['contacts', 'addresses']);
