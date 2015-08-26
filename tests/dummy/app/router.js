@@ -7,14 +7,14 @@ var Router = Ember.Router.extend({
 
 export default Router.map(function() {
   // LIST
-  this.route('ui-list');
-  this.route('ui-selectable-list');
+  this.route('demo-list');
+  this.route('demo-selectable-list');
   this.route('demo-sortable-list');
 
   // ITEM
-  this.route('ui-item');
-  this.route('ui-actionable-item');
-  this.route('ui-tabular-item');
+  this.route('demo-item');
+  this.route('demo-actionable-item');
+  this.route('demo-tabular-item');
   this.route('demo-sortable-item');
 
   // HELPER

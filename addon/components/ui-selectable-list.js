@@ -16,8 +16,7 @@ export default UiList.extend({
    * @param  {Object} options hash of various variables
    * @return {Boolean}
    */
-  _itemListener: function(action, item, options={}) {
-    this.sendAction('action', action, options);
+  _itemListener: function(action, item) {
     if(action === 'paneClick') {
       const {min,max} = this.getProperties('min','max');
       const selected = new A(this.get('_selected'));

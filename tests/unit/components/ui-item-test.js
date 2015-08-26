@@ -90,11 +90,11 @@ test('mood property - function/callback', function(assert) {
       return item.get('title') === "Monkey" ? 'success' : 'warning';
     }
   });
-  assert.equal(component.get('_mood'), 'mood-success', 'Mood should have resolved to scalar value');
+  assert.equal(component.get('_mood'), 'mood-success', '_mood should have resolved to scalar value');
   component.set('title','Rabbit');
   let done = assert.async();
   run.later( () => {
-    assert.equal(component.get('_mood'), 'mood-warning', 'Mood should have re-resolved to new scalar value');
+    assert.equal(component.get('_mood'), 'mood-warning', '_mood should have re-resolved to new scalar value');
     done();
   }, 5);
 });

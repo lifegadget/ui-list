@@ -54,6 +54,11 @@
     flex-grow: 1;
 }
 
+.ui-list.item .block-pane {
+  text-align: center;
+  margin: auto;
+}
+
 .ui-list.item .two-lined-message .title {
     position: relative;
     top: 4px;

@@ -2,13 +2,22 @@ import Ember from 'ember';
 const { keys, create } = Object; // jshint ignore:line
 const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
 
-
+/**
+ * This mixin manages those properties which are owned by "items"
+ * but will seed responsibility to the "list" once registered.
+ *
+ * Several of these properties can either take on a direct value or
+ * instead be a function which is executed when their context is changed.
+ * In cases where a function is present, the "sensitivities" for the property represent properties which
+ * which may impact the functions output and therefore must be added as a observable property.
+ */
+const observedProperties = ['skin', 'size', 'mood', 'squeezed'];
 const HeritableProperties = Ember.Mixin.create({
   classNameBindings: ['_size','_disabled:disabled:enabled','_mood','squeezed','_skin'],
 
   // SKIN
   skin: 'default',
-  _skin: computed('skin', 'list.skin', function() {
+  _skin: computed('skin', 'list.skin', '_skinMutex', function() {
     const listSkin = this.get('list.skin');
     let skin = listSkin ? listSkin : this.get('skin');
     if (typeOf(skin) === 'function') {
@@ -20,8 +29,9 @@ const HeritableProperties = Ember.Mixin.create({
   }),
   // MOOD
   size: 'default',
-  _size: computed('size', 'title','responsive.mutex', function() {
-    let size = this.get('size');
+  _size: computed('size', 'list.size','_sizeMutex', function() {
+    let listSize = this.get('list.size');
+    let size = listSize ? listSize : this.get('size');
     if (typeOf(size) === 'function') {
       run( ()=> {
         size = size(this);
@@ -31,8 +41,9 @@ const HeritableProperties = Ember.Mixin.create({
   }),
   // MOOD
   mood: 'default',
-  _mood: computed('mood','title','subHeading','badge','icon','image','skin', 'size', function() {
-    let mood = this.get('mood');
+  _mood: computed('mood','list.mood', '_moodMutex', function() {
+    let listMood = get(this,'list.mood');
+    let mood = listMood ? listMood : this.get('mood');
     if (typeOf(mood) === 'function') {
       run( ()=> {
         mood = mood(this);
@@ -42,12 +53,50 @@ const HeritableProperties = Ember.Mixin.create({
   }),
   // SQUEEZED
   squeezed: false,
-  _squeezed: computed('squeezed', 'list.squeezed', function() {
+  _squeezed: computed('squeezed', 'list.squeezed', '_squeezeMutex', function() {
     const _squeezed = this.get('squeezed');
     const listSqueezed = this.get('list.squeezed');
     return new A(['null','undefined']).contains(typeOf(listSqueezed)) ? listSqueezed : _squeezed;
-  })
+  }),
 
+  // DYNAMIC OBSERVATION
+  _defaultSensitivities: ['title', 'subHeading', 'mood', 'badge'],
+  initiateDynamicObservers: on('didInitAttrs', function() {
+    this._dynObservers = {};
+    new A(observedProperties).forEach(prop => {
+      this._dynObservers[prop] = new A([]);
+      const propType = typeOf(this.get(prop));
+      if(propType === 'function') {
+        this.addSensitivityObservers(prop);
+      }
+    });
+  }),
+  destroyDynamicObservers: on('willDestroyElement', function() {
+    observedProperties.map(op => {
+      this.removeSensitivityObservers(op);
+    });
+  }),
+  addSensitivityObservers(property) {
+    const propSensitivities = this.get(`${property}Sensativities`);
+    const defaultSensitivities = this.get('_defaultSensitivities').filter(i => { return i !== property;});
+    const observeredProperties = propSensitivities ? propSensitivities : defaultSensitivities;
+    const mutexProp = `_${property}Mutex`;
+    observeredProperties.map( op => {
+      let mutex = () => {
+        this.notifyPropertyChange(mutexProp);
+      };
+      this._dynObservers[property].pushObject({property: op, mutex: mutex});
+      this.addObserver(op, mutex);
+    });
+  },
+  removeSensitivityObservers(property) {
+    const observedProperties = this._dynObservers[property];
+    run.next(()=> {
+      observedProperties.map( op => {
+        this.removeObserver(op.property, this, op.mutex);
+      });
+    });
+  }
 
 });
 
