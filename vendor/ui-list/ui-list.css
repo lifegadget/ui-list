@@ -8,20 +8,58 @@
 }
 
 .ui-list.item {
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
+    flex:item;
     display: flex;
-    flex-flow: space-between;
-    width: 100%;
-    vertical-align: middle;
+    align-items: stretch;
+    flex-flow: center;
+    flex-direction: row;
+
     min-height: 40px;
     border-radius: 5px;
     border: 1px solid lightgrey;
     font-size: 1.2em;
     cursor: pointer;
 }
+
+.ui-list.item .pane {
+  padding: 5px 8px 5px 8px;
+  display: flex;
+}
+.ui-list.item .left-pane,
+.ui-list.item .right-pane {
+  flex-direction: row;
+  flex-shrink: 1;
+  justify-content: center;
+  align-items: center;
+}
+.ui-list.item .center-pane {
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: flex-start;
+  margin-top: 2px;
+}
+.ui-list.item .aspect {
+  flex: item;
+}
+.ui-list.item .left-pane .aspect {
+  margin-right: 5px;
+}
+.ui-list.item .left-pane .aspect:first-child {
+  margin-right: 0px;
+}
+.ui-list.item .right-pane .aspect {
+  margin-left: 5px;
+}
+.ui-list.item .right-pane .aspect:first-child {
+  margin-left: 0px;
+}
+.ui-list.item .aspect.icon {
+  font-size: 1.2em;
+}
+.ui-list.item .left-pane.has-sub-heading .aspect.icon {
+  font-size: 2em;
+}
+
 
 .ui-list.item.selected {
   border: 2px solid #303030;
@@ -49,40 +87,40 @@
     opacity: .4;
 }
 
-.ui-list.item .left-pane {
+/*.ui-list.item .left-pane {
     margin: auto;
     flex-shrink: 0;
     text-align: left;
 }
-.ui-list.item .left-pane.two-lined-message {
+.ui-list.item .left-pane.has-sub-heading {
     font-size: 2.4em;
 }
 .ui-list.item .center-pane {
     margin: auto;
     text-align: left;
     flex-grow: 1;
-}
+}*/
 
 .ui-list.item .block-pane {
   text-align: center;
   margin: auto;
 }
 
-.ui-list.item .two-lined-message .title {
+/*.ui-list.item .has-sub-heading .title {
     position: relative;
     top: 4px;
-}
-.ui-list.item .two-lined-message .sub-heading {
+}*/
+/*.ui-list.item .has-sub-heading .sub-heading {
     position: relative;
     top: -4px;
-}
+}*/
 
-.ui-list.item .right-pane {
+/*.ui-list.item .right-pane {
     flex-shrink: 0;
     align-self: right;
     margin: auto;
     text-align: right;
-}
+}*/
 
 .ui-list .sub-heading {
     font-size: smaller;
@@ -104,7 +142,7 @@
 }
 
 /* BADGE ADJUSTMENTS */
-.ui-list .badge {
+/*.ui-list .badge {
     position: relative;
     top: -2px;
 }
@@ -121,7 +159,7 @@
 }
 .ui-list.item.huge .badge {
     font-size: 18px;
-}
+}*/
 
 /* HORIZONTAL PADDING */
 .ui-list.item .hpad {

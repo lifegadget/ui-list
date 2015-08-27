@@ -1,37 +1,38 @@
-{{#if hasBlock}}
-  <span class='block-pane'>
-  {{yield this}}
-  </span>
-{{else}}
-  <div class="hpad left"></div>
-  {{#if hasLeftPane}}
-    <div class="left-pane {{if twoLinedMessage 'two-lined-message'}}" {{action "paneClick" "left"}}>
-        {{#if iconLeft}}{{ui-icon icon=iconLeft }}{{/if}}
-        {{#if imageLeft}}{{ui-image src=imageLeft borderMask='circle'}}{{/if}}
-        {{#if titleLeft}}<span class="title">{{{titleLeft}}}</span>{{/if}}
-    </div>
-    <div class="hpad"></div>
+{{#if hasLeftPane}}
+<div class="pane left-pane {{if hasSubHeading 'has-sub-heading'}}" {{action 'paneClick' 'left'}}>
+  {{! LEFT PANE }}
+  {{#if iconLeft}}<div class="aspect icon">{{ui-icon icon=iconLeft }}</div>{{/if}}
+  {{#if imageLeft}}<div class="aspect image">{{ui-image src=imageLeft borderMask='circle'}}</div>{{/if}}
+  {{#if titleLeft}}<div class="aspect handle">
+    <span class="title">{{{titleLeft}}}</span>
+  </div>{{/if}}
+</div>
+{{/if}}
+<div class="pane center-pane {{if hasSubHeading 'has-sub-heading'}}" {{action 'paneClick' 'center'}}>
+  {{#if hasBlock}}
+    {{yield this}}
+  {{else}}
+    {{! CENTER PANE }}
+    {{#if title}}
+    <span class='aspect title'>
+      {{{title}}}
+    </span>
+    {{/if}}
+    {{#if subHeading}}
+    <span class='aspect sub-heading'>
+      {{{subHeading}}}
+    </span>
+    {{/if}}
   {{/if}}
-    <div class="center-pane
-      {{if hasLeftPane 'with-left' 'no-left'}}
-      {{if twoLinedMessage 'two-lined-message'}}"
-      {{action "paneClick" "center"}}
-    >
-        {{#if title}}<span class='title'>{{{title}}}</span>{{/if}}
-        <span class='sub-heading'><br/>{{{subHeading}}}</span>
-    </div>
-    <div class="hpad"></div>
-  <div class="right-pane {{if badgeRight 'with-badge'}}" {{action "paneClick" "right"}}>
-      {{#if badgeRight}}<span class="badge">{{badgeRight}}</span>{{/if}}
-      {{#if titleRight}}<span class='title'>{{title}}</span>{{/if}}
-      {{#if subHeadingRight}}
-        {{#if titleRight}}<span class="divider"> | </span>{{/if}}
-        <span class='sub-heading'>
-          {{subHeadingRight}}
-        </span>
-      {{/if}}
-      {{#if iconRight}}{{ui-icon class="icon-right" icon=iconRight fw=false}}{{/if}}
-      {{#if handleRight}}{{ui-aspect-handle value=handleRight onMouseDown="mouseDown" onTouchStart="touchStart"}}{{/if}}
-  </div>
-  <div class="hpad right"></div>
+</div>
+{{#if hasRightPane}}
+<div class="pane right-pane {{if hasSubHeading 'has-sub-heading'}}" {{action 'paneClick' 'left'}}>
+  {{! RIGHT PANE }}
+  {{#if badgeRight}}<span class="aspect badge">{{badgeRight}}</span>{{/if}}
+  {{#if titleRight}}<span class='aspect title'>{{title}}</span>{{/if}}
+  {{#if titleRight}}<span class="divider"> | </span>{{/if}}
+  {{#if subHeadingRight}}<span class='aspect sub-heading'>{{subHeadingRight}}</span>{{/if}}
+  {{#if iconRight}}<div class="aspect icon">{{ui-icon class="icon-right" icon=iconRight fw=false}}</div>{{/if}}
+  {{#if handleRight}}<div class="aspect handle">{{ui-aspect-handle value=handleRight onMouseDown="mouseDown" onTouchStart="touchStart"}}</div>{{/if}}
+</div>
 {{/if}}
