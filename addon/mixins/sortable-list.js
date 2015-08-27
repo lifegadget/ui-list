@@ -92,14 +92,15 @@ export default Ember.Mixin.create({
   */
   commit() {
     let items = this.get('sortedItems');
-    let groupModel = this.get('model');
-    let itemModels = items.mapBy('model');
+    let groupModel = this.get('_registeredItems');
+    let itemModels = items.mapBy('data');
     let draggedItem = items.findBy('wasDropped', true);
+    console.log('commit %o into group: %o', draggedItem, groupModel);
     let draggedModel;
 
     if (draggedItem) {
       set(draggedItem, 'wasDropped', false); // Reset
-      draggedModel = get(draggedItem, 'model');
+      draggedModel = get(draggedItem, 'data');
     }
 
     delete this._itemPosition;

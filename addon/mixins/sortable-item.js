@@ -278,11 +278,11 @@ export default Mixin.create({
     @private
   */
   _makeDragHandler(startEvent) {
-    const groupDirection = this.get('list.direction');
+    const listDirection = this.get('list.direction');
     let dragOrigin;
     let elementOrigin;
 
-    if (groupDirection === 'x') {
+    if (listDirection === 'x') {
       dragOrigin = getX(startEvent);
       elementOrigin = this.get('x');
 
@@ -294,7 +294,7 @@ export default Mixin.create({
       };
     }
 
-    if (groupDirection === 'y') {
+    if (listDirection === 'y') {
       dragOrigin = getY(startEvent);
       elementOrigin = this.get('y');
 
@@ -304,18 +304,6 @@ export default Mixin.create({
 
         this._drag(y);
       };
-    }
-  },
-
-  /**
-    @method _tellGroup
-    @private
-  */
-  _tellGroup(method, ...args) {
-    let group = this.get('list');
-
-    if (group) {
-      group[method](...args);
     }
   },
 
@@ -334,9 +322,9 @@ export default Mixin.create({
   _applyPosition() {
     if (!this.element) { return; }
 
-    const groupDirection = this.get('list.direction');
+    const listDirection = this.get('list.direction');
 
-    if (groupDirection === 'x') {
+    if (listDirection === 'x') {
       let x = this.get('x');
       let dx = x - this.element.offsetLeft + parseFloat(this.$().css('margin-left'));
 
@@ -344,7 +332,7 @@ export default Mixin.create({
         transform: `translateX(${dx}px)`
       });
     }
-    if (groupDirection === 'y') {
+    if (listDirection === 'y') {
       let y = this.get('y');
       let dy = y - this.element.offsetTop;
 
@@ -360,12 +348,12 @@ export default Mixin.create({
   */
   _drag(dimension) {
     let updateInterval = this.get('updateInterval');
-    const groupDirection = this.get('list.direction');
+    const listDirection = this.get('list.direction');
 
-    if (groupDirection === 'x') {
+    if (listDirection === 'x') {
       this.set('x', dimension);
     }
-    if (groupDirection === 'y') {
+    if (listDirection === 'y') {
       this.set('y', dimension);
     }
 

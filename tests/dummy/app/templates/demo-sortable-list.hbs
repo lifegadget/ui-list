@@ -13,33 +13,31 @@
   <widget class="wide">
     {{ui-sortable-list
       items=items
-      onReindex='sortChanged'
       filter=listFilter
       map=map
       size=size
       mood=mood
-      style=style
-      defaultIcon=defaultIcon
+      skin=skin
       compressed=compressed
       squeezed=squeezed
       sort=sortBy
       sortAscending=sortAscending
+      onChange='update'
     }}
   </widget>
   <code>
     {{display-component componentName='ui-sortable-list'
       items=':items'
-      onReindex='sortChanged'
       filter=listFilter
       map=':map'
       size=size
       mood=mood
-      style=style
-      defaultIcon=defaultIcon
+      skin=skin
       compressed=compressed
       squeezed=squeezed
       sort=sortBy
       sortAscending=sortAscending
+      onChange='update'
     }}
   </code>
   <description>
@@ -68,8 +66,8 @@
                 {{/if}}
              </column>
             <column>
-                Skin / Style Family:<br/>
-                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=style size='small' stretch=true}}<br/>
+                Skin / skin Family:<br/>
+                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=skin size='small' stretch=true}}<br/>
                 Sort By:
                 {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>
                 {{ui-buttons cardinality='1:1' buttons=sortOrders selected=sortBy size='small' stretch=true}}<br/>
