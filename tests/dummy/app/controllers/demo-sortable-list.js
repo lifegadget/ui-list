@@ -29,6 +29,10 @@ export default Ember.Controller.extend({
     const FilterFunc = item => { return item.badge > 0; };
     return this.get('isFiltered') ? FilterFunc : null;
   }),
+  moodStrategy: 'static',
+  enableStaticChooser: on('init',computed('moodStrategy', function() {
+    return this.get('moodStrategy') === 'static';
+  })),
 
 
   toggledBadge: on('init',computed('showBadge', function() {
@@ -50,9 +54,12 @@ export default Ember.Controller.extend({
   itemsNew: null,
 
   actions: {
-    update(newOrder, draggedModel) {
-      this.set('itemsNew', A(newOrder));
-      this.set('items', draggedModel);
+    update(action, info) {
+      const flashMessages = Ember.get(this, 'flashMessages');
+      const titles = new A(info.new).mapBy('foo').join(', ');
+      flashMessages.success(`onChange Event: ${action}; element dragged was "${info.dragged.foo}". Order now: ${titles}`);
+
+      this.set('items', info.new);
     }
   }
 

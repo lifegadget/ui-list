@@ -52,7 +52,6 @@ export default Ember.Mixin.create({
   */
   prepare() {
     this._itemPosition = this.get('itemPosition');
-    console.log('preparing: %o', this._itemPosition);
   },
 
   /**
@@ -95,7 +94,6 @@ export default Ember.Mixin.create({
     let groupModel = this.get('_registeredItems');
     let itemModels = items.mapBy('data');
     let draggedItem = items.findBy('wasDropped', true);
-    console.log('commit %o into group: %o', draggedItem, groupModel);
     let draggedModel;
 
     if (draggedItem) {
@@ -119,10 +117,10 @@ export default Ember.Mixin.create({
       });
     });
 
-    if (groupModel !== NO_MODEL) {
-      this.sendAction('onChange', groupModel, itemModels, draggedModel);
-    } else {
-      this.sendAction('onChange', itemModels, draggedModel);
-    }
+    this.sendAction('onChange', 'sorted', {
+      dragged: draggedModel,
+      new: itemModels,
+      old: groupModel
+    });
   }
 });

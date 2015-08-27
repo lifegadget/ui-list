@@ -16,36 +16,34 @@ export default UiList.extend({
    * @param  {Object} options hash of various variables
    * @return {Boolean}
    */
-  _itemListener: function(action, item) {
-    if(action === 'paneClick') {
-      const {min,max} = this.getProperties('min','max');
-      const selected = new A(this.get('_selected'));
-      const itemSelected = item.get('selected');
-      // deselection attempt
-      if(itemSelected && selected.contains(item.elementId)) {
-        if(selected.length - min > 0) {
-          this.deselectItem(item);
-        } else {
-          this.sendAction('onError', 'deselect-min-constraint', item );
-        }
+  paneClick(item) {
+    const {min,max} = this.getProperties('min','max');
+    const selected = new A(this.get('_selected'));
+    const itemSelected = item.get('selected');
+    // deselection attempt
+    if(itemSelected && selected.contains(item.elementId)) {
+      if(selected.length - min > 0) {
+        this.deselectItem(item);
+      } else {
+        this.sendAction('onError', 'deselect-min-constraint', item );
       }
-      // selection attempt
-      else if(!itemSelected && !selected.contains(item.elementId)) {
-        // round-robin selected items
-        if(max === 1) {
-          const oldSelected = selected.length > 0 ? this.findRegisteredItem(selected[0]) : null;
-          if(oldSelected) {
-            this.deselectItem(oldSelected[0]);
-          }
-          this.selectItem(item);
+    }
+    // selection attempt
+    else if(!itemSelected && !selected.contains(item.elementId)) {
+      // round-robin selected items
+      if(max === 1) {
+        const oldSelected = selected.length > 0 ? this.findRegisteredItem(selected[0]) : null;
+        if(oldSelected) {
+          this.deselectItem(oldSelected[0]);
         }
-        // round-robin is not applicable
-        else {
-          if(selected.length + 1 > max) {
-            this.sendAction('onError', 'deselect-max-constraint', item );
-          } else {
-            this.selectItem(item);
-          }
+        this.selectItem(item);
+      }
+      // round-robin is not applicable
+      else {
+        if(selected.length + 1 > max) {
+          this.sendAction('onError', 'deselect-max-constraint', item );
+        } else {
+          this.selectItem(item);
         }
       }
     }
