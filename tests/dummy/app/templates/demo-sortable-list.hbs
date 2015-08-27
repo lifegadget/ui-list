@@ -1,3 +1,4 @@
+{{#demo-css}}
 <h3>Component::<code>ui-sortable-list</code></h3>
 
 <h4>Overview</h4>
@@ -7,43 +8,42 @@
     </desc>
 </div>
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
-<h4>Example</h4>
+<h4>Interactive Demo</h4>
+<row>
+  <widget class="wide">
+    {{ui-sortable-list
+      items=items
+      filter=listFilter
+      map=map
+      size=size
+      mood=mood
+      skin=skin
+      compressed=compressed
+      squeezed=squeezed
+      sort=sortBy
+      sortAscending=sortAscending
+      onChange='update'
+    }}
+  </widget>
+  <code>
+    {{display-component componentName='ui-sortable-list'
+      items=':items'
+      filter=listFilter
+      map=':map'
+      size=size
+      mood=mood
+      skin=skin
+      compressed=compressed
+      squeezed=squeezed
+      sort=sortBy
+      sortAscending=sortAscending
+      onChange='update'
+    }}
+  </code>
+  <description>
 
-<div class="col-xs-9 col-sm-4">
-  {{ui-sortable-list
-    items=items
-    onReindex='sortChanged'
-
-    filter=listFilter
-    map=map
-    size=size
-    mood=mood
-    style=style
-    defaultIcon=defaultIcon
-    compressed=compressed
-    squeezed=squeezed
-    sort=sortBy
-    sortAscending=sortAscending
-  }}
-</div>
-<br/>
-<div class="col-xs-3 col-sm-8">
-  \{{ui-sortable-list<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; items=items<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; map=map<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; {{#if enableStaticChooser}}mood='{{mood}}'{{else}}mood=sillyLogic{{/if}}<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; size="{{size}}"<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; style="{{style}}"{{#if compressed}}<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; compressed=true{{/if}}{{#if squeezed}}<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; squeezed=true{{/if}}{{#if sortBy}}<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp; sort="{{sortBy}}" {{else}}<br/>
-    {{/if}}<br/>
-  }}
-</div>
-
-
-{{! ------------------------------------------------------------------------------------------------------------------------- }}
-<p class="downer">&nbsp;</p>
+  </description>
+</row>
 
 <configuration class="downer">
     <icon>{{icon-cog size="2x"}}</icon>
@@ -53,25 +53,16 @@
                 List Size: <br/>
                 {{ui-buttons cardinality='1:1' buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}<br/>
                 Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
-                Horizontally Squeezed: {{ui-toggle-button value=squeezed on='squeezed' off='normal' size='small'}}<br/>
-                Filter: {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false size='small'}}
             </column>
             <column>
-                Mood: <br/>
-                {{ui-buttons cardinality='1:1' buttons='static,sillyLogic' value=moodStrategy size='small' stretch=true}}<br/>
-                {{#if enableStaticChooser}}
-                Static Moods:<br/>
+                Mood:<br/>
                   {{ui-buttons cardinality='1:1' buttons='default,success,info,warning,error' value=mood disable=disableStaticChooser size='small' defaultValue='default'}}
-                {{/if}}
              </column>
             <column>
-                Skin / Style Family:<br/>
-                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=style size='small' stretch=true}}<br/>
-                Sort By:
-                {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>
-                {{ui-buttons cardinality='1:1' buttons=sortOrders selected=sortBy size='small' stretch=true}}<br/>
+                Skin / skin Family:<br/>
+                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=skin size='small'}}
             </column>
         </columns>
     </config>
 </configuration>
-{{! ------------------------------------------------------------------------------------------------------------------------- }}
+{{/demo-css}}

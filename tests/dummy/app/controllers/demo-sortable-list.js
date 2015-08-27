@@ -1,5 +1,7 @@
 import Ember from 'ember';
-const { computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
+const { keys, create } = Object; // jshint ignore:line
+const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
+
 
 export default Ember.Controller.extend({
 
@@ -13,13 +15,6 @@ export default Ember.Controller.extend({
     Ember.Object.create({when: 6, foo: 'Had Coffee', bar: 'need to chill out after that beer', icon: 'coffee'}),
     Ember.Object.create({when: 1, foo: 'Ate Breakfast', bar: 'start of every good morning', icon: 'cutlery'})
   ],
-  emberItems: [
-    {foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'cutlery', badge: 6},
-    {foo: 'Hospital', bar: 'visit sick uncle Joe', icon: 'ambulance', badge: 1},
-    {foo: 'Pub', bar: 'it\'s time for some suds', icon: 'beer'},
-    {foo: 'Took Cab', bar: 'took a cab, drinking not driving', icon: 'cab'},
-    {foo: 'Had Coffee', bar: 'need to chill out after that beer', icon: 'coffee'}
-  ],
   map: {
     title: 'foo',
     subHeading: 'bar'
@@ -29,21 +24,15 @@ export default Ember.Controller.extend({
     let moodiness = badge && badge > 5 ? 'error' : 'warning';
     return badge ? moodiness : null;
   },
-  sortOrders: [
-    {name: 'Natural', id: null},
-    {name: 'When', id: 'when'},
-    {name: 'Badges', id: 'badge'},
-    {name: 'Title', id: 'title'}
-  ],
-  sortAscending: true,
-  moodStrategy: 'static',
-  enableStaticChooser: on('init',computed('moodStrategy', function() {
-    return this.get('moodStrategy') === 'static';
-  })),
+
   listFilter: computed('isFiltered', function() {
     const FilterFunc = item => { return item.badge > 0; };
     return this.get('isFiltered') ? FilterFunc : null;
   }),
+  moodStrategy: 'static',
+  enableStaticChooser: on('init',computed('moodStrategy', function() {
+    return this.get('moodStrategy') === 'static';
+  })),
 
 
   toggledBadge: on('init',computed('showBadge', function() {
@@ -58,23 +47,19 @@ export default Ember.Controller.extend({
   toggledSubHeading: on('init',computed('showSubHeading', function() {
     return this.get('showSubHeading') ? 'ran 12mi in London' : null;
   })),
-  mood: 'default',
-  style: 'default',
+  skin: 'default',
   size: 'default',
   compressed: false,
   defaultIcon: 'envelope',
+  itemsNew: null,
 
-  // loadEmberData: on('init', function() {
-  //   let items = new A(this.get('items'));
-  //   items.forEach( (item,index) => {
-  //     let pojo = JSON.parse(JSON.stringify(item));
-  //     pojo.id = index;
-  //     this.store.push('activity', pojo);
-  //   });
-  // }),
   actions: {
-    sortChanged: function() {
-      console.log('Sort order changed');
+    update(action, info) {
+      const flashMessages = Ember.get(this, 'flashMessages');
+      const titles = new A(info.new).mapBy('foo').join(', ');
+      flashMessages.success(`onChange Event: ${action}; element dragged was "${info.dragged.foo}". Order now: ${titles}`);
+
+      this.set('items', info.new);
     }
   }
 
