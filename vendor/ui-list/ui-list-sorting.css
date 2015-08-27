@@ -1,15 +1,25 @@
-.ui-aspect-handle {
+.ui-aspect-handle:hover {
   cursor: grab;
 }
+
 .sortable-item {
+  padding: 4px;
   transition: all .125s;
+}
+.sortable-item .ui-aspect-handle {
+  /*TODO: look at sortable demo*/
 }
 .sortable-item.is-dragging {
   transition-duration: 0s;
   background: red;
   z-index: 10;
+  cursor: grabbing;
+}
+.sortable-item.is-dragging .ui-aspect-handle {
+  cursor: grabbing;
 }
 .sortable-item.is-dropping {
   background: #f66;
   z-index: 10;
+  cursor: grab;
 }
