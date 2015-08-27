@@ -1,19 +1,27 @@
 import Ember from 'ember';
 const {keys} = Object;
+const dasherize = thingy => {
+  return thingy ? Ember.String.dasherize(thingy) : thingy;
+};
 const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, get, merge } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 
 let SharedItem = Ember.Mixin.create({
+  /**
+   * Provides a mechanism for items to call methods on the containing list,
+   * as a fallback if there is no group a message will be sent out on the
+   * "onMessage" action channel.
+   * @param  {string}    action   the name of the list's method to call
+   * @param  {mixed}     args     any parameters needed
+   * @return {mixed}
+   */
   _tellList: function (action,...args) {
     const list = this.get('list');
     if(get(list,'_itemListener')) {
-      list._itemListener(action, ...args); // tell group listener
+      list[action](...args);
     } else {
-      this.sendAction(action, this, ...args); // broadcast to container
+      this.sendAction('onMessage', dasherize(action), this, ...args);
     }
-  },
-  _actionEffects: function(action,options) { // jshint ignore: line
-    // default handler does nothing, up to specific type to add functionality
   },
 
   // COMPUTED PROPERTIES
