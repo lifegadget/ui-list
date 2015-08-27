@@ -26,7 +26,7 @@ var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,{
   },
   titleExists: computed.notEmpty('title'),
   subHeadingExists: computed.notEmpty('subHeading'),
-  twoLinedMessage: computed.and('titleExists','subHeadingExists'),
+  hasSubHeading: computed.and('titleExists','subHeadingExists'),
 
   // actions
   actions: {
