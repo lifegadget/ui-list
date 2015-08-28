@@ -251,6 +251,7 @@ export default Mixin.create({
     @private
   */
   _startDrag(event) {
+    $('body').addClass('no-select');
     if (this.get('isBusy')) { return; }
 
     let drag = this._makeDragHandler(event);
@@ -365,6 +366,7 @@ export default Mixin.create({
     @private
   */
   _drop() {
+    $('body').removeClass('no-select');
     if (!this.element) { return; }
 
     this._preventClick(this.element);

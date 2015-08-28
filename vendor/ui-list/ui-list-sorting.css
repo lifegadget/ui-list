@@ -17,16 +17,19 @@
 }
 .sortable-item.is-dragging {
   transition-duration: 0s;
-  background: red;
-  z-index: 10;
+  background: #E3E8E8;
   cursor: grabbing;
+  border-style: dashed;
+  border-width: 2px;
+  margin:12px 3px 12px 3px;
+  z-index: 100;
 }
 .sortable-item.is-dragging .ui-aspect-handle {
   background: inherit;
   cursor: grabbing;
 }
 .sortable-item.is-dropping {
-  background: #f66;
+  background: #F1F4F4;
   z-index: 10;
   cursor: grab;
 }

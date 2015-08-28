@@ -4,7 +4,7 @@
 <h4>Overview</h4>
 <div class="row">
     <desc>
-        A sortable list derives from <code>ui-list</code> but adds the ability to manually sort items via a drag and drop interface. It should be noted that this functionality -- in particular the two mixins that this component uses -- are heavily leaning on the the great work from Jamie White and his <a href="https://github.com/jgwhite/ember-cli-sortable">ember-cli-sortable</a> addon.
+        A sortable list derives from <prop>ui-list</prop> but adds the ability to manually sort items via a drag and drop interface. It should be noted that this functionality -- in particular the two mixins that this component uses -- are heavily leaning on the the great work from Jamie White and his <a href="https://github.com/jgwhite/ember-sortable">ember-cli-sortable</a> addon.
     </desc>
 </div>
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
@@ -41,7 +41,14 @@
     }}
   </code>
   <description>
-
+    <h5>CSS Properties</h5>
+    <p>
+      All of the CSS properties which are involved in sortable lists can be found in the source file:<br/>
+    </p>
+    <prop class='center'>vendor/ui-list/ui-list-sorting.css</prop><br/>
+    <p>
+      For instance, a popular selector to override is <css>.sortable-item.is-dragging</css> which sets the background color amoungst other things.
+    </p>
   </description>
 </row>
 

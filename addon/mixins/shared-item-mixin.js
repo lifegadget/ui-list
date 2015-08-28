@@ -17,7 +17,7 @@ let SharedItem = Ember.Mixin.create({
    */
   _tellList: function (action,...args) {
     const list = this.get('list');
-    if(get(list,'_itemListener')) {
+    if(get(list,action)) {
       list[action](...args);
     } else {
       this.sendAction('onMessage', dasherize(action), this, ...args);
