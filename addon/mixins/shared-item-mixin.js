@@ -158,7 +158,7 @@ let SharedItem = Ember.Mixin.create({
   /**
    * Registers the item with a parent list (if one exists)
    */
-  _register: on('didInitAttrs', function() {
+  _register: on('init', function() {
     const list = this.get('list');
     if(this.get('list.register')) {
       list.register(this);

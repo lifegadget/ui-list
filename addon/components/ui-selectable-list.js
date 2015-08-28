@@ -7,6 +7,10 @@ const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, se
 export default UiList.extend({
   layout: layout,
   _selected: [],
+  // TODO: look into why we need to reset this at INIT! it was maintaining values when re-routing to the page which contained the component
+  _selectedInitiator: on('init', function() {
+    this._selected = [];
+  }),
   min: 0,
   max: 1,
   /**
@@ -34,7 +38,7 @@ export default UiList.extend({
       if(max === 1) {
         const oldSelected = selected.length > 0 ? this.findRegisteredItem(selected[0]) : null;
         if(oldSelected) {
-          this.deselectItem(oldSelected[0]);
+          this.deselectItem(oldSelected);
         }
         this.selectItem(item);
       }

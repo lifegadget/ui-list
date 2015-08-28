@@ -21,7 +21,7 @@
   cursor: grabbing;
   border-style: dashed;
   border-width: 2px;
-  margin:12px 3px 12px 3px;
+  margin:10px 3px 11px 3px;
   z-index: 100;
 }
 .sortable-item.is-dragging .ui-aspect-handle {

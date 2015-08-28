@@ -13,10 +13,10 @@ export default UiList.extend(SortableItem,{
   classNames: ['no-select'],
   actions: {
     mouseDown: function(event) {
-      this._startDrag(event);
+      this._primeDrag(event);
     },
     touchStart: function(event) {
-      this._startDrag(event);
+      this._primeDrag(event);
     }
   }
 });
