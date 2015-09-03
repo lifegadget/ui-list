@@ -167,7 +167,6 @@ var UiList = Ember.Component.extend(ListMessaging,{
    * @return {Boolean}
    */
   paneClick(item, options) {
-    console.log('recieved paneClick: %o, %o', item, options);
     this.sendAction('onClick', item, options );
   },
 
