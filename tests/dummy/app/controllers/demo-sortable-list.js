@@ -54,12 +54,16 @@ export default Ember.Controller.extend({
   itemsNew: null,
 
   actions: {
-    update(action, info) {
+    onUpdate(action, info) {
       const flashMessages = Ember.get(this, 'flashMessages');
       const titles = new A(info.new).mapBy('foo').join(', ');
       flashMessages.success(`onChange Event: ${action}; element dragged was "${info.dragged.foo}". Order now: ${titles}`);
 
       this.set('items', info.new);
+    },
+    onClick(item, options) {
+      const flashMessages = Ember.get(this, 'flashMessages');
+      flashMessages.success(`onClick Event. Pane was ${options.pane}; item originating was ${item.elementId} ... "${item.get('title')}"`);
     }
   }
 

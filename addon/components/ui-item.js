@@ -31,6 +31,7 @@ var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,{
   // actions
   actions: {
     paneClick: function(pane) {
+      console.log('%s pane was clicked.', pane);
       this._tellList('paneClick', this, {pane: pane});
     }
   }

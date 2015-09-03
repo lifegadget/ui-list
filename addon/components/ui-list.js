@@ -158,6 +158,19 @@ var UiList = Ember.Component.extend(ListMessaging,{
 
     return filteredContent;
   }),
+
+  /**
+   * Receives messages from register items
+   * @param  {string} action  the action the item is communicating
+   * @param  {object} item    reference to the item communicating
+   * @param  {Object} options hash of various variables
+   * @return {Boolean}
+   */
+  paneClick(item, options) {
+    console.log('recieved paneClick: %o, %o', item, options);
+    this.sendAction('onClick', item, options );
+  },
+
   /**
    * Keeps track of what properties are set across items so that items components can be more
    * conservative on their observer usage

@@ -36,10 +36,11 @@
   flex-direction: column;
   flex: 1 1;
   justify-content: flex-start;
+  text-align: left;
   margin-top: 2px;
 }
 .ui-list.item .aspect {
-  flex: item;
+
 }
 .ui-list.item .left-pane .aspect {
   margin-right: 5px;

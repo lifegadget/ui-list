@@ -62,6 +62,12 @@ export default Ember.Controller.extend({
   style: 'default',
   size: 'default',
   compressed: false,
-  defaultIcon: 'envelope'
+  defaultIcon: 'envelope',
+  actions: {
+    onClick(item, options) {
+      const flashMessages = Ember.get(this, 'flashMessages');
+      flashMessages.success(`onClick Event. Pane was ${options.pane}; item originating was ${item.elementId} ... "${item.get('title')}"`);
+    }
+  }
 
 });

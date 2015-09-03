@@ -26,6 +26,7 @@
         squeezed=squeezed
         sort=sortBy
         sortAscending=sortAscending
+        onClick='onClick'
       }}
     {{else}}
       {{ui-list
@@ -40,6 +41,7 @@
         squeezed=squeezed
         sort=sortBy
         sortAscending=sortAscending
+        onClick='onClick'
       }}
     {{/if}}
   </widget>
@@ -58,6 +60,7 @@
         squeezed=squeezed
         sort=sortBy
         sortAscending=sortAscending
+        onClick='onClick'
       }}
     {{else}}
       {{display-component componentName='ui-list'
@@ -72,6 +75,7 @@
         squeezed=squeezed
         sort=sortBy
         sortAscending=sortAscending
+        onClick='onClick'
       }}
     {{/if}}
   </code>
@@ -146,6 +150,7 @@ sillyLogic(item) {
         squeezed=squeezed
         sort=sortBy
         sortAscending=sortAscending
+        onClick='onClick'
         as |list|
       }}
         {{#each items as |item|}}
@@ -162,6 +167,7 @@ sillyLogic(item) {
         squeezed=squeezed
         sort=sortBy
         sortAscending=sortAscending
+        onClick='onClick'
         as |list|
       }}
     {{#each items as |item|}}
@@ -182,6 +188,7 @@ sillyLogic(item) {
       squeezed=squeezed
       sort=sortBy
       sortAscending=sortAscending
+      onClick='onClick'
     }}
     {{#display-component componentName='each' _target='items' as='item' _indent=1}}
         {{display-component componentName='ui-item' _indent=2 title=':item.foo' subHeading=':item.bar' icon=':item.icon' badge=':item.badge' list=':list'}}
