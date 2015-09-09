@@ -123,7 +123,6 @@ let SharedItem = Ember.Mixin.create({
       const relevantAspects = aspects.map(aspect=>{ return aspect + capitalize(pane); });
       const cp = computed.or(...relevantAspects);
       defineProperty(this,property,cp);
-      this.notifyPropertyChange(property);
     });
   },
 
