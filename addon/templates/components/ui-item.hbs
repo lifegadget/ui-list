@@ -1,17 +1,17 @@
-{{#if hasLeftPane}}
-<div class="pane left-pane {{if hasSubHeading 'has-sub-heading'}}" {{action 'paneClick' 'left'}}>
-  {{! LEFT PANE }}
-  {{#if iconLeft}}<div class="aspect icon">{{ui-icon icon=iconLeft }}</div>{{/if}}
-  {{#if imageLeft}}<div class="aspect image">{{ui-image src=imageLeft borderMask='circle'}}</div>{{/if}}
-  {{#if titleLeft}}<div class="aspect handle">
-    <span class="title">{{{titleLeft}}}</span>
-  </div>{{/if}}
-</div>
-{{/if}}
-<div class="pane center-pane {{if hasSubHeading 'has-sub-heading'}}" {{action 'paneClick' 'center'}}>
-  {{#if hasBlock}}
-    {{yield this}}
-  {{else}}
+{{#if hasBlock}}
+  {{yield this}}
+{{else}}
+  {{#if hasLeftPane}}
+  <div class="pane left-pane {{if hasSubHeading 'has-sub-heading'}}" {{action 'paneClick' 'left'}}>
+    {{! LEFT PANE }}
+    {{#if iconLeft}}<div class="aspect icon">{{ui-icon icon=iconLeft }}</div>{{/if}}
+    {{#if imageLeft}}<div class="aspect image">{{ui-image src=imageLeft borderMask='circle'}}</div>{{/if}}
+    {{#if titleLeft}}<div class="aspect handle">
+      <span class="title">{{{titleLeft}}}</span>
+    </div>{{/if}}
+  </div>
+  {{/if}}
+  <div class="pane center-pane {{if hasSubHeading 'has-sub-heading'}}" {{action 'paneClick' 'center'}}>
     {{! CENTER PANE }}
     {{#if title}}
     <span class='aspect title'>
@@ -23,16 +23,16 @@
       {{{subHeading}}}
     </span>
     {{/if}}
+  </div>
+  {{#if hasRightPane}}
+  <div class="pane right-pane {{if hasSubHeading 'has-sub-heading'}}" {{action 'paneClick' 'right'}}>
+    {{! RIGHT PANE }}
+    {{#if badgeRight}}<span class="aspect badge">{{badgeRight}}</span>{{/if}}
+    {{#if titleRight}}<span class='aspect title'>{{title}}</span>{{/if}}
+    {{#if titleRight}}<span class="divider"> | </span>{{/if}}
+    {{#if subHeadingRight}}<span class='aspect sub-heading'>{{subHeadingRight}}</span>{{/if}}
+    {{#if iconRight}}<div class="aspect icon">{{ui-icon class="icon-right" icon=iconRight fw=false}}</div>{{/if}}
+    {{#if handleRight}}<div class="aspect handle">{{ui-aspect-handle value=handleRight onMouseDown="mouseDown" onTouchStart="touchStart"}}</div>{{/if}}
+  </div>
   {{/if}}
-</div>
-{{#if hasRightPane}}
-<div class="pane right-pane {{if hasSubHeading 'has-sub-heading'}}" {{action 'paneClick' 'right'}}>
-  {{! RIGHT PANE }}
-  {{#if badgeRight}}<span class="aspect badge">{{badgeRight}}</span>{{/if}}
-  {{#if titleRight}}<span class='aspect title'>{{title}}</span>{{/if}}
-  {{#if titleRight}}<span class="divider"> | </span>{{/if}}
-  {{#if subHeadingRight}}<span class='aspect sub-heading'>{{subHeadingRight}}</span>{{/if}}
-  {{#if iconRight}}<div class="aspect icon">{{ui-icon class="icon-right" icon=iconRight fw=false}}</div>{{/if}}
-  {{#if handleRight}}<div class="aspect handle">{{ui-aspect-handle value=handleRight onMouseDown="mouseDown" onTouchStart="touchStart"}}</div>{{/if}}
-</div>
 {{/if}}

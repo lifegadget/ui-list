@@ -17,6 +17,7 @@ module.exports = {
     app.import('vendor/ui-list/ui-list-plus.css');
     app.import('vendor/ui-list/ui-list-flat.css');
     app.import('vendor/ui-list/ui-list-simple.css');
+    app.import('vendor/ui-list/ui-list-nav.css');
 
     // animations
     var defaultAnimations = [

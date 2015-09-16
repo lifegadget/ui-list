@@ -7,6 +7,14 @@
   user-select: none;
 }
 
+.ui-list.list-container {
+  display: flex;
+  flex-direction: column;
+}
+.ui-list.list-container.horizontal {
+  flex-direction: row;
+}
+
 .ui-list.item {
     flex:item;
     display: flex;

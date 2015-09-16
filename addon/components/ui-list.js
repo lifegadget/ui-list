@@ -32,7 +32,7 @@ var UiList = Ember.Component.extend(ListMessaging,{
   tagName: 'div',
   type: 'ui-item', // the type of Item contained by this list
   classNames: ['ui-list','list-container'],
-  classNameBindings: ['compressed'],
+  classNameBindings: ['compressed','horizontal:horizontal:vertical'],
   compressed: false, // horizontal space compression between items (provided via CSS),
   _watcher: Ember.Object.extend(ObserveAll).create(),
   /**

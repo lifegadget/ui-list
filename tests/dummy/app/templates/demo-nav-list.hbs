@@ -1,0 +1,86 @@
+{{#demo-css}}
+<h3>Component::<code>ui-nav-list</code></h3>
+
+<h4>Overview</h4>
+<div class="row">
+    <desc>
+        A <prop>nav list</prop> is a <prop>ui-selectable-list</prop> with cardinality defaulted to "1:1" and the skin set to "nav".
+    </desc>
+</div>
+{{! ------------------------------------------------------------------------------------------------------------------------- }}
+
+<h4>Interactive Demo</h4>
+<row>
+  <widget class="{{widgetWidth}}">
+      {{ui-nav-list
+        items=items
+        position=position
+        map=map
+        size=size
+        mood=mood
+        onSelect='onSelect'
+        onError='onError'
+      }}
+  </widget>
+  <code>
+  &nbsp;<br/>
+    {{display-component componentName='ui-nav-list'
+      items=':items'
+      position=position
+      map=':map'
+      size=size
+      mood=mood
+      onSelect='onSelect'
+      onError='onError'
+    }}
+  </code>
+  <description>
+    As stated in the overview, this component's behaviours are <i>largely</i> taken from the "selectable" list but with a navigation mention the cardinatlity, the min/max settings are preset as they typically would not need to be changed (you can override if you need to). Instead the main variables are:
+    <h4>Positioning</h4>
+    <controls>
+      <control>
+        <span class='title'>position</span>
+        <span>{{radio-buttons buttons='left,right,top,bottom' defaultValue=0 value=position}}</span>
+      </control>
+    </controls>
+    <p>
+      If you have an item selected you'll see that all it's really doing is setting a <b>css</b> property which in turn puts the border highlighting to the appropriate side of the item.
+    </p>
+  </description>
+</row>
+<row>
+  <description>
+    <p>
+      In the cases of switching to <i>top</i> or <i>bottom</i> you also get the flexbox switching direction and making the navigation horizontal.
+    </p>
+    <note>
+      <b>Note:</b> contextually the <prop>position</prop> property is meant to signify where on the containers page this menu would be located <i>not</i> the location of the selected border.
+    </note>
+
+    <h4>Actions Up</h4>
+    <p>
+      Refer to the documentation for <a {{link-to 'demo-selectable-list'}}><prop>ui-selectable-list</prop></a>.
+    </p>
+
+  </description>
+</row>
+
+{{! ------------------------------------------------------------------------------------------------------------------------- }}
+<p class="downer">&nbsp;</p>
+
+<configuration class="downer">
+    <icon>{{icon-cog size="2x"}}</icon>
+    <config>
+        <columns>
+            <column>
+                List Size: <br/>
+                {{ui-buttons cardinality='1:1' buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}<br/>
+            </column>
+            <column>
+                Mood:<br/>
+                  {{ui-buttons cardinality='1:1' buttons='default,success,info,warning,error' value=mood disable=disableStaticChooser size='small' defaultValue='default'}}
+             </column>
+        </columns>
+    </config>
+</configuration>
+{{/demo-css}}
