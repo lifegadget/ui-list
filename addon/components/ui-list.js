@@ -39,7 +39,7 @@ var UiList = Ember.Component.extend(ListMessaging,{
    * adds or remove observation points for the individual properties
    * of a given an array element (aka, an item)
    */
-  items: on('init', computed( {
+  _items: computed( 'items', {
     set: function(key, value) {
       const watcher = this.get('_watcher');
       // release all old observations
@@ -63,7 +63,32 @@ var UiList = Ember.Component.extend(ListMessaging,{
       // initial state / getter
       return new A([]);
     }
-  })),
+  }),
+  /**
+   * Content is immutable copy of _items with the ability to be filtered
+   */
+  content: computed('items.[]','filter','items.@each._propertyChanged', function() {
+    const content = new A(this.get('_items'));
+    const filter = this.get('filter');
+    // FILTER
+    // -------------------------------
+    let filteredContent = null;
+    switch(typeOf(filter)) {
+    case 'function':
+      filteredContent = content.filter(filter, this);
+      break;
+    case 'object':
+      filteredContent = content.filterBy(filter.key,filter.value);
+      break;
+    case 'array':
+      filteredContent = content.filterBy(filter[0],filter[1]);
+      break;
+    default:
+      filteredContent = content;
+    }
+
+    return filteredContent;
+  }),
   // FILTER SETTING
   // ------------------
   filter: null,
@@ -133,34 +158,10 @@ var UiList = Ember.Component.extend(ListMessaging,{
     }));
   }),
 
-  /**
-   * Content is immutable copy of items with the ability to be filtered
-   */
-  content: computed('items.[]','filter','items.@each._propertyChanged', function() {
-    const content = new A(this.get('items'));
-    const filter = this.get('filter');
-    // FILTER
-    // -------------------------------
-    let filteredContent = null;
-    switch(typeOf(filter)) {
-    case 'function':
-      filteredContent = content.filter(filter, this);
-      break;
-    case 'object':
-      filteredContent = content.filterBy(filter.key,filter.value);
-      break;
-    case 'array':
-      filteredContent = content.filterBy(filter[0],filter[1]);
-      break;
-    default:
-      filteredContent = content;
-    }
 
-    return filteredContent;
-  }),
 
   /**
-   * Receives messages from register items
+   * Receives messages from register _items
    * @param  {string} action  the action the item is communicating
    * @param  {object} item    reference to the item communicating
    * @param  {Object} options hash of various variables
@@ -171,10 +172,10 @@ var UiList = Ember.Component.extend(ListMessaging,{
   },
 
   /**
-   * Keeps track of what properties are set across items so that items components can be more
+   * Keeps track of what properties are set across _items so that _items components can be more
    * conservative on their observer usage
    */
-  _itemSetProperties: on('beforeRender',computed('items', function() {
+  _itemSetProperties: on('beforeRender',computed('_items', function() {
     const possibleAspectPanes = this.get('availableAspectPanes');
     const mappedFrom = this.get('_mappedFrom');
     let aspectPanes = keys(this.get('mappedProperties'));

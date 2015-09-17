@@ -13,7 +13,6 @@ var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,{
   tagName: 'div',
   disabled: false,
   selected: false,
-  iconRight: 'chevron-right',
   _aspects: ['title','subHeading','icon','image','badge'],
   _panes: ['left','center', 'right'],
   // Defaulting panes for various Aspects

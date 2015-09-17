@@ -128,8 +128,9 @@ let SharedItem = Ember.Mixin.create({
 
   // Initialize "Dereferenced Computed Properties"
 	// ---------------------------------------------
-	// NOTE: 'map' is a dereferenced hash of mappings; an item can use either a map or individual property assignments
-	// of the variety item.fooMap = 'mappedTo';
+	// NOTE: 'map' is a dereferenced hash of mappings;
+  // an item can use either a map or individual property assignments
+	// of the variety item.fooMap = 'mappedTo'
   _defineAspectMappings: function() {
     const aspectPanes = new A(this.get('_aspectPanes'));
     aspectPanes.forEach( aspectPane => {
