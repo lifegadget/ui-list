@@ -1,38 +1,49 @@
 /* NAV STYLING OVERLAY */
-.ui-list.list-container.skin-nav.left {
-  border-right: 3px solid #EEEEEE;
-}
-
-.ui-list.list-container .item.skin-nav {
-  margin: 2px 5px 2px 5px;
-}
-
 .ui-list.item.skin-nav {
     border-radius: 0px;
     border: none;
+    margin: 0px 0px 0px 0px;
 }
 
 .ui-list.item.skin-nav.selected {
   background-color: #F3F3F3;
 }
-/* Intentionally making hover lower specificity than selected */
-.skin-nav:hover {
-  background-color: #F9F9F9;
+.ui-list.list-container.right.skin-nav {
+  border-left: 3px solid #3F3F3F;
+  margin: 2px 5px 0px 15px;
 }
-
 .ui-list.list-container.right .ui-list.item.skin-nav.selected {
-  border-left: 5px solid green;
-  margin-left: 0px;
+  border-right: 5px solid green;
+  margin-right: -5px;
+}
+.ui-list.list-container.left.skin-nav {
+  border-right: 3px solid #3F3F3F;
+  margin: 0px 15px 2px 5px;
 }
 .ui-list.list-container.left .ui-list.item.skin-nav.selected {
-  border-right: 5px solid green;
-  margin-right: 0px;
+  border-left: 5px solid green;
+  margin-left: -5px;
+}
+.ui-list.list-container.top .ui-list.item.skin-nav {
+  padding-bottom: 5px;
+}
+.ui-list.list-container.top.skin-nav {
+  border-bottom: 5px solid rgba(234, 234, 234, 0.78);
+  justify-content: space-around;
 }
 .ui-list.list-container.top .ui-list.item.skin-nav.selected {
   border-bottom: 5px solid green;
-  margin-bottom: -2px;
+  margin-bottom: -5px;
+}
+.ui-list.list-container.bottom.skin-nav {
+  border-top: 5px solid rgba(234, 234, 234, 0.78);
+  justify-content: space-around;
+}
+.ui-list.list-container.bottom .ui-list.item.skin-nav {
+  padding-top: 5px;
 }
 .ui-list.list-container.bottom .ui-list.item.skin-nav.selected {
   border-top: 5px solid green;
-  margin-top: -2px;
+  margin-top: -5px;
 }
+

@@ -13,6 +13,7 @@ module.exports = {
     );
     // component CSS
     app.import('vendor/ui-list/ui-list.css');
+    app.import('vendor/ui-list/ui-item.css');
     app.import('vendor/ui-list/ui-list-sorting.css');
     app.import('vendor/ui-list/ui-list-layout.css');
     app.import('vendor/ui-list/ui-list-plus.css');

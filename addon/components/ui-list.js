@@ -9,7 +9,7 @@ import ListMessaging from '../mixins/list-messaging';
 
 var UiList = Ember.Component.extend(ListMessaging,{
   classNames: ['ui-list','list-container'],
-  classNameBindings: ['compressed','horizontal:horizontal:vertical'],
+  classNameBindings: ['compressed','horizontal:horizontal:vertical', '_skin'],
   sortAscending: true,
   layout: layout,
   tagName: 'div',
@@ -32,6 +32,10 @@ var UiList = Ember.Component.extend(ListMessaging,{
     const type = this.get('type');
 
     return type ? type : 'UiItem';
+  }),
+  _skin: computed('skin', function() {
+    const {skin} = this.getProperties('skin');
+    return skin ? `skin-${skin}` : false;
   }),
   mouseEnter(e) {
     this.sendAction('onHover', this, {
