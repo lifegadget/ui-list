@@ -67,6 +67,16 @@ export default Ember.Controller.extend({
     onClick(item, options) {
       const flashMessages = Ember.get(this, 'flashMessages');
       flashMessages.success(`onClick Event. Pane was ${options.pane}; item originating was ${item.elementId} ... "${item.get('title')}"`);
+    },
+    onHover(item, o) {
+      const flashMessages = Ember.get(this, 'flashMessages');
+      let title = get(item,'title') || get(item, 'elementId');
+      if(o.state) {
+        flashMessages.info(`onHover Event. Mouse ENTERED ${o.granularity} component "${title}".`);
+      } else {
+        flashMessages.warning(`onHover Event. Mouse LEFT ${o.granularity} component "${title}".`);
+      }
+
     }
   }
 

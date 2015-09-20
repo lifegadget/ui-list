@@ -5,8 +5,9 @@ const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, se
 import layout from '../templates/components/ui-item';
 import SharedItem from 'ui-list/mixins/shared-item-mixin';
 import HeritableProperties from 'ui-list/mixins/heritable-properties'; // props which list can override
+import Stylist from 'ember-cli-stylist/mixins/shared-stylist';
 
-var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,{
+var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,Stylist,{
   // Item Meta
   layout: layout,
   type: 'ui-item',
@@ -26,6 +27,24 @@ var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,{
   titleExists: computed.notEmpty('title'),
   subHeadingExists: computed.notEmpty('subHeading'),
   hasSubHeading: computed.and('titleExists','subHeadingExists'),
+
+  mouseEnter(e) {
+    this._tellList('onHover', this, {
+      granularity: 'item',
+      state: true,
+      eventTrigger: 'mouse-enter',
+      event: e
+    });
+  },
+  mouseLeave(e) {
+    this._tellList('onHover', this, {
+      granularity: 'item',
+      state: false,
+      eventTrigger: 'mouse-leave',
+      event: e
+    });
+  },
+
 
   // actions
   actions: {

@@ -58,7 +58,7 @@ export default UiList.extend({
     const id = get(item,'elementId');
     set(item,'selected', true);
     this._selected.push(id);
-    this.sendAction('onSelect', 'selected', item, {
+    this.sendAction('onChange', 'selected', item, {
       selected: this._selected
     });
   },
@@ -68,7 +68,7 @@ export default UiList.extend({
     this._selected = this._selected.filter(i => {
       return i !== id;
     });
-    this.sendAction('onSelect', 'deselected', item, {
+    this.sendAction('onChange', 'deselected', item, {
       selected: this._selected
     });
   }

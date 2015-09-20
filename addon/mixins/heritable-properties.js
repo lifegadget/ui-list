@@ -100,5 +100,5 @@ const HeritableProperties = Ember.Mixin.create({
 
 });
 
-HeritableProperties[Ember.NAME_KEY] = 'Item Props with List Overides';
+HeritableProperties[Ember.NAME_KEY] = 'Heritable Properties';
 export default HeritableProperties;

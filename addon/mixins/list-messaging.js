@@ -37,6 +37,11 @@ const ListMessaging = Ember.Mixin.create({
       });
       return item ? item[0] : null;
     },
+
+    eventPropagation(event, item, ...args) {
+      console.log(`event ${event} was propagated.`);
+      this.sendAction(event, item, ...args);
+    }
 });
 
 ListMessaging[Ember.NAME_KEY] = 'List Messaging';

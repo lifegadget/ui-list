@@ -17,18 +17,42 @@ let SharedItem = Ember.Mixin.create({
    */
   _tellList: function (action,...args) {
     const list = this.get('list');
+    const isEvent = action.substr(0,2) === 'on';
     if(get(list,action)) {
-      list[action](...args);
+      if(isEvent) {
+        list.eventPropagation(action,...args);
+      } else {
+        list[action](...args);
+      }
     } else {
-      this.sendAction('onMessage', dasherize(action), this, ...args);
+      if(isEvent) {
+        this.sendAction(action, dasherize(action), this, ...args);
+      } else {
+        this.sendAction('action', dasherize(action), this, ...args);
+      }
     }
   },
 
-  // COMPUTED PROPERTIES
-  // -------------------------
-  // Classy stuff
   classNames: ['ui-list','item'],
   classNameBindings: ['selected'],
+  attributeBindings: ['tabindex'],
+
+  // DEFAULT CLICK BEHAVIOUR
+  mouseDown(event) {
+    console.log('mouse down: %o', event);
+    this.clicked(event,'mouse');
+  },
+  touchStart(event) {
+    this.clicked(event,'touch');
+  },
+  clicked(event,channel) {
+    event.stopPropagation();
+    event.preventDefault();
+    this._tellList('onClick', this, {
+      event: event,
+      channel: channel
+    });
+  },
 
   /**
    * The specific Item components should define which aspects and panes they support, this
@@ -111,6 +135,27 @@ let SharedItem = Ember.Mixin.create({
       }
     });
   },
+
+  // FILTER
+  // -------------------------------
+  filter: null,
+  _filter: observer('filter', function() {
+    let filteredContent = null;
+    switch(typeOf(filter)) {
+    case 'function':
+      filteredContent = content.filter(filter, this);
+      break;
+    case 'object':
+      filteredContent = content.filterBy(filter.key,filter.value);
+      break;
+    case 'array':
+      filteredContent = content.filterBy(filter[0],filter[1]);
+      break;
+    default:
+      filteredContent = content;
+    }
+  }),
+
 
   /**
    * setup up logical flags to indicate the existance of content on a per pane basis

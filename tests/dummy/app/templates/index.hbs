@@ -13,7 +13,13 @@
 <desc>
   <div class="row">
     <div class="">
-      <div class="col-xs-6 col-sm-4">
+      <div class="col-xs-6 col-sm-3">
+        <heading>MACRO</heading>
+        <ul class="components">
+          <li>nothing yet</li>
+        </ul>
+      </div>
+      <div class="col-xs-6 col-sm-3">
         <heading>LIST</heading>
         <ul class="components">
           <li>{{#link-to 'demo-list'}}<code>ui-list</code>{{/link-to}}</li>
@@ -22,7 +28,7 @@
           <li>{{#link-to 'demo-sortable-list'}}<code>ui-sortable-list</code>{{/link-to}}</li>
         </ul>
       </div>
-      <div class="col-xs-6 col-sm-4">
+      <div class="col-xs-6 col-sm-3">
         <heading>ITEM</heading>
         <ul class="components">
           <li>{{#link-to 'demo-item'}}<code>ui-item</code>{{/link-to}}</li>
@@ -31,30 +37,40 @@
           <li>{{#link-to 'demo-tabular-item'}}<code>ui-tabular-item</code>{{/link-to}}</li>
         </ul>
       </div>
-      <div class="col-xs-6 col-sm-4">
-        <heading>HELPER</heading>
+      <div class="col-xs-6 col-sm-3">
+        <heading>GRANULAR</heading>
         <ul class="components">
+          <li>
+            {{#link-to 'demo-item-pane'}}<code>ui-item-pane</code>{{/link-to}}
+          </li>
           <li>
             {{#link-to 'ui-aspect-action-bar'}}<code>ui-aspect-action-bar</code>{{/link-to}}
           </li>
           <li>{{#link-to 'ui-aspect-timer'}}<code>ui-aspect-timer</code>{{/link-to}}</li>
           <li>{{#link-to 'demo-aspect-handle'}}<code>ui-aspect-handle</code>{{/link-to}}</li>
         </ul>
-        <span style="border-bottom: 1pt dotted lightgrey; text-align:center; width:100%;display:block"></span>
-        <div class="text-center">External Helpers / Dependencies</div>
-        <ul class="components">
-          <li><a href="http://development.ui-icon.divshot.io/"><code>ui-icon</code></a></li>
-          <li><a href="http://development.ui-image.divshot.io/"><code>ui-image</code></a></li>
-        </ul>
       </div>
     </div>
   </div>
 </desc>
+<row>
+  <description>
+    <p>
+      <heading>External Dependencies</heading>
+      <ul class="components">
+        <li><a href="http://development.ui-icon.divshot.io/"><code>ui-icon</code></a></li>
+        <li><a href="http://development.ui-image.divshot.io/"><code>ui-image</code></a></li>
+      </ul>
+    </p>
+  </description>
+</row>
+
+
 <h3>Design Diagrams</h3>
 <desc>
   Here are some high level design diagrams which illustrate the thinking involved in these components:<br/>
   <centered>
-    {{radio-buttons buttons='HL Design::hl-design,Key Attributes::key-attributes' value=designImage}}
+    {{radio-buttons buttons='HL Design::hl-design,Responsibilities,Actions' value=designImage}}
   </centered>
   <indent>
     <a href="images/{{designImage}}.png" target="_new"><img src="images/{{designImage}}.png"></a>

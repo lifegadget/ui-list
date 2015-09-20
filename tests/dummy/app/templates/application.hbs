@@ -1,14 +1,6 @@
-<div class="container">
-    <h1 id="title"><a href="https://github.com/lifegadget/ui-list">ui-list</a></h1>
-    <h2>List controls for ambitious Ember applications</h2>
-        
-    {{outlet}}
-</div>
-
-{{#if notIndexPage}}
-    {{#link-to 'index'}}
-    <div class="back-navigation">
-        {{ui-icon icon='arrow-circle-left' size='5x' class='animated fadeIn'}}
-    </div>
-    {{/link-to}}
-{{/if}}
+{{app-page
+  repo='ui-list'
+  repoOwner='lifegadget'
+  subHeading='List controls for ambitious Ember applications'
+  currentPath=currentPath
+}}

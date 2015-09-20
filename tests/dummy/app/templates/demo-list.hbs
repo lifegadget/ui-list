@@ -27,6 +27,7 @@
         sort=sortBy
         sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
       }}
     {{else}}
       {{ui-list
@@ -42,6 +43,7 @@
         sort=sortBy
         sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
       }}
     {{/if}}
   </widget>
@@ -61,6 +63,7 @@
         sort=sortBy
         sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
       }}
     {{else}}
       {{display-component componentName='ui-list'
@@ -76,6 +79,7 @@
         sort=sortBy
         sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
       }}
     {{/if}}
   </code>
@@ -168,6 +172,7 @@ sillyLogic(item) {
         sort=sortBy
         sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
         as |list|
       }}
     {{#each items as |item|}}
@@ -189,6 +194,7 @@ sillyLogic(item) {
       sort=sortBy
       sortAscending=sortAscending
       onClick='onClick'
+      onHover='onHover'
     }}
     {{#display-component componentName='each' _target='items' as='item' _indent=1}}
         {{display-component componentName='ui-item' _indent=2 title=':item.foo' subHeading=':item.bar' icon=':item.icon' badge=':item.badge' list=':list'}}

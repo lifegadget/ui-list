@@ -18,10 +18,11 @@ export default Router.map(function() {
   this.route('demo-tabular-item');
   this.route('demo-sortable-item');
 
-  // HELPER
+  // GRANULAR
+  this.route('demo-item-pane');
   this.route('ui-aspect-action-bar');
   this.route('ui-aspect-timer');
   this.route('demo-aspect-handle');
 
-  this.resource('not-implemented', {path: '/*badurl'});
+  this.route('not-implemented', {path: '/*badurl'});
 });

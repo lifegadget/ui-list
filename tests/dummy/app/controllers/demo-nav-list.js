@@ -66,11 +66,11 @@ export default Ember.Controller.extend({
   compressed: false,
   defaultIcon: 'envelope',
   actions: {
-    onSelect: function(action, item) {
+    onChange(action, item) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      flashMessages.success(`onSelect Event: ${action} on ${item.elementId}`);
+      flashMessages.success(`onChange Event: ${action} on ${item.elementId}`);
     },
-    onError: function(code, item) {
+    onError(code, item) {
       const flashMessages = Ember.get(this, 'flashMessages');
       const title = Ember.get(item, 'title');
       flashMessages.warning(`onError event: ${code} when interacting with "${title}"`);

@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import ObserveAll from 'ember-cli-observe-all/mixins/observe-all';
 const { keys, create } = Object; // jshint ignore:line
 const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
 const capitalize = Ember.String.capitalize;
@@ -9,6 +8,13 @@ import layout from '../templates/components/ui-list';
 import ListMessaging from '../mixins/list-messaging';
 
 var UiList = Ember.Component.extend(ListMessaging,{
+  classNames: ['ui-list','list-container'],
+  classNameBindings: ['compressed','horizontal:horizontal:vertical'],
+  sortAscending: true,
+  layout: layout,
+  tagName: 'div',
+  tabindex: false,
+
   sort: null,
   sortProperties: on('init', computed('sort', function() {
     let sort = this.get('sort');
@@ -27,67 +33,56 @@ var UiList = Ember.Component.extend(ListMessaging,{
 
     return type ? type : 'UiItem';
   }),
-  sortAscending: true,
-  layout: layout,
-  tagName: 'div',
-  type: 'ui-item', // the type of Item contained by this list
-  classNames: ['ui-list','list-container'],
-  classNameBindings: ['compressed','horizontal:horizontal:vertical'],
-  compressed: false, // horizontal space compression between items (provided via CSS),
-  _watcher: Ember.Object.extend(ObserveAll).create(),
-  /**
-   * adds or remove observation points for the individual properties
-   * of a given an array element (aka, an item)
-   */
-  _items: computed( 'items', {
-    set: function(key, value) {
-      const watcher = this.get('_watcher');
-      // release all old observations
-      watcher.destroyObservers();
-      value = value ? new A(value) : new A([]);
-      return new A(value.map( item => {
-        // ensure we have an Ember object
-        item = item.set ? item : Ember.Object.create(item);
-        // add observers allowing for change detection of 'deep content' (aka, properties of array objects)
-        watcher.observeAll(item, (key) => {
-          const callback = this.get('_propertyChangedCallback');
-          if(callback && typeOf(callback) === 'function') {
-            callback(key);
-          }
-        });
+  mouseEnter(e) {
+    this.sendAction('onHover', this, {
+      granularity: 'list',
+      state: true,
+      eventTrigger: 'mouse-enter',
+      event: e
+    });
+    return true;
+  },
+  mouseLeave(e) {
+    this.sendAction('onHover', this, {
+      granularity: 'list',
+      state: false,
+      eventTrigger: 'mouse-leave',
+      event: e
+    });
+    return true;
+  },
 
-        return item;
-      }));
-    },
-    get: function() {
-      // initial state / getter
-      return new A([]);
-    }
-  }),
+  type: 'ui-item', // the type of Item contained by this list
+  compressed: false, // horizontal space compression between items (provided via CSS),
+  prepareItems() {
+    let result = new A();
+    let items = this.get('items');
+    items = typeOf(items) === 'array' ? items : items.split(',');
+    items.forEach(item => {
+      switch(typeOf(item)) {
+        case 'instance':
+          result.pushObject(item);
+          break;
+        case 'object':
+          result.pushObject(Ember.Object.create(item));
+          break;
+        case 'string':
+        case 'number':
+          result.pushObject(Ember.Object.create({title:item}));
+          break;
+        default:
+          debug('item of unknown type passed into items array');
+      }
+    });
+
+    return result;
+  },
   /**
    * Content is immutable copy of _items with the ability to be filtered
    */
-  content: computed('items.[]','filter','items.@each._propertyChanged', function() {
-    const content = new A(this.get('_items'));
-    const filter = this.get('filter');
-    // FILTER
-    // -------------------------------
-    let filteredContent = null;
-    switch(typeOf(filter)) {
-    case 'function':
-      filteredContent = content.filter(filter, this);
-      break;
-    case 'object':
-      filteredContent = content.filterBy(filter.key,filter.value);
-      break;
-    case 'array':
-      filteredContent = content.filterBy(filter[0],filter[1]);
-      break;
-    default:
-      filteredContent = content;
-    }
+  content: computed('items.[]','filter','tabindex', function() {
 
-    return filteredContent;
+    return this.prepareItems();
   }),
   // FILTER SETTING
   // ------------------
