@@ -138,23 +138,23 @@ let SharedItem = Ember.Mixin.create({
 
   // FILTER
   // -------------------------------
-  filter: null,
-  _filter: observer('filter', function() {
-    let filteredContent = null;
-    switch(typeOf(filter)) {
-    case 'function':
-      filteredContent = content.filter(filter, this);
-      break;
-    case 'object':
-      filteredContent = content.filterBy(filter.key,filter.value);
-      break;
-    case 'array':
-      filteredContent = content.filterBy(filter[0],filter[1]);
-      break;
-    default:
-      filteredContent = content;
-    }
-  }),
+  // filter: null,
+  // _filter: observer('filter', function() {
+  //   let filteredContent = null;
+  //   switch(typeOf(filter)) {
+  //   case 'function':
+  //     filteredContent = content.filter(filter, this);
+  //     break;
+  //   case 'object':
+  //     filteredContent = content.filterBy(filter.key,filter.value);
+  //     break;
+  //   case 'array':
+  //     filteredContent = content.filterBy(filter[0],filter[1]);
+  //     break;
+  //   default:
+  //     filteredContent = content;
+  //   }
+  // }),
 
 
   /**

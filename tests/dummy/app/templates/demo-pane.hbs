@@ -1,5 +1,5 @@
 {{#demo-css}}
-<h3>Component::<code>ui-item-pane</code></h3>
+<h3>Component::<code>ui-pane</code></h3>
 
 <h4>Overview</h4>
 <row>
@@ -12,33 +12,33 @@
 <row>
   <widget class='wide'>
     {{#ui-item height='300px' as |item|}}
-      {{#ui-item-pane orient=orient horizontal=horizontal vertical=vertical name=name}}
+      {{#ui-pane orient=orient horizontal=horizontal vertical=vertical name=name}}
         <span class="aspect">a1</span>
         <span class="aspect">a2</span>
-      {{/ui-item-pane}}
-      {{#ui-item-pane orient=orient horizontal=horizontal vertical=vertical}}
+      {{/ui-pane}}
+      {{#ui-pane orient=orient horizontal=horizontal vertical=vertical}}
         <span class="aspect">b1</span>
         <span class="aspect">b2</span>
         <span class="aspect">b3</span>
-      {{/ui-item-pane}}
-      {{#ui-item-pane orient=orient horizontal=horizontal vertical=vertical}}
+      {{/ui-pane}}
+      {{#ui-pane orient=orient horizontal=horizontal vertical=vertical}}
         <span class="aspect">c1</span>
         <span class="aspect">c2</span>
-      {{/ui-item-pane}}
+      {{/ui-pane}}
     {{/ui-item}}
   </widget>
   <code>
     {{#display-component componentName='ui-item' as='item'}}
-      {{#display-component _indent=1 componentName='ui-item-pane' item=':item' orient=orient horizontal=horizontal vertical=vertical name=name}}
+      {{#display-component _indent=1 componentName='ui-pane' item=':item' orient=orient horizontal=horizontal vertical=vertical name=name}}
         {{#html-tag tag='span' _indent=2}}a1{{/html-tag}}
         {{#html-tag tag='span' _indent=2}}a2{{/html-tag}}
       {{/display-component}}
-      {{#display-component _indent=1 componentName='ui-item-pane' item=':item' orient=orient horizontal=horizontal vertical=vertical}}
+      {{#display-component _indent=1 componentName='ui-pane' item=':item' orient=orient horizontal=horizontal vertical=vertical}}
        {{#html-tag tag='span' _indent=2}}b1{{/html-tag}}
        {{#html-tag tag='span' _indent=2}}b2{{/html-tag}}
        {{#html-tag tag='span' _indent=2}}b3{{/html-tag}}
      {{/display-component}}
-      {{#display-component _indent=1 componentName='ui-item-pane' item=':item' orient=orient horizontal=horizontal vertical=vertical}}
+      {{#display-component _indent=1 componentName='ui-pane' item=':item' orient=orient horizontal=horizontal vertical=vertical}}
         {{#html-tag tag='span' _indent=2}}c1{{/html-tag}}
         {{#html-tag tag='span' _indent=2}}c2{{/html-tag}}
       {{/display-component}}
@@ -47,7 +47,7 @@
   <description>
     <h4>Naming</h4>
       <p>
-        Panes should be named as that will allow containers to refer to the pane by name. Naming it will also give it a unique css class that can be used for more detailed styling. The css name will be <css>\{{name}}-pane</css>.
+        Panes should be named as that will allow containers to refer to the pane by name. Naming it will give it a unique css class that can be used for more detailed styling. The css name will be <css>\{{name}}-pane</css>.
         <controls>
           <control>
             <span class='name'>name</span>

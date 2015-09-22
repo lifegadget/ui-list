@@ -19,7 +19,7 @@ export default Router.map(function() {
   this.route('demo-sortable-item');
 
   // GRANULAR
-  this.route('demo-item-pane');
+  this.route('demo-pane');
   this.route('ui-aspect-action-bar');
   this.route('ui-aspect-timer');
   this.route('demo-aspect-handle');
