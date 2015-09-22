@@ -12,12 +12,6 @@
   display: flex;
   flex: 1;
 }
-/* PANE CHILDREN (TYPICALLY AN ASPECT) */
-.ui-list .pane > span,
-.ui-list .pane > div {
-  display: flex;
-  flex: 1;
-}
 
 /* horizontal orientation */
 .ui-list .orient-horizontal.h-center {
