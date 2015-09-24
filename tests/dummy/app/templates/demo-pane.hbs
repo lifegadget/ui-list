@@ -66,6 +66,11 @@
       </controls>
       The horizontal layout on first blush looks a little chaotic but it actually makes perfect sense; if you switch to vertical layout it will probably start to be more clear.
     </p>
+
+  </description>
+</row>
+<row>
+  <description>
     <h4>Alignment</h4>
     <p>
       Once the general orientation is set the next level of configuration is:
@@ -84,7 +89,13 @@
     <note>
       <b>Note:</b> the <prop>ui-item</prop> that serves as the container in this example was given a fixed height so as to better illustrate the layout options.
     </note>
-  </description>
 
+  </description>
+</row>
+<row>
+  <description>
+    <h4>Panes → Aspects</h4>
+    Whereas the "pane" is a structural element, the "aspect" represents content types. In our simple example above we just used <code>span</code> tags which you <i>can</i> do but typically it suggested you leverage the pane component (or subclass it): {{#link-to 'demo-aspect'}}<prop>aspect</prop>{{/link-to}}
+  </description>
 </row>
 {{/demo-css}}

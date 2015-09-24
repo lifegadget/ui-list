@@ -15,18 +15,18 @@ var UiList = Ember.Component.extend(ListMessaging,{
   tagName: 'div',
   tabindex: false,
 
-  sort: null,
-  sortProperties: on('init', computed('sort', function() {
-    let sort = this.get('sort');
-    if(typeOf(sort) === 'string') {
-      sort.split(',');
-      if(typeOf(sort) === 'string') {
-        sort = [sort];
-      }
-    }
+  // sort: null,
+  // sortProperties: on('init', computed('sort', function() {
+  //   let sort = this.get('sort');
+  //   if(typeOf(sort) === 'string') {
+  //     sort.split(',');
+  //     if(typeOf(sort) === 'string') {
+  //       sort = [sort];
+  //     }
+  //   }
 
-    return typeOf(sort) === 'array' ? sort : null;
-  })),
+  //   return typeOf(sort) === 'array' ? sort : null;
+  // })),
   arrangedContent: computed.alias('content'),
   itemType: computed('type', function() {
     const type = this.get('type');
@@ -60,8 +60,8 @@ var UiList = Ember.Component.extend(ListMessaging,{
   compressed: false, // horizontal space compression between items (provided via CSS),
   prepareItems() {
     let result = new A();
-    let items = this.get('items');
-    items = typeOf(items) === 'array' ? items : items.split(',');
+    let items = new A(this.get('items'));
+    items = typeOf(items) === 'string' ? items.split(',') : items;
     items.forEach(item => {
       switch(typeOf(item)) {
         case 'instance':

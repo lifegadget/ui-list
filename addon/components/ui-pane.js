@@ -5,12 +5,15 @@ import layout from '../templates/components/ui-pane';
 const dasherize = thingy => {
   return thingy ? Ember.String.dasherize(thingy) : thingy;
 };
+import NodeMessenger from '../mixins/node-messenger';
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(NodeMessenger,{
   layout: layout,
   tagName: 'div',
   classNames: ['pane'],
-  classNameBindings: ['_orient','_horizontal', '_vertical','_name'],
+  classNameBindings: ['_orient','_horizontal', '_vertical','_name','isEmpty:empty:filled'],
+  _parentalProperty: 'item',
+  _componentType: 'pane',
 
   name: null,
   _name: computed('name', function() {
@@ -32,5 +35,9 @@ export default Ember.Component.extend({
     const vertical = this.get('vertical');
     return vertical ? `v-${vertical}` : null;
   }),
+
+  isEmpty: computed('_register.length', function() {
+    return this.get('_registry.length') > 0;
+  })
 
 });
