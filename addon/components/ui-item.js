@@ -6,8 +6,9 @@ import layout from '../templates/components/ui-item';
 import SharedItem from 'ui-list/mixins/shared-item-mixin';
 import HeritableProperties from 'ui-list/mixins/heritable-properties'; // props which list can override
 import Stylist from 'ember-cli-stylist/mixins/shared-stylist';
+import NodeMessenger from '../mixins/node-messenger';
 
-var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,Stylist,{
+var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,Stylist,NodeMessenger,{
   // Item Meta
   layout: layout,
   type: 'ui-item',
@@ -16,6 +17,9 @@ var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,Stylist,{
   selected: false,
   _aspects: ['title','subHeading','icon','image','badge'],
   _panes: ['left','center', 'right'],
+  // _parentalProperty: 'list',
+  _componentType: 'item',
+
   // Defaulting panes for various Aspects
   paneAliases: {
     icon: 'iconLeft',
@@ -29,7 +33,7 @@ var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,Stylist,{
   hasSubHeading: computed.and('titleExists','subHeadingExists'),
 
   mouseEnter(e) {
-    this._tellList('onHover', this, {
+    this._tellParent('onHover', this, {
       granularity: 'item',
       state: true,
       eventTrigger: 'mouse-enter',
@@ -37,7 +41,7 @@ var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,Stylist,{
     });
   },
   mouseLeave(e) {
-    this._tellList('onHover', this, {
+    this._tellParent('onHover', this, {
       granularity: 'item',
       state: false,
       eventTrigger: 'mouse-leave',
@@ -45,7 +49,9 @@ var UiItem = Ember.Component.extend(SharedItem,HeritableProperties,Stylist,{
     });
   },
 
-
+  onClick(options) {
+    console.log('on-click: %o', options);
+  },
   // actions
   actions: {
     paneClick: function(pane) {

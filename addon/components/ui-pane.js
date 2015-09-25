@@ -36,8 +36,4 @@ export default Ember.Component.extend(NodeMessenger,{
     return vertical ? `v-${vertical}` : null;
   }),
 
-  isEmpty: computed('_register.length', function() {
-    return this.get('_registry.length') > 0;
-  })
-
 });

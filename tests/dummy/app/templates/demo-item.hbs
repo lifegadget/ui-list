@@ -48,23 +48,7 @@
     </ul>
   </description>
 </row>
-<row>
-  <widget>
-    {{#ui-item size='small'}}
-      and now for something completely different
-    {{/ui-item}}
-  </widget>
-  <code>
-    {{#display-component componentName='ui-item'}}
-      and now for something completely different
-    {{/display-component}}
-  </code>
-  <description>
-    The block style format is also available and provides universal freedom in how you style your items. This style for <i>items</i> has not been tested as much as the inline style so please send in a PR if you find any snafus.
-  </description>
-</row>
 
-{{! ----------------------------------------------------------- }}
 <h4>Interactive Demo</h4>
 <row>
   <widget>
@@ -138,5 +122,70 @@
     </controls>
   </description>
 </row>
+
+<h4>Block Style</h4>
+
+<row>
+  <widget>
+    {{#ui-item size='small'}}
+      and now for something completely different
+    {{/ui-item}}
+  </widget>
+  <code>
+    {{#display-component componentName='ui-item'}}
+      and now for something completely different
+    {{/display-component}}
+  </code>
+  <description>
+    The block style format is also available and provides universal freedom in how you style your items. This style for <i>items</i> has not been tested as much as the inline style so please send in a PR if you find any snafus.
+  </description>
+</row>
+
+<row>
+  <widget>
+    {{#ui-item size='small' as |item|}}
+      {{#ui-pane item=item name='left' as |pane|}}
+        {{#ui-aspect pane=pane}}
+          left
+        {{/ui-aspect}}
+      {{/ui-pane}}
+      {{#ui-pane item=item name='center' as |pane|}}
+        {{#ui-aspect pane=pane}}
+          center
+        {{/ui-aspect}}
+      {{/ui-pane}}
+      {{#ui-pane item=item name='right' as |pane|}}
+        {{#ui-aspect pane=pane}}
+          right
+        {{/ui-aspect}}
+      {{/ui-pane}}
+    {{/ui-item}}
+  </widget>
+  <code>
+    {{#display-component componentName='ui-item' size='small' as |item|}}
+      {{#display-component componentName='ui-pane' _indent=1 item=item name='left' as |pane|}}
+        {{#display-component componentName='ui-aspect' _indent=2 pane=':pane'}}
+          left
+        {{/display-component}}
+      {{/display-component}}
+      {{#display-component componentName='ui-pane' _indent=1 item=item name='center' as |pane|}}
+        {{#display-component componentName='ui-aspect' _indent=2 pane=':pane'}}
+          center
+        {{/display-component}}
+      {{/display-component}}
+      {{#display-component componentName='ui-pane' _indent=1 item=item name='right' as |pane|}}
+        {{#display-component componentName='ui-aspect' _indent=2 pane=':pane'}}
+          right
+        {{/display-component}}
+      {{/display-component}}
+    {{/display-component}}
+  </code>
+  <description>
+    Let's stay instead that you're more of a "law abiding citizen" type and yet you want to be in control of everything. Sure, no problem. Here's how you might emulate -- in somewhat simplified fashion -- the inline form of ui-item.
+  </description>
+</row>
+
+{{! ----------------------------------------------------------- }}
+
 
 {{/demo-css}}

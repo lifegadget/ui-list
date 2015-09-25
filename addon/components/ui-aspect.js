@@ -9,43 +9,33 @@ export default Ember.Component.extend(NodeMessenger,{
   layout: layout,
   classNames: ['aspect'],
   _parentalProperty: 'pane',
-  _componentType:'aspect',
+  _componentType: 'aspect',
   mouseDown(evt) {
-    this._tellAncestors('aspect-click', {
-      evt: evt,
-      source: 'mouse',
-      aspect: this,
-      aspectName: get(this, 'name'),
-      pane: this.pane,
-      paneName: get(this,'pane.name')
-    });
+    this._propagateEvent('onClick','mouseDown',evt);
   },
   touchStart(evt) {
-    this._tellAncestors('aspect-click', {
-      evt: evt,
-      source: 'touch',
-      aspect: this,
-      aspectName: get(this, 'name'),
-      pane: this.pane,
-      paneName: get(this,'pane.name')
-    });
+    this._propagateEvent('onClick','touchStart',evt);
   },
   focusIn(evt) {
-    this._tellAncestors('aspect-focus-in', {
-      evt: evt,
-      aspect: this,
-      aspectName: get(this, 'name'),
-      pane: this.pane,
-      paneName: get(this,'pane.name')
-    });
+   this._propagateEvent('onHover','focusIn',evt);
   },
   focusOut(evt) {
-    this._tellAncestors('aspect-focus-out', {
-      evt: evt,
-      aspect: this,
-      aspectName: get(this, 'name'),
-      pane: this.pane,
-      paneName: get(this,'pane.name')
-    });
+    this._propagateEvent('onHover','focusOut',evt);
+  },
+
+  eventsPropagated: ['mouseDown','touchStart','focusIn','focusOut'],
+  _propagateEvent(category, source, evt) {
+    console.log('category: %s, evt: %o', category,evt);
+    let eventsPropagated = new A(this.get('eventsPropagated'));
+    if(eventsPropagated.contains(source)) {
+      this._tellAncestors(category, {
+        evt: evt,
+        source: source,
+        aspect: this,
+        aspectName: get(this, 'name'),
+        pane: this.pane,
+        paneName: get(this,'pane.name')
+      });
+    }
   }
 });

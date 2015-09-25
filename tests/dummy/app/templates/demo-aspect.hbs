@@ -17,9 +17,14 @@
       <li>ui-handle-aspect</li>
     </ul>
     </p>
-    {{#ui-pane name='testing' as |pane|}}
-      {{ui-aspect name='test-aspect' pane=pane}}
+    {{#ui-item as |item|}}
+    {{#ui-pane name='testing' item=item as |pane|}}
+      {{#ui-aspect name='a1' pane=pane}}aspect{{/ui-aspect}}
+      {{#ui-aspect name='a2' pane=pane}}aspect{{/ui-aspect}}
     {{/ui-pane}}
+    {{/ui-item}}
+    {{#ui-aspect name='a2' pane=pane}}on my own{{/ui-aspect}}
+
   </description>
 </row>
 

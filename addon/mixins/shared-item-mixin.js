@@ -37,22 +37,7 @@ let SharedItem = Ember.Mixin.create({
   classNameBindings: ['selected'],
   attributeBindings: ['tabindex'],
 
-  // DEFAULT CLICK BEHAVIOUR
-  mouseDown(event) {
-    console.log('mouse down: %o', event);
-    this.clicked(event,'mouse');
-  },
-  touchStart(event) {
-    this.clicked(event,'touch');
-  },
-  clicked(event,channel) {
-    event.stopPropagation();
-    event.preventDefault();
-    this._tellList('onClick', this, {
-      event: event,
-      channel: channel
-    });
-  },
+
 
   /**
    * The specific Item components should define which aspects and panes they support, this
@@ -203,13 +188,13 @@ let SharedItem = Ember.Mixin.create({
   /**
    * Registers the item with a parent list (if one exists)
    */
-  _register: on('init', function() {
+  register: on('init', function() {
     const list = this.get('list');
     if(this.get('list.register')) {
       list.register(this);
     }
   }),
-  _deregister: on('willDestroyElement', function() {
+  deregister: on('willDestroyElement', function() {
     const list = this.get('list');
     if(this.get('list.deregister')) {
       list.deregister(this);
