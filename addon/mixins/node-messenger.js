@@ -11,10 +11,11 @@ let NodeMessenger = Ember.Mixin.create({
   // CSS CLASS BINDING
   classNameBindings: ['_name','_hasChildren:has-children:no-children','_hasParent:has-parent:no-parent'],
   // DEFAULT VALUES
-  _parentalProperty: '_parent_component_',
+  _parentalProperty: 'parentView', // change this on component where possible
   _parentalPropertyHistoric: null,
   _componentType: 'undefined',
   _componentNameProperty: 'name',
+  _childIdProperty: 'elementId',
   // BOOLEAN FLAGS
   _hasChildren: computed('_registry.length', function() {
     return this.get('_registry.length') > 0;
@@ -25,7 +26,7 @@ let NodeMessenger = Ember.Mixin.create({
   }),
   _hasMessagingParent: computed('_parentalProperty','_parentalPropertyDidChange', function() {
     const {_parentalProperty} = this.getProperties('_parentalProperty');
-    return _parentalProperty && get(this,_parentalProperty) && get(this,_parentalProperty + '._message');
+    return this._hasParent() && get(this,_parentalProperty + '._message');
   }),
   // REGISTRY
   _registry: computed(function() {
@@ -45,7 +46,8 @@ let NodeMessenger = Ember.Mixin.create({
     }
   }),
   _registerSelf: on('didInitAttrs', function() {
-    const {_parentalProperty,_componentType,_componentNameProperty} = this.getProperties('_parentalProperty', '_componentType','_componentNameProperty');
+    const {_parentalProperty,_componentType,_componentNameProperty} =
+      this.getProperties('_parentalProperty', '_componentType','_componentNameProperty');
     if(_parentalProperty && get(this,_parentalProperty + '.register')) {
       get(this,_parentalProperty).register(this, _componentType, get(this,_componentNameProperty));
     }
@@ -59,15 +61,13 @@ let NodeMessenger = Ember.Mixin.create({
   },
   _tellChildren(msg, options) {
     let {_registry} = this.getProperties( '_registry');
-    _registry.forEach( item => {
-      item.child._message(msg, options);
-    });
+    _registry.forEach( item => item.child._message(msg, options) );
   },
   _tellDescendants(msg, options) {
     let {_registry} = this.getProperties( '_registry');
     _registry.forEach( item => {
       if(item.child._message(msg, options) !== false) {
-        item.child._curryDown(msg, options);
+        item.child._tellDescendants(msg, options);
       }
     });
   },
@@ -78,19 +78,22 @@ let NodeMessenger = Ember.Mixin.create({
     return this.get(_parentalProperty);
   },
   _tellParent(msg,options) {
+    const parent = this._getParent();
+    if(!parent) {
+      return false;
+    }
     options = merge(options, {
       originator: this,
       curriedBy: [],
       call: 'tell-parent'
     });
-    let {_parentalProperty} = this.getProperties('_parentalProperty');
-    _parentalProperty = _parentalProperty ? _parentalProperty  : 'parentView';
-    if(isPresent(this.get('_parentalProperty' + '._message'))) {
-      get(this,_parentalProperty)._message(msg,options);
+    if(this._hasMessagingParent()) {
+      parent._message(msg,options);
     } else {
-      this.sendAction(msg, this, options);
+      this.sendAction(msg, options);
     }
   },
+
   _tellAncestors(msg, options) {
     if(!options.curriedBy) {
       options.curriedBy = [];
@@ -111,33 +114,28 @@ let NodeMessenger = Ember.Mixin.create({
       this.sendAction(msg, options);
     }
   },
-  // CURRYING
-
-  _curryDown(msg, options) {
-    let curriedBy = options.curriedBy || [];
-    curriedBy = new A(curriedBy).pushObject(this);
-    this._tellChildren(msg,merge(options, {
-      curriedBy: curriedBy
-    }));
-  },
   /**
    * Takes in a message from another component with the goal of either:
    *
-   * a) sending a component action out to the container (if msg starts with 'on')
-   * b) executing the function on this object by the name of the message (if it exists);
-   *    otherwise send action
+   * a) passes execution control to the method specified by the camelized "msg"
+   * b) if there is no handler function but a parent still exists; pass back `true` to continue bubbling
+   * c) if there are no parents to this component then sendAction to any listening container object
    *
    * @param  {string} msg     dasherized message name (coverted to camelized)
    * @param  {object} options hash of properties to pass on
-   * @return {void}
+   * @return {BOOLEAN}
    */
   _message(msg,options) {
     const method = camelize(msg);
     if(isPresent(method) && typeOf(get(this,method)) === 'function') {
       return this[method](options);
     }
+    else if(this._hasParent()){
+      return true;
+    }
     else {
-        this.sendAction(method, options); // end of event chain, send to container
+      this.sendAction(method, options); // end of event chain, send to container
+      return false;
     }
   },
   // OBSERVERS
@@ -159,4 +157,3 @@ let NodeMessenger = Ember.Mixin.create({
 
 NodeMessenger[Ember.NAME_KEY] = 'Node Messenger';
 export default NodeMessenger;
-

@@ -23,6 +23,7 @@ export default UiList.extend({
    */
   onClick(options) {
     const item = options.item;
+    console.log('options are: ', this);
     const {min,max} = this.getProperties('min','max');
     const selected = new A(this.get('_selected'));
     const itemSelected = item.get('selected');
