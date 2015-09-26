@@ -38,7 +38,7 @@ export default Ember.Mixin.create({
     @type Array
   */
   sortedItems: computed(function() {
-    let items = a(this.get('_registeredItems'));
+    let items = a(this.get('_registry').map(item=>item.child));
     let direction = this.get('direction');
 
     return items.sortBy(direction);
@@ -91,7 +91,7 @@ export default Ember.Mixin.create({
   */
   commit() {
     let items = this.get('sortedItems');
-    let groupModel = this.get('_registeredItems');
+    let groupModel = this.get('_registry').map(item=>item.child);
     let itemModels = items.mapBy('data');
     let draggedItem = items.findBy('wasDropped', true);
     let draggedModel;

@@ -59,6 +59,14 @@ const HeritableProperties = Ember.Mixin.create({
     return new A(['null','undefined']).contains(typeOf(listSqueezed)) ? listSqueezed : _squeezed;
   }),
 
+  // DISABLED
+  disabled: false,
+  _disabled: computed('disabled', 'list.disabled', '_disabledMutex', function() {
+    const disabled = this.get('disabled');
+    const listdisabled = this.get('list.disabled');
+    return new A(['null','undefined']).contains(typeOf(listdisabled)) ? disabled : listdisabled;
+  }),
+
   // DYNAMIC OBSERVATION
   _defaultSensitivities: ['title', 'subHeading', 'mood', 'badge'],
   initiateDynamicObservers: on('didInitAttrs', function() {

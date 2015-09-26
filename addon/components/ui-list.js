@@ -6,28 +6,18 @@ const camelize = Ember.String.camelize;
 
 import layout from '../templates/components/ui-list';
 import ListMessaging from '../mixins/list-messaging';
+import NodeMessenger from '../mixins/node-messenger';
 
-var UiList = Ember.Component.extend(ListMessaging,{
+var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
   classNames: ['ui-list','list-container'],
   classNameBindings: ['compressed','horizontal:horizontal:vertical', '_skin'],
+  _componentType: 'list',
   sortAscending: true,
   layout: layout,
   tagName: 'div',
   tabindex: false,
 
-  // sort: null,
-  // sortProperties: on('init', computed('sort', function() {
-  //   let sort = this.get('sort');
-  //   if(typeOf(sort) === 'string') {
-  //     sort.split(',');
-  //     if(typeOf(sort) === 'string') {
-  //       sort = [sort];
-  //     }
-  //   }
-
-  //   return typeOf(sort) === 'array' ? sort : null;
-  // })),
-  arrangedContent: computed.alias('content'),
+  arrangedContent: computed.alias('content'), // here for historical reasons
   itemType: computed('type', function() {
     const type = this.get('type');
 
@@ -38,7 +28,8 @@ var UiList = Ember.Component.extend(ListMessaging,{
     return skin ? `skin-${skin}` : false;
   }),
   mouseEnter(e) {
-    this.sendAction('onHover', this, {
+    this.sendAction('onHover', {
+      origination: this,
       granularity: 'list',
       state: true,
       eventTrigger: 'mouse-enter',
@@ -47,7 +38,8 @@ var UiList = Ember.Component.extend(ListMessaging,{
     return true;
   },
   mouseLeave(e) {
-    this.sendAction('onHover', this, {
+    this.sendAction('onHover', {
+      origination: this,
       granularity: 'list',
       state: false,
       eventTrigger: 'mouse-leave',
@@ -57,7 +49,7 @@ var UiList = Ember.Component.extend(ListMessaging,{
   },
 
   type: 'ui-item', // the type of Item contained by this list
-  compressed: false, // horizontal space compression between items (provided via CSS),
+  compressed: false, // vertical space compression
   prepareItems() {
     let result = new A();
     let items = new A(this.get('items'));
@@ -157,17 +149,11 @@ var UiList = Ember.Component.extend(ListMessaging,{
     }));
   }),
 
+  actions: {
+    onHover() {
+      return true;
+    }
 
-
-  /**
-   * Receives messages from register _items
-   * @param  {string} action  the action the item is communicating
-   * @param  {object} item    reference to the item communicating
-   * @param  {Object} options hash of various variables
-   * @return {Boolean}
-   */
-  paneClick(item, options) {
-    this.sendAction('onClick', item, options );
   },
 
   /**

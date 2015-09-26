@@ -2,7 +2,8 @@ import Ember from 'ember';  // jshint ignore:line
 import layout from '../templates/components/ui-list';
 import UiList from '../components/ui-list';
 const { keys, create } = Object; // jshint ignore:line
-const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
+const { computed, observer, $, A, run, on, typeOf, debug } = Ember;  // jshint ignore:line
+const { defineProperty, get, set, inject, isEmpty } = Ember; // jshint ignore:line
 
 export default UiList.extend({
   layout: layout,
@@ -20,7 +21,8 @@ export default UiList.extend({
    * @param  {Object} options hash of various variables
    * @return {Boolean}
    */
-  paneClick(item) {
+  onClick(options) {
+    const item = options.item;
     const {min,max} = this.getProperties('min','max');
     const selected = new A(this.get('_selected'));
     const itemSelected = item.get('selected');
@@ -36,7 +38,7 @@ export default UiList.extend({
     else if(!itemSelected && !selected.contains(item.elementId)) {
       // round-robin selected items
       if(max === 1) {
-        const oldSelected = selected.length > 0 ? this.findRegisteredItem(selected[0]) : null;
+        const oldSelected = selected.length > 0 ? this.get('_registry.0.child') : null;
         if(oldSelected) {
           this.deselectItem(oldSelected);
         }

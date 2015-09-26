@@ -3,7 +3,7 @@
 
 <h4>Overview</h4>
 <row>
-  <description>
+  <description class='wide'>
     <p>
       An <i>aspect</i> is a content element typically contained by a <i>pane</i> component. <prop>ui-aspect</prop> is the base class for aspect classes and it handles event handling and a limited API surface. While aspects represent the "visual" aspects of an <b>item</b> each pane type is different so head to some of the sub-classes to see them illustrated.
     </p>
@@ -17,14 +17,23 @@
       <li>ui-handle-aspect</li>
     </ul>
     </p>
-    {{#ui-item as |item|}}
+  </description>
+  <description>
+    <p>
+    {{#ui-item orient='horizontal' horizontal='around' as |item|}}
     {{#ui-pane name='testing' item=item as |pane|}}
-      {{#ui-aspect name='a1' pane=pane}}aspect{{/ui-aspect}}
+      {{#ui-aspect name='a1' pane=pane }}aspect{{/ui-aspect}}
       {{#ui-aspect name='a2' pane=pane}}aspect{{/ui-aspect}}
     {{/ui-pane}}
+    {{#ui-pane name='another' orient='vertical' item=item as |pane|}}
+      {{#ui-aspect name='a3' pane=pane }}aspect{{/ui-aspect}}
+      {{#ui-aspect name='a4' pane=pane}}aspect{{/ui-aspect}}
+    {{/ui-pane}}
     {{/ui-item}}
-    {{#ui-aspect name='a2' pane=pane}}on my own{{/ui-aspect}}
+    </p>
+    <p>
 
+    </p>
   </description>
 </row>
 

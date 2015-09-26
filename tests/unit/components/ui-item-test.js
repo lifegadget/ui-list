@@ -7,7 +7,7 @@ import {
 } from 'ember-qunit';
 
 moduleForComponent('ui-item', 'Unit | Component | ui-item', {
-  needs: ['component:ui-icon','component:ui-image','component:ui-pane'],
+  needs: ['component:ui-icon','component:ui-image','component:ui-pane', 'component:ui-title-aspect', 'component:ui-sub-heading-aspect'],
   unit: true
 });
 

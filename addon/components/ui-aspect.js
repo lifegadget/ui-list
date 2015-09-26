@@ -1,40 +1,48 @@
 import Ember from 'ember';
 const { keys, create } = Object; // jshint ignore:line
-const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
-
+const { computed, observer, $, A, run, on, typeOf, debug } = Ember;  // jshint ignore:line
+const { defineProperty, get, set, inject, isEmpty } = Ember; // jshint ignore:line
 import layout from '../templates/components/ui-aspect';
 import NodeMessenger from '../mixins/node-messenger';
 
 export default Ember.Component.extend(NodeMessenger,{
   layout: layout,
+  tagName: 'span',
   classNames: ['aspect'],
+  classNameBindings: ['aspectType'],
   _parentalProperty: 'pane',
   _componentType: 'aspect',
+  _componentNameProperty: 'aspectType',
+
   mouseDown(evt) {
-    this._propagateEvent('onClick','mouseDown',evt);
+    this._propagateEvent('onClick','mouse-down',evt);
   },
   touchStart(evt) {
-    this._propagateEvent('onClick','touchStart',evt);
+    this._propagateEvent('onClick','touch-start',evt);
   },
-  focusIn(evt) {
-   this._propagateEvent('onHover','focusIn',evt);
+  mouseEnter(evt) {
+   this._propagateEvent('onHover','mouse-enter',evt);
   },
-  focusOut(evt) {
-    this._propagateEvent('onHover','focusOut',evt);
+  mouseLeave(evt) {
+    this._propagateEvent('onHover','mouse-leave',evt);
   },
 
-  eventsPropagated: ['mouseDown','touchStart','focusIn','focusOut'],
-  _propagateEvent(category, source, evt) {
-    console.log('category: %s, evt: %o', category,evt);
+  onClick() {
+    return { aspect: this, aspectName: this.get('name')};
+  },
+
+  eventsPropagated: ['mouse-down','touch-start','focus-in','focus-out'],
+  _propagateEvent(msg, eventSource, evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
     let eventsPropagated = new A(this.get('eventsPropagated'));
-    if(eventsPropagated.contains(source)) {
-      this._tellAncestors(category, {
+    if(eventsPropagated.contains(eventSource)) {
+      this._tellAncestors(msg, {
         evt: evt,
-        source: source,
+        eventSource: eventSource,
+        granularity: this.get('_componentType'),
         aspect: this,
         aspectName: get(this, 'name'),
-        pane: this.pane,
-        paneName: get(this,'pane.name')
       });
     }
   }

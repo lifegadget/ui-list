@@ -1,9 +1,10 @@
 import Ember from 'ember';
-const {keys} = Object;
+const { keys, create } = Object; // jshint ignore:line
+const { computed, observer, $, A, run, on, typeOf, debug } = Ember;  // jshint ignore:line
+const { defineProperty, get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
 const dasherize = thingy => {
   return thingy ? Ember.String.dasherize(thingy) : thingy;
 };
-const { Mixin, computed, observer, $, A, run, on, typeOf, defineProperty, get, merge } = Ember;    // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 
 let SharedItem = Ember.Mixin.create({
@@ -36,9 +37,6 @@ let SharedItem = Ember.Mixin.create({
   classNames: ['ui-list','item'],
   classNameBindings: ['selected'],
   attributeBindings: ['tabindex'],
-
-
-
   /**
    * The specific Item components should define which aspects and panes they support, this
    * just bring together the resultant array of aspectPanes which could be targetted/configured by a user
@@ -121,27 +119,6 @@ let SharedItem = Ember.Mixin.create({
     });
   },
 
-  // FILTER
-  // -------------------------------
-  // filter: null,
-  // _filter: observer('filter', function() {
-  //   let filteredContent = null;
-  //   switch(typeOf(filter)) {
-  //   case 'function':
-  //     filteredContent = content.filter(filter, this);
-  //     break;
-  //   case 'object':
-  //     filteredContent = content.filterBy(filter.key,filter.value);
-  //     break;
-  //   case 'array':
-  //     filteredContent = content.filterBy(filter[0],filter[1]);
-  //     break;
-  //   default:
-  //     filteredContent = content;
-  //   }
-  // }),
-
-
   /**
    * setup up logical flags to indicate the existance of content on a per pane basis
    */
@@ -185,21 +162,6 @@ let SharedItem = Ember.Mixin.create({
     });
   },
 
-  /**
-   * Registers the item with a parent list (if one exists)
-   */
-  register: on('init', function() {
-    const list = this.get('list');
-    if(this.get('list.register')) {
-      list.register(this);
-    }
-  }),
-  deregister: on('willDestroyElement', function() {
-    const list = this.get('list');
-    if(this.get('list.deregister')) {
-      list.deregister(this);
-    }
-  })
 });
 
 SharedItem[Ember.NAME_KEY] = 'Shared Item Props';

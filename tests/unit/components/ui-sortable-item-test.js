@@ -4,14 +4,14 @@ const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, se
 
 import { moduleForComponent, test } from 'ember-qunit';
 
-moduleForComponent('ui-sortable-item', 'Unit | Component | ui sortable item', {
+moduleForComponent('ui-sortable-item', 'Unit | Component | ui-sortable-item', {
   // Specify the other units that are required for this test
-  needs: ['component:ui-aspect-handle', 'component:ui-icon'],
+  needs: ['component:ui-aspect-handle', 'component:ui-icon', 'component:ui-pane'],
   unit: true
 });
 
 test('it renders', function(assert) {
-  run(()=>{
+  run.next(()=>{
     assert.expect(2);
 
     // Creates the component instance

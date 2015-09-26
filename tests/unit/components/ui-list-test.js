@@ -7,8 +7,8 @@ import {
 
 moduleForComponent('ui-list', 'Unit | Component | ui-list', {
   // Specify the other units that are required for this test
-  needs: ['component:ui-item','component:ui-icon'],
-    unit: true
+  needs: ['component:ui-item','component:ui-icon', 'component:ui-pane', 'component:ui-icon-aspect', 'component:ui-title-aspect', 'component:ui-sub-heading-aspect', 'helper:if-then-else'],
+  unit: true
 });
 
 test('it renders', function(assert) {
@@ -208,38 +208,17 @@ test('list managed properties propagated down to items (size, skin, mood, squeez
     assert.equal(component.get('squeezed'), true, 'INIT: squeezed set to true');
     done();
     run.later(() => {
-      assert.equal(component.get('_registeredItems.0._size'), 'large', 'items should have size set to large');
-      assert.equal(component.get('_registeredItems.0._skin'), 'skin-flat', 'items should have skin set to flat');
-      assert.equal(component.get('_registeredItems.0._mood'), 'mood-success', 'items should have mood set to success');
-      assert.equal(component.get('_registeredItems.0._squeezed'), true, 'items should have squeezed set to true');
+      assert.equal(component.get('_registry.0.child._size'), 'large', 'items should have size set to large');
+      assert.equal(component.get('_registry.0.child._skin'), 'skin-flat', 'items should have skin set to flat');
+      assert.equal(component.get('_registry.0.child._mood'), 'mood-success', 'items should have mood set to success');
+      assert.equal(component.get('_registry.0.child._squeezed'), true, 'items should have squeezed set to true');
       done2();
     },5);
   },5);
 });
 
-// test('observing a property change in items', function(assert) {
-//   assert.expect(6);
-//   var done = assert.async();
-//     var component = this.subject({
-//       _propertyChangedCallback: (property) => {
-//         assert.equal(component.get('content.0.foo'),'Food', 'the \'content\' array should have the updated value from \'items\'');
-//         assert.equal('foo', property, 'the changed property "foo" was detected');
-//         this.done = true;
-//         done();
-//       }
-//     });
-//   assert.ok(component._propertyChangedCallback, 'change callback appears to exist');
-//   assert.equal(typeOf(component._propertyChangedCallback), 'function',  'callback is a valid function');
-//   component.set('items', [
-//     Ember.Object.create({when: 2, foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'shopping-cart', badge: 1}),
-//     Ember.Object.create({when: 3, foo: 'Hospital', bar: 'visit sick uncle Joe', icon: 'ambulance', badge: 6})
-//   ]);
-//   assert.equal(component.get('items.0.foo'), 'Groceries', 'initial value of foo is correct');
-//   component.set('items.0.foo','Food');
-//   assert.equal(component.get('items.0.foo'), 'Food', 'changed value of foo (in items) is correct');
-// });
-
 test('Items are registered, mapped and appear in DOM', function(assert) {
+  assert.expect(8);
   let component = this.subject({
     map: {
      title: 'foo'
@@ -255,31 +234,31 @@ test('Items are registered, mapped and appear in DOM', function(assert) {
   this.render();
   run.later( () => {
     // sanity tests on registered items
-    assert.equal(component.get('_registeredItems.length'), 3, 'there should be three item components which have registered themselves.');
-    let foey = component.get('_registeredItems').map(item=>{ return item.get('foo');});
-    let arrangedFoey = new A(component.get('arrangedContent').map(item=>{ return item.get('foo');}));
+    assert.equal(component.get('_registry.length'), 3, 'there should be three item components which have registered themselves.');
+    let foey = component.get('_registry').map(i => i.child.get('foo'));
+    let arrangedFoey = new A(component.get('arrangedContent').map(i=> i.get('foo')));
     assert.ok(
       foey.every(item => { return arrangedFoey.contains(item);} ),
       'Foo properties were equivalent between list\'s arrangedContent and the registered item components: ' + JSON.stringify(foey)
     );
-    let icon = component.get('_registeredItems').map(item=>{ return item.get('icon');});
+    let icon = component.get('_registry').map(i=>i.child.get('icon'));
     assert.ok(
       foey.every(item => { return arrangedFoey.contains(item);} ),
       'Icon properties were equivalent between list\'s arrangedContent and the registered item components: ' + JSON.stringify(icon)
     );
     assert.deepEqual(
-      new A(component.get('_registeredItems').map( item => { return item.get('type'); })).uniq(),
+      new A(component.get('_registry').map( i => i.child.get('type'))).uniq(),
       ['ui-item'],
       'all registered items should be of type ui-item.'
     );
     // Test mappings at the Item level
     assert.equal(
-      component.get('_registeredItems').findBy('foo','Groceries').get('title'),
+      component.get('_registry').map(i=>i.child).filter(i=>i.get('foo')==='Groceries')[0].get('title'),
       'Groceries',
       'The foo property should have an alias to title in the item component (via a map hash prop on list)'
     );
     assert.equal(
-      component.get('_registeredItems').findBy('bar','visit sick uncle Joe').get('subHeading'),
+      component.get('_registry').map(i=>i.child).filter(i=>i.get('bar') === 'visit sick uncle Joe')[0].get('subHeading'),
       'visit sick uncle Joe',
       'The bar property should have an alias to subHeading in the item component (via a direct property mapping proxied from list)'
     );
@@ -322,7 +301,7 @@ test('Test that decorator properties make it through to items', function(assert)
   // Now look in the Item component
   let done = assert.async();
   run.later( () => {
-    assert.ok(component.get('_registeredItems'), 'List\'s registered items array has been populated');
+    assert.ok(component.get('_registry'), 'List\'s registered items array has been populated');
     // assert.equal(component.get('_registeredItems.length'), 3, 'there should be three registered items.');
     // assert.equal(
     //   component.get('_registeredItems').findBy('foo','Groceries').get('title'),

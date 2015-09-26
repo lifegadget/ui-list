@@ -138,7 +138,9 @@
     background-color: #F2F2F2;
     border-color: darkgrey;
     border-style: dashed;
-    cursor: not-allowed;
+}
+.ui-list.item.disabled {
+  cursor: not-allowed;
 }
 
 .ui-list.disabled .ui-icon {
