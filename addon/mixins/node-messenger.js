@@ -97,8 +97,7 @@ let NodeMessenger = Ember.Mixin.create({
       return false;
     }
     options = merge(options, {
-      originator: this,
-      curriedBy: a(),
+      originatedBy: this,
       call: 'tell-parent'
     });
     if(this._hasMessagingParent) {
