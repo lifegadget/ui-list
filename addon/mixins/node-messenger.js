@@ -1,8 +1,8 @@
 import Ember from 'ember';
 const { keys, create } = Object; // jshint ignore:line
-const { computed, observer, $, A, run, on } = Ember;  // jshint ignore:line
-const { typeOf, debug, defineProperty, isPresent } = Ember;  // jshint ignore:line
-const { get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
+const { computed, observer, $, run, on, typeOf, debug, isPresent } = Ember;  // jshint ignore:line
+const { defineProperty, get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
+const a = Ember.A; // jshint ignore:line
 const camelize = thingy => {
   return thingy ? Ember.String.camelize(thingy) : thingy;
 };
@@ -25,12 +25,12 @@ let NodeMessenger = Ember.Mixin.create({
     return _parentalProperty && get(this,_parentalProperty);
   }),
   _hasMessagingParent: computed('_parentalProperty','_parentalPropertyDidChange', function() {
-    const {_parentalProperty} = this.getProperties('_parentalProperty');
-    return this._hasParent() && get(this,_parentalProperty + '._message');
+    const {_parentalProperty, _hasParent} = this.getProperties('_parentalProperty', '_hasParent');
+    return _hasParent && get(this,_parentalProperty + '._message');
   }),
   // REGISTRY
   _registry: computed(function() {
-    return new A();
+    return a();
   }),
   register(child, type='unspecified', name='unspecified') {
     const {_registry} = this.getProperties('_registry');
@@ -45,13 +45,25 @@ let NodeMessenger = Ember.Mixin.create({
       this.removeObserver(_parentalProperty);
     }
   }),
-  _registerSelf: on('didInitAttrs', function() {
-    const {_parentalProperty,_componentType,_componentNameProperty} =
-      this.getProperties('_parentalProperty', '_componentType','_componentNameProperty');
-    if(_parentalProperty && get(this,_parentalProperty + '.register')) {
-      get(this,_parentalProperty).register(this, _componentType, get(this,_componentNameProperty));
-    }
+  _registerSelf: on('didInsertElement', function() {
+    run.schedule('afterRender', ()  => {
+      const {_parentalProperty,_componentType,_componentNameProperty} =
+        this.getProperties('_parentalProperty', '_componentType','_componentNameProperty');
+      if(_parentalProperty && get(this,_parentalProperty + '.register')) {
+        get(this,_parentalProperty).register(this, _componentType, get(this,_componentNameProperty));
+      }
+    });
   }),
+  _findInRegistry(...args) {
+    let property = 'elementId'
+    let value;
+    if(args.length===2) {
+      [ property, value ] = args;
+    } else {
+      [ value ] = args;
+    }
+    return this.get('_registry').find(i=>get(i, 'child.' + property) === value).child;
+  },
   // CHILDREN
   _tellChild(childId, msg, options) {
     let {_childIdProperty,_registry} = this.getProperties('_childIdProperty', '_registry');
@@ -69,13 +81,15 @@ let NodeMessenger = Ember.Mixin.create({
       if(item.child._message(msg, options) !== false) {
         item.child._tellDescendants(msg, options);
       }
+      else {
+        // End of ecosystem, no need to sendAction when descending
+      }
     });
   },
   // ANCESTORS
   _getParent() {
-    let {_parentalProperty} = this.getProperties('_parentalProperty');
-    _parentalProperty = _parentalProperty ? _parentalProperty  : 'parentView';
-    return this.get(_parentalProperty);
+    const _parentalProperty = this.get('_parentalProperty');
+    return _parentalProperty ? this.get(_parentalProperty) : null;
   },
   _tellParent(msg,options) {
     const parent = this._getParent();
@@ -84,40 +98,42 @@ let NodeMessenger = Ember.Mixin.create({
     }
     options = merge(options, {
       originator: this,
-      curriedBy: [],
+      curriedBy: a(),
       call: 'tell-parent'
     });
-    if(this._hasMessagingParent()) {
+    if(this._hasMessagingParent) {
       parent._message(msg,options);
     } else {
       this.sendAction(msg, options);
     }
   },
-
   _tellAncestors(msg, options) {
-    if(!options.curriedBy) {
-      options.curriedBy = [];
+    console.log('tell-ancestors: %s %o FROM %o', msg, options, this);
+    const parent = this._getParent();
+    const response = this.get('_hasMessagingParent') ? parent._message(msg,options) : false;
+    options = typeOf(options)==='object' ? merge(options,response) : options;
+    if(isPresent(options.curriedBy)) {
+      a(options.curriedBy).pushObject(parent);
+    } else {
+      options = merge(options, {
+        originatedBy: this,
+        curriedBy: a(),
+        call: 'tell-ancestors'
+      });
     }
-    new A(options.curriedBy).pushObject(this);
-    let response = this._message(msg,options);
+    // Pass up the chain
     if(response !== false) {
-      options = typeOf(response) === 'object' ? merge(options,response) : options;
-    }
-    else {
-      return;
-    }
-    let parent = this._getParent();
-    if(parent) {
       parent._tellAncestors(msg,options);
     }
     else {
-      this.sendAction(msg, options);
+      // End of component ecosystem, send out to container
+      this.sendAction(msg,options);
     }
   },
   /**
    * Takes in a message from another component with the goal of either:
    *
-   * a) passes execution control to the method specified by the camelized "msg"
+   * a) passes execution control to the method specified by the camelized "msg" (off of _messages hash)
    * b) if there is no handler function but a parent still exists; pass back `true` to continue bubbling
    * c) if there are no parents to this component then sendAction to any listening container object
    *
@@ -126,11 +142,12 @@ let NodeMessenger = Ember.Mixin.create({
    * @return {BOOLEAN}
    */
   _message(msg,options) {
-    const method = camelize(msg);
-    if(isPresent(method) && typeOf(get(this,method)) === 'function') {
-      return this[method](options);
+    const method = '_messages.' + camelize(msg);
+    if(isPresent(method) && typeOf(get(this, method)) === 'function') {
+      let contextualized = this.get(method).bind(this);
+      return contextualized(options);
     }
-    else if(this._hasParent()){
+    else if(this._hasParent){
       return true;
     }
     else {

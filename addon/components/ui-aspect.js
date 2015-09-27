@@ -27,8 +27,10 @@ export default Ember.Component.extend(NodeMessenger,{
     this._propagateEvent('onHover','mouse-leave',evt);
   },
 
-  onClick() {
-    return { aspect: this, aspectName: this.get('name')};
+  _messages: {
+    onClick() {
+      return { aspect: this, aspectType: this.get('aspectType') };
+    },
   },
 
   eventsPropagated: ['mouse-down','touch-start','focus-in','focus-out'],
@@ -42,7 +44,7 @@ export default Ember.Component.extend(NodeMessenger,{
         eventSource: eventSource,
         granularity: this.get('_componentType'),
         aspect: this,
-        aspectName: get(this, 'name'),
+        aspectType: this.get(this.get('_componentNameProperty')),
       });
     }
   }

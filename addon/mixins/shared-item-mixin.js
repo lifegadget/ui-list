@@ -1,39 +1,11 @@
 import Ember from 'ember';
 const { keys, create } = Object; // jshint ignore:line
-const { computed, observer, $, A, run, on, typeOf, debug } = Ember;  // jshint ignore:line
+const { computed, observer, $, run, on, typeOf, debug } = Ember;  // jshint ignore:line
 const { defineProperty, get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
-const dasherize = thingy => {
-  return thingy ? Ember.String.dasherize(thingy) : thingy;
-};
+const a = Ember.A; // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 
 let SharedItem = Ember.Mixin.create({
-  /**
-   * Provides a mechanism for items to call methods on the containing list,
-   * as a fallback if there is no group a message will be sent out on the
-   * "onMessage" action channel.
-   * @param  {string}    action   the name of the list's method to call
-   * @param  {mixed}     args     any parameters needed
-   * @return {mixed}
-   */
-  _tellList: function (action,...args) {
-    const list = this.get('list');
-    const isEvent = action.substr(0,2) === 'on';
-    if(get(list,action)) {
-      if(isEvent) {
-        list.eventPropagation(action,...args);
-      } else {
-        list[action](...args);
-      }
-    } else {
-      if(isEvent) {
-        this.sendAction(action, dasherize(action), this, ...args);
-      } else {
-        this.sendAction('action', dasherize(action), this, ...args);
-      }
-    }
-  },
-
   classNames: ['ui-list','item'],
   classNameBindings: ['selected'],
   attributeBindings: ['tabindex'],
@@ -42,8 +14,8 @@ let SharedItem = Ember.Mixin.create({
    * just bring together the resultant array of aspectPanes which could be targetted/configured by a user
    */
   _aspectPanes: computed('_aspects','_panes',function() {
-    const aspects = new A(this.get('_aspects'));
-    const panes = new A(this.get('_panes'));
+    const aspects = a(this.get('_aspects'));
+    const panes = a(this.get('_panes'));
     let aspectPanes = [];
     aspects.forEach( aspect => {
       aspectPanes.push(aspect);
@@ -68,7 +40,7 @@ let SharedItem = Ember.Mixin.create({
 
   // Unpack data property from a list
   _unpackData: function() {
-    const ignoredProperties = new A(['toString','toArray', 'isTruthy']);
+    const ignoredProperties = a(['toString','toArray', 'isTruthy']);
     const isEmberData = typeOf(get(this, 'data.data')) === 'object' ? true : false;
     const isDecorated = isEmberData && this.get('data.isTruthy') ? true : false;
     const notPrivate = property => { return property.substr(0,1) !== '_'; };
@@ -123,8 +95,8 @@ let SharedItem = Ember.Mixin.create({
    * setup up logical flags to indicate the existance of content on a per pane basis
    */
   _logicPanes: function() {
-    const panes = new A(this.get('_panes'));
-    const aspects = new A(this.get('_aspects'));
+    const panes = a(this.get('_panes'));
+    const aspects = a(this.get('_aspects'));
     panes.forEach( pane => {
       const property = 'has' + capitalize(pane) + 'Pane';
       const relevantAspects = aspects.map(aspect=>{ return aspect + capitalize(pane); });
@@ -139,7 +111,7 @@ let SharedItem = Ember.Mixin.create({
   // an item can use either a map or individual property assignments
 	// of the variety item.fooMap = 'mappedTo'
   _defineAspectMappings: function() {
-    const aspectPanes = new A(this.get('_aspectPanes'));
+    const aspectPanes = a(this.get('_aspectPanes'));
     aspectPanes.forEach( aspectPane => {
       if(this._getMap(aspectPane)) {
         let cp = computed.readOnly(this._getMap(aspectPane));

@@ -53,13 +53,18 @@ var UiItem = Ember.Component.extend(FlexHelper,SharedItem,HeritableProperties,St
     });
   },
   /**
-   * Collect all clicks from sibliings and add context to the curry up to ui-list
-   * @param  {object} originator The component which originated the click event
-   * @param  {object} options    Hash of additional context
-   * @return {boolean}           returns false to block the bubbling of the original event
+   * Receivers for node-messenger messages
    */
-  onClick() {
-    return { item: this, itemTitle: this.get('title'), itemValue: this.get('value') };
+  _messages: {
+    /**
+     * Collect all clicks from sibliings and add context to the curry up to ui-list
+     * @param  {object} originator The component which originated the click event
+     * @param  {object} options    Hash of additional context
+     * @return {boolean}           returns false to block the bubbling of the original event
+     */
+    onClick() {
+      return { item: this, itemTitle: this.get('title'), itemValue: this.get('value') };
+    }
   }
 
 });

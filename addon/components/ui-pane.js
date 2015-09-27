@@ -36,10 +36,11 @@ export default Ember.Component.extend(FlexHelper, NodeMessenger,{
   focusOut(evt) {
     this._propagateEvent('onHover','focus-out',evt);
   },
-  onClick() {
-    return { pane: this, paneName: get(this,'name') };
+  _messages: {
+    onClick() {
+      return { pane: this, paneName: get(this,'name') };
+    }
   },
-
   eventsPropagated: ['mouse-down','touch-start','focus-in','focus-out'],
   _propagateEvent(category, eventSource, evt) {
     evt.preventDefault();
