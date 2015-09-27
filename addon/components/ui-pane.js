@@ -46,7 +46,6 @@ export default Ember.Component.extend(FlexHelper, NodeMessenger,{
     evt.preventDefault();
     evt.stopPropagation();
 
-    // console.log('PANE category: %s, source: %s this: %o', category,eventSource, this.toString());
     let eventsPropagated = new A(this.get('eventsPropagated'));
     if(eventsPropagated.contains(eventSource)) {
       this._tellAncestors(category, {

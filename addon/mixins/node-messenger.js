@@ -55,7 +55,7 @@ let NodeMessenger = Ember.Mixin.create({
     });
   }),
   _findInRegistry(...args) {
-    let property = 'elementId'
+    let property = 'elementId';
     let value;
     if(args.length===2) {
       [ property, value ] = args;
@@ -108,7 +108,6 @@ let NodeMessenger = Ember.Mixin.create({
     }
   },
   _tellAncestors(msg, options) {
-    console.log('tell-ancestors: %s %o FROM %o', msg, options, this);
     const parent = this._getParent();
     const response = this.get('_hasMessagingParent') ? parent._message(msg,options) : false;
     options = typeOf(options)==='object' ? merge(options,response) : options;
