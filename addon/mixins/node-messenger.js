@@ -91,7 +91,7 @@ let NodeMessenger = Ember.Mixin.create({
     const _parentalProperty = this.get('_parentalProperty');
     return _parentalProperty ? this.get(_parentalProperty) : null;
   },
-  _tellParent(msg,options) {
+  _tellParent(msg,options={}) {
     const parent = this._getParent();
     if(!parent) {
       return false;
@@ -107,7 +107,7 @@ let NodeMessenger = Ember.Mixin.create({
       this.sendAction(msg, options);
     }
   },
-  _tellAncestors(msg, options) {
+  _tellAncestors(msg, options={}) {
     const parent = this._getParent();
     const response = this.get('_hasMessagingParent') ? parent._message(msg,options) : false;
     options = typeOf(options)==='object' ? merge(options,response) : options;

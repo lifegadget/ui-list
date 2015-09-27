@@ -68,12 +68,16 @@ export default Ember.Controller.extend({
   actions: {
     onChange(action, item) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      flashMessages.success(`onChange Event: ${action} on ${item.elementId}`);
+      if(action==='selected') {
+        flashMessages.success(`onChange Event: ${action} on ${item.elementId}`);
+      } else {
+        flashMessages.warning(`onChange Event: ${action} on ${item.elementId}`);
+      }
     },
     onError(code, item) {
       const flashMessages = Ember.get(this, 'flashMessages');
       const title = Ember.get(item, 'title');
-      flashMessages.warning(`onError event: ${code} when interacting with "${title}"`);
+      flashMessages.danger(`onError event: ${code} when interacting with "${title}"`);
     }
   },
   min: 0,
