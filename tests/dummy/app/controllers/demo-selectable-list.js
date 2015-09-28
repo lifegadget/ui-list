@@ -7,16 +7,12 @@ export default Ember.Controller.extend({
 
   selected: [],
   items: [
-    {foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'cutlery', badge: 6},
-    {foo: 'Hospital', bar: 'visit sick uncle Joe', icon: 'ambulance', badge: 1},
-    {foo: 'Pub', bar: 'it\'s time for some suds', icon: 'beer'},
-    {foo: 'Took Cab', bar: 'took a cab, drinking not driving', icon: 'cab'},
-    {foo: 'Had Coffee', bar: 'need to chill out after that beer', icon: 'coffee'}
+    {title: 'Groceries', subHeading: 'hungry, hungry, hippo', icon: 'cutlery', badge: 6},
+    {title: 'Hospital', subHeading: 'visit sick uncle Joe', icon: 'ambulance', badge: 1},
+    {title: 'Pub', subHeading: 'it\'s time for some suds', icon: 'beer'},
+    {title: 'Took Cab', subHeading: 'took a cab, drinking not driving', icon: 'cab'},
+    {title: 'Had Coffee', subHeading: 'need to chill out after that beer', icon: 'coffee'}
   ],
-  map: {
-    title: 'foo',
-    subHeading: 'bar'
-  },
   mood: 'default',
   skin: 'default',
   size: 'default',
