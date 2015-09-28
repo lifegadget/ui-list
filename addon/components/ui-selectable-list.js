@@ -6,14 +6,28 @@ const { computed, observer, $, run, on, typeOf, debug } = Ember;  // jshint igno
 const { defineProperty, get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
 const a = Ember.A; // jshint ignore:line
 
-export default UiList.extend({
+const UiSelectableList = UiList.extend({
   layout: layout,
-  _selected: [],
-  // TODO: look into why we need to reset this at INIT!
-  // it was maintaining values when re-routing to the page which contained the component
-  _selectedInitiator: on('init', function() {
-    this._selected = [];
-  }),
+  selectionProperty: 'id',
+  selected: [],
+  /**
+   * Will keep ensure that all registered items 'selected' state is in-line with the list's 'selected' array.
+   * Also sets '_selected' as an Ember array of 'selected' (useful for containment checks)
+   */
+  _selectedObserver: on('didInsertElement',observer('selected', function() {
+    let {selectionProperty, selected} = this.getProperties('selectionProperty', 'selected');
+    selected = typeOf(selected) === 'array' ? a(selected) : a([selected]);
+    run.schedule('afterRender', () => {
+      this._getRegistryItems().map(item => {
+        if ( selected.contains(item.get(selectionProperty)) ) {
+          item.set('selected', true);
+        } else {
+          item.set('selected', false);
+        }
+      })
+      this.set('_selected', selected);
+    });
+  })),
   min: 0,
   max: 1,
   _messages: {
@@ -31,55 +45,86 @@ export default UiList.extend({
      * @return {Boolean}
      */
     onClick(options) {
+      const {min,max,_selected,selectionProperty} = this.getProperties('min','max','_selected','selectionProperty');
       const item = options.item;
-      const {min,max} = this.getProperties('min','max');
-      const selected = a(this.get('_selected'));
+      const itemId = item.get(selectionProperty);
       const itemSelected = item.get('selected');
-      // deselection attempt
-      if(itemSelected && selected.contains(item.elementId)) {
-        if(selected.length - min > 0) {
-          this.deselectItem(item);
-        } else {
-          this.sendAction('onError', 'deselect-min-constraint', item );
+      let wasSuccessful = false;
+      let selection;
+
+      // deselect
+      if(itemSelected) {
+        // min error
+        if( _selected.length - 1 < min ) {
+          this.sendAction('onError', {
+            type: 'selection',
+            code: 'deselect-min-constraint',
+            message: `attempted to remove "${item.get('title')}" but this list must have at least ${min} items.`,
+            min: min,
+            selected: _selected,
+            item: item,
+            id: itemId,
+          });
+        }
+        // valid
+        else {
+          selection = a(_selected.slice(0)).removeObject(itemId);
+          wasSuccessful = true;
+          this.sendAction('onChange', {
+            type: 'selection',
+            action: 'de-select',
+            message: `removed "${item.get('title')}" from the selection (${selection.length} items remain)`,
+            removed: item,
+            id: itemId,
+            selected: selection
+          });
         }
       }
-      // selection attempt
-      else if(!itemSelected && !selected.contains(item.elementId)) {
-        // round-robin selected items
-        if(max === 1) {
-          const oldSelected = selected.length > 0 ? this._findInRegistry(selected[0]) : null;
-          if(oldSelected) {
-            this.deselectItem(oldSelected);
-          }
-          this.selectItem(item);
+      // toggle
+      else if(max === 1 && _selected.length + 1 > max) {
+        const oldSelected = this._findInRegistry('id',_selected[0]);
+        this.sendAction('onChange', {
+          type: 'selection',
+          action: 'toggle',
+          message: `toggled from "${oldSelected.get('title')}" to "${item.get('title')}"`,
+          added: item,
+          removed: oldSelected,
+          selected: a([itemId])
+        });
+      }
+      // select
+      else {
+        // max error
+        if( _selected.length + 1 > max ) {
+          this.sendAction('onError', {
+            type: 'selection',
+            code: 'select-max-constraint',
+            message: `attempted to add "${item.get('title')}" but this list can only have a maximum of ${max} items.`,
+            max: max,
+            selected: _selected,
+            item: item,
+            id: itemId,
+          });
         }
-        // round-robin is not applicable
+        // valid selection
         else {
-          if(selected.length + 1 > max) {
-            this.sendAction('onError', 'deselect-max-constraint', item );
-          } else {
-            this.selectItem(item);
-          }
+          wasSuccessful=true;
+          selection = a(_selected.slice(0)).addObject(itemId);
+          this.sendAction('onChange', {
+            type: 'selection',
+            action: 'select',
+            message: `added "${item.get('title')}" to the selection (${selection.length} items selected)`,
+            added: item,
+            id: itemId,
+            selected: selection
+          });
         }
       }
 
-      return true;
+      return wasSuccessful;
     },
-  },
-  selectItem(item) {
-    const id = get(item,'elementId');
-    set(item,'selected', true);
-    this._selected.push(id);
-    this.sendAction('onChange', 'selected', item, {
-      selected: this._selected
-    });
-  },
-  deselectItem(item) {
-    const id = get(item,'elementId');
-    set(item,'selected', false);
-    this._selected = this._selected.removeObject(id);
-    this.sendAction('onChange', 'deselected', item, {
-      selected: this._selected
-    });
-  }
+  }, // end _messages
 });
+
+UiSelectableList[Ember.NAME_KEY] = 'ui-selectable-list';
+export default UiSelectableList;

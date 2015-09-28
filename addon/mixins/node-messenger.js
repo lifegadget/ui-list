@@ -64,6 +64,23 @@ let NodeMessenger = Ember.Mixin.create({
     }
     return this.get('_registry').find(i=>get(i, 'child.' + property) === value).child;
   },
+  _filterByRegistry(...args) {
+    let property = 'elementId';
+    let value;
+    if(args.length===2) {
+      [ property, value ] = args;
+    } else {
+      [ value ] = args;
+    }
+    value = typeOf(value) === 'array' ? a(value) : a([value]);
+    return this._getRegistryItems().filter( i => value.contains(get(i,property)) );
+  },
+  /**
+   * Returns the register objects (without other meta that was captured in registration)
+   */
+  _getRegistryItems() {
+    return this.get('_registry').map(i=>i.child);
+  },
   // CHILDREN
   _tellChild(childId, msg, options) {
     let {_childIdProperty,_registry} = this.getProperties('_childIdProperty', '_registry');

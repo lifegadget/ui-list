@@ -17,5 +17,6 @@ export default UiSelectableList.extend({
   horizontal: computed('position', function() {
     const position = this.get('position');
     return new A(['top','bottom']).contains(position) ? true : false;
-  })
+  }),
+
 });

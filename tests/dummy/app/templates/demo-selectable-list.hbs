@@ -14,6 +14,7 @@
   <widget class="wide">
       {{ui-selectable-list
         items=items
+        selected=selected
         filter=listFilter
         map=map
         size=size
@@ -29,6 +30,7 @@
   &nbsp;<br/>
     {{display-component componentName='ui-selectable-list'
       items=':items'
+      selected=':selected'
       filter=listFilter
       map=':map'
       size=size
@@ -74,24 +76,37 @@
 {{! ------------------------------------------------------------------------------------------------------------------------- }}
 <p class="downer">&nbsp;</p>
 
-<configuration class="downer">
-    <icon>{{icon-cog size="2x"}}</icon>
-    <config>
-        <columns>
-            <column>
-                List Size: <br/>
-                {{ui-buttons cardinality='1:1' buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}<br/>
-            </column>
-            <column>
-                Mood:<br/>
-                  {{ui-buttons cardinality='1:1' buttons='default,success,info,warning,error' value=mood disable=disableStaticChooser size='small' defaultValue='default'}}
-             </column>
-            <column>
-                Skin / Style Family:<br/>
-                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=skin size='small' stretch=true}}<br/>
-                <br/>
-            </column>
-        </columns>
-    </config>
-</configuration>
+<row>
+  <description>
+    List Size: <br/>
+    {{ui-buttons
+      cardinality='1:1'
+      buttons='tiny,small,default,large,huge'
+      value=size
+      size='small'
+      defaultValue='default'
+    }}
+  </description>
+  <description>
+    Mood:<br/>
+      {{ui-buttons
+        cardinality='1:1'
+        buttons='default,success,info,warning,error'
+        value=mood
+        disable=disableStaticChooser
+        size='small'
+        defaultValue='default'
+      }}
+  </description>
+  <description>
+    Skin / Style Family:<br/>
+    {{ui-buttons
+      cardinality='1:1'
+      buttons='default,plus,flat,simple'
+      value=skin
+      size='small'
+      stretch=true
+    }}
+  </description>
+</row>
 {{/demo-css}}

@@ -4,11 +4,25 @@ const { computed, observer, $, run, on, typeOf, debug } = Ember;  // jshint igno
 const { defineProperty, get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
 const a = Ember.A; // jshint ignore:line
 const capitalize = Ember.String.capitalize;
+const dasherize = thingy => {
+  return thingy ? Ember.String.dasherize(thingy) : thingy;
+};
 
 let SharedItem = Ember.Mixin.create({
   classNames: ['ui-list','item'],
   classNameBindings: ['selected'],
   attributeBindings: ['tabindex'],
+  /**
+   * meant to be a PK for an item
+   */
+  id: computed('title', {
+    set(_,value) {
+      return value;
+    },
+    get() {
+      return dasherize(this.get('title'));
+    }
+  }),
   /**
    * The specific Item components should define which aspects and panes they support, this
    * just bring together the resultant array of aspectPanes which could be targetted/configured by a user
