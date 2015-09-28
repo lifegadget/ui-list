@@ -4,7 +4,7 @@ const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, se
 
 export default Ember.Controller.extend({
   flashMessages: Ember.inject.service(),
-  queryParams: ['mood','size','skin','position'],
+  queryParams: ['mood','size','skin','position','selected'],
 
   items: [
     {foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'cutlery', badge: 6},
@@ -14,33 +14,31 @@ export default Ember.Controller.extend({
     {foo: 'Had Coffee', bar: 'need to chill out after that beer', icon: 'coffee'}
   ],
   position: 'left',
+  selected: ['groceries'],
   map: {
     title: 'foo',
     subHeading: 'bar'
-  },
-  sillyLogic: function(item) {
-    let badge = item.get('badge');
-    let moodiness = badge && badge > 5 ? 'error' : 'warning';
-    return badge ? moodiness : null;
   },
   mood: 'default',
   skin: 'default',
   size: 'default',
   actions: {
     // in demo we'll accept all changes and send back into component
-    onChange(action, item) {
+    onChange(o) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      console.log('changed: %o', item);
-      if(action==='selected') {
-        flashMessages.success(`onChange Event: ${action} on ${item.elementId}`);
+      console.log('changed: %o', o);
+      if(o.action==='toggle') {
+        flashMessages.success(`onChange Event: ${o.message}`);
       } else {
-        flashMessages.warning(`onChange Event: ${action} on ${item.elementId}`);
+        flashMessages.warning(`onChange Event: ${o.message}`);
+      }
+      if(o.type === 'selection') {
+        this.set('selected', o.selected);
       }
     },
-    onError(code, item) {
+    onError(o) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      const title = Ember.get(item, 'title');
-      flashMessages.danger(`onError event: ${code} when interacting with "${title}"`);
+      flashMessages.danger(`onError event: ${o.message}`);
     }
   }
 });
