@@ -24,7 +24,7 @@ const UiSelectableList = UiList.extend({
         } else {
           item.set('selected', false);
         }
-      })
+      });
       this.set('_selected', selected);
     });
   })),
