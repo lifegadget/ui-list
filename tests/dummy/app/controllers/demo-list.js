@@ -6,6 +6,10 @@ const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, se
 export default Ember.Controller.extend({
 
   queryParams: ['mood','size','style','compressed'],
+  tabs: [
+    {title: 'Inline', subHeading:'using inline component syntax'},
+    {title: 'Block', subHeading:'using block component syntax'}
+  ],
 
   items: [
     Ember.Object.create({when: 2, foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'shopping-cart', badge: 1}),
@@ -64,9 +68,19 @@ export default Ember.Controller.extend({
   compressed: false,
   defaultIcon: 'envelope',
   actions: {
-    onClick(item, options) {
+    onClick(o) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      flashMessages.success(`onClick Event. Pane was ${options.pane}; item originating was ${item.elementId} ... "${item.get('title')}"`);
+      flashMessages.success(`onClick Event. Click originated from ${o.granularity}; item was ${o.itemTitle}`);
+      console.log('container click: %o', o);
+    },
+    onHover(o) {
+      const flashMessages = Ember.get(this, 'flashMessages');
+      if(o.eventTrigger === 'mouse-enter') {
+        flashMessages.info(`onHover Event. Mouse entered ${o.granularity.toUpperCase()} component.`);
+      } else {
+        flashMessages.warning(`onHover Event. Mouse left ${o.granularity.toUpperCase()} component.`);
+      }
+      console.log('container hover: %o', o);
     }
   }
 

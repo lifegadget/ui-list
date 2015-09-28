@@ -4,14 +4,14 @@
 <h4>Overview</h4>
 <div class="row">
     <desc>
-        The <prop>ui-item</prop> is the default list item. As the basis for all other items it defines a good number of key properties which include:
-        <ul>
+        The <prop>ui-item</prop> is the default list item. Refer to CSS structure for the default layout.
+ {{!--        <ul>
           <li>Layout and property definition of <prop>aspects</prop> and <prop>panes</prop></li>
           <li>The relative <prop>size</prop> of each item</li>
           <li>The <prop>skin</prop> to use for styling purposes</li>
           <li>A <prop>mood</prop> which simply sets CSS styling for some common mood types made popular by bootstrap</li>
           <li>Can be displayed as individual item or join up with other items as part of a <strong>list</strong>; it knows how to behave appropriately in either context</li>
-        </ul>
+        </ul> --}}
     </desc>
 </div>
 <h4>CSS Layout</h4>
@@ -48,23 +48,7 @@
     </ul>
   </description>
 </row>
-<row>
-  <widget>
-    {{#ui-item size='tiny'}}
-      now for something completely different
-    {{/ui-item}}
-  </widget>
-  <code>
-    {{#display-component componentName='ui-item'}}
-      now for something completely different
-    {{/display-component}}
-  </code>
-  <description>
-    The block style format is also available and provides universal freedom in how you style your items. This style for <i>items</i> has not been tested as much as the inline style so please send in a PR if you find any snafus.
-  </description>
-</row>
 
-{{! ----------------------------------------------------------- }}
 <h4>Interactive Demo</h4>
 <row>
   <widget>
@@ -138,5 +122,70 @@
     </controls>
   </description>
 </row>
+
+<h4>Block Style</h4>
+
+<row>
+  <widget>
+    {{#ui-item size='small'}}
+      and now for something completely different
+    {{/ui-item}}
+  </widget>
+  <code>
+    {{#display-component componentName='ui-item'}}
+      and now for something completely different
+    {{/display-component}}
+  </code>
+  <description>
+    The block style format is also available and provides universal freedom in how you style your items. This style for <i>items</i> has not been tested as much as the inline style so please send in a PR if you find any snafus.
+  </description>
+</row>
+
+<row>
+  <widget>
+    {{#ui-item size='small' as |item|}}
+      {{#ui-pane item=item name='left' as |pane|}}
+        {{#ui-aspect pane=pane}}
+          left
+        {{/ui-aspect}}
+      {{/ui-pane}}
+      {{#ui-pane item=item name='center' as |pane|}}
+        {{#ui-aspect pane=pane}}
+          center
+        {{/ui-aspect}}
+      {{/ui-pane}}
+      {{#ui-pane item=item name='right' as |pane|}}
+        {{#ui-aspect pane=pane}}
+          right
+        {{/ui-aspect}}
+      {{/ui-pane}}
+    {{/ui-item}}
+  </widget>
+  <code>
+    {{#display-component componentName='ui-item' size='small' as |item|}}
+      {{#display-component componentName='ui-pane' _indent=1 item=item name='left' as |pane|}}
+        {{#display-component componentName='ui-aspect' _indent=2 pane=':pane'}}
+          left
+        {{/display-component}}
+      {{/display-component}}
+      {{#display-component componentName='ui-pane' _indent=1 item=item name='center' as |pane|}}
+        {{#display-component componentName='ui-aspect' _indent=2 pane=':pane'}}
+          center
+        {{/display-component}}
+      {{/display-component}}
+      {{#display-component componentName='ui-pane' _indent=1 item=item name='right' as |pane|}}
+        {{#display-component componentName='ui-aspect' _indent=2 pane=':pane'}}
+          right
+        {{/display-component}}
+      {{/display-component}}
+    {{/display-component}}
+  </code>
+  <description>
+    Let's stay instead that you're more of a "law abiding citizen" type and yet you want to be in control of everything. Sure, no problem. Here's how you might emulate -- in somewhat simplified fashion -- the inline form of ui-item.
+  </description>
+</row>
+
+{{! ----------------------------------------------------------- }}
+
 
 {{/demo-css}}

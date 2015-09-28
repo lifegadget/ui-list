@@ -1,0 +1,47 @@
+{{#demo-css}}
+<h3>Component::<code>ui-icon-aspect</code></h3>
+
+<h4>Overview</h4>
+<row>
+  <description class='wide'>
+      Meant to provide a simple way to display font-awesome, glyph, or custom icons/svg's.
+    </description>
+</row>
+
+<h4>API Surface</h4>
+<row>
+  <description>
+    <h5>Value</h5>
+    <p>
+      Each sub-class is used to present a specific type of content, and while each content type may have it's own properties which it exposes each component provides a <prop>value</prop> property which will serve as the primary input. For instance:<br/>
+      <note>
+        <span class='monospace'>\{{ui-title-aspect value='Hello World'}}</span>
+      </note>
+      would alias <prop>value</prop> to the <prop>title</prop> property for display purposes. In contrast:<br/>
+      <note>
+        <span class='monospace'>\{{ui-image-aspect value='smile.jpg'}}</span>
+      </note>
+      would alias <prop>value</prop> to the <prop>src</prop> property.
+    </p>
+    Alternatively, if you use a block component then your inline content is effectively the same as 'value'.
+
+    <h5>Registration with Pane</h5>
+    You should always register aspects with their containing panes. This is done automatically if you're using the inline form of a aspect component but in cases where you want to use a block component you just set the aspect's <prop>pane</prop> property to the pane's exposed block param:
+
+    <note>
+      <span class='monospace'>\{{#ui-pane as |pane|}}\{{#ui-aspect pane=pane}}hello world\{{/ui-aspect}}\{{/ui-pane}}</span>
+    </note>
+  </description>
+</row>
+
+<h4>Event Model</h4>
+<row>
+  <description>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+  </description>
+</row>
+
+
+{{/demo-css}}

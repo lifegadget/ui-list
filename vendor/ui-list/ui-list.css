@@ -7,38 +7,14 @@
   user-select: none;
 }
 
-.ui-list.item {
-    flex:item;
-    display: flex;
-    align-items: stretch;
-    flex-flow: center;
-    flex-direction: row;
-
-    min-height: 40px;
-    border-radius: 5px;
-    border: 1px solid lightgrey;
-    font-size: 1.2em;
-    cursor: pointer;
-}
-
-.ui-list.item .pane {
-  padding: 5px 8px 5px 8px;
+.ui-list.list-container {
   display: flex;
-}
-.ui-list.item .left-pane,
-.ui-list.item .right-pane {
-  flex-direction: row;
-  flex-shrink: 0;
-  justify-content: center;
-  align-items: center;
-}
-.ui-list.item .center-pane {
   flex-direction: column;
-  flex: 1 1;
-  justify-content: flex-start;
-  text-align: left;
-  margin-top: 2px;
 }
+.ui-list.list-container.horizontal {
+  flex-direction: row;
+}
+
 .ui-list.item .aspect {
 
 }
@@ -61,25 +37,6 @@
   font-size: 2em;
 }
 
-
-.ui-list.item.selected {
-  border: 2px solid #303030;
-  margin-top: -1px;
-  margin-left: -1px;
-  margin-right: 1px;
-  background-color: #FCFCFC;
-}
-.ui-list.item.selected .hpad.right {
-  width: 13px;
-}
-
-.ui-list.list-container .item {
-    margin: 10px 5px 10px 5px;
-}
-.ui-list.list-container.compressed .item {
-    margin: 5px 5px 5px 5px;
-}
-
 .ui-list .ui-image {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -88,40 +45,12 @@
     opacity: .4;
 }
 
-/*.ui-list.item .left-pane {
-    margin: auto;
-    flex-shrink: 0;
-    text-align: left;
-}
-.ui-list.item .left-pane.has-sub-heading {
-    font-size: 2.4em;
-}
-.ui-list.item .center-pane {
-    margin: auto;
-    text-align: left;
-    flex-grow: 1;
-}*/
-
 .ui-list.item .block-pane {
   text-align: center;
   margin: auto;
 }
 
-/*.ui-list.item .has-sub-heading .title {
-    position: relative;
-    top: 4px;
-}*/
-/*.ui-list.item .has-sub-heading .sub-heading {
-    position: relative;
-    top: -4px;
-}*/
 
-/*.ui-list.item .right-pane {
-    flex-shrink: 0;
-    align-self: right;
-    margin: auto;
-    text-align: right;
-}*/
 
 .ui-list .sub-heading {
     font-size: smaller;
@@ -141,26 +70,6 @@
 .ui-list.item.huge {
     font-size: 2em;
 }
-
-/* BADGE ADJUSTMENTS */
-/*.ui-list .badge {
-    position: relative;
-    top: -2px;
-}
-.ui-list.item.tiny .badge {
-    font-size: 9px;
-    font-weight: 200;
-}
-.ui-list.item.small .badge {
-    font-size: 11px;
-    font-weight: 200;
-}
-.ui-list.item.large .badge {
-    font-size: 16px;
-}
-.ui-list.item.huge .badge {
-    font-size: 18px;
-}*/
 
 /* HORIZONTAL PADDING */
 .ui-list.item .hpad {
@@ -229,7 +138,9 @@
     background-color: #F2F2F2;
     border-color: darkgrey;
     border-style: dashed;
-    cursor: not-allowed;
+}
+.ui-list.item.disabled {
+  cursor: not-allowed;
 }
 
 .ui-list.disabled .ui-icon {

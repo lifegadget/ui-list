@@ -10,7 +10,9 @@
 </div>
 {{! ------------------------------------------------------------------------------------------ }}
 <h4>Interactive Demo</h4>
-
+{{!-- <row style='max-width:600px'>
+  {{ui-nav-list items=tabs position='top'}}
+</row>
 <row>
   <widget class="wide">
     {{#if moodFunction}}
@@ -24,9 +26,8 @@
         defaultIcon=defaultIcon
         compressed=compressed
         squeezed=squeezed
-        sort=sortBy
-        sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
       }}
     {{else}}
       {{ui-list
@@ -39,9 +40,8 @@
         defaultIcon=defaultIcon
         compressed=compressed
         squeezed=squeezed
-        sort=sortBy
-        sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
       }}
     {{/if}}
   </widget>
@@ -58,9 +58,8 @@
         defaultIcon=defaultIcon
         compressed=compressed
         squeezed=squeezed
-        sort=sortBy
-        sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
       }}
     {{else}}
       {{display-component componentName='ui-list'
@@ -73,9 +72,8 @@
         defaultIcon=defaultIcon
         compressed=compressed
         squeezed=squeezed
-        sort=sortBy
-        sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
       }}
     {{/if}}
   </code>
@@ -103,40 +101,8 @@ sillyLogic(item) {
 }
     </pre>
   </description>
-</row>
+</row> --}}
 
-{{! ------------------------------------------------------------------------------------------------------------------------- }}
-<configuration>
-    <icon>{{icon-cog size="2x"}}</icon>
-    <config>
-        <columns>
-            <column>
-                List Size: <br/>
-                {{radio-buttons buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}<br/>
-                Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
-                Filter: {{ui-toggle-button value=isFiltered on='Only where Badge exists' off='No Filter' defaultValue=false size='small'}}
-            </column>
-            <column style='flex-basis: 300px'>
-                Mood: <br/>
-                {{radio-buttons buttons='static,sillyLogic' value=moodStrategy size='small'}}<br/>
-                {{#if moodFunction}}
-                  Mood is defined as a function at the list level (see above) which is proxied into each item. Because it is a function, it then engages dynamic observers to ensure that if inputs to the function change it is updated.
-                {{else}}
-                Static Moods:<br/>
-                  {{radio-buttons buttons='default,success,info,warning,error' value=staticMood disable=disableStaticChooser size='small' defaultValue='default'}}
-                {{/if}}
-             </column>
-            <column>
-                Skin / Style Family:<br/>
-                {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=skin size='small' stretch=true}}<br/>
-                Sort By:
-                {{ui-toggle-button value=sortAscending toggleEffect='tada' onIcon='chevron-down' offIcon='chevron-up' on='' off=''}}<br/>
-                {{ui-buttons cardinality='1:1' buttons='Natural:::null,Badge,Title' value=sortBy size='small' stretch=true}}<br/>
-            </column>
-        </columns>
-    </config>
-</configuration>
-{{! ------------------------------------------------------------------------------------------------------------------------- }}
 
 <row>
   <widget class='wide'>
@@ -168,6 +134,7 @@ sillyLogic(item) {
         sort=sortBy
         sortAscending=sortAscending
         onClick='onClick'
+        onHover='onHover'
         as |list|
       }}
     {{#each items as |item|}}
@@ -189,6 +156,7 @@ sillyLogic(item) {
       sort=sortBy
       sortAscending=sortAscending
       onClick='onClick'
+      onHover='onHover'
     }}
     {{#display-component componentName='each' _target='items' as='item' _indent=1}}
         {{display-component componentName='ui-item' _indent=2 title=':item.foo' subHeading=':item.bar' icon=':item.icon' badge=':item.badge' list=':list'}}
@@ -204,7 +172,30 @@ sillyLogic(item) {
   </description>
 </row>
 
-<h4>Heritable Properties and Sensitivity</h4>
+<h4>Properties</h4>
+<row>
+  <description>
+    List Size: <br/>
+    <p>{{radio-buttons buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}</p><br/>
+    Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
+  </description>
+  <description>
+    Mood: <br/>
+    {{radio-buttons buttons='static,sillyLogic' value=moodStrategy size='small'}}<br/>
+    {{#if moodFunction}}
+      Mood is defined as a function at the list level (see above) which is proxied into each item. Because it is a function, it then engages dynamic observers to ensure that if inputs to the function change it is updated.
+    {{else}}
+    Static Moods:<br/>
+      {{radio-buttons buttons='default,success,info,warning,error' value=staticMood disable=disableStaticChooser size='small' defaultValue='default'}}
+    {{/if}}
+  </description>
+  <description>
+    Skin / Style Family:<br/>
+    {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=skin size='small' stretch=true}}<br/>
+  </description>
+</row>
+
+{{!-- <h4>Heritable Properties and Sensitivity</h4>
 <p>
   This is probably a terrible name but didn't have a lot of time to think about it. Basically it's a set of properties which are owned by the item but the list will take over responsibility for any items which it manages. Examples are <prop>mood</prop>, <prop>size</prop>, <prop>skin</prop>, and <prop>squeezed</prop>.
 </p>
@@ -214,6 +205,6 @@ sillyLogic(item) {
   <code>moodSensitivities=['badge']</code>
 
   You'll notice that we didn't actually do that but that's because any function is <i>by default</i> given the following observable properties: <prop>mood</prop>, <prop>title</prop>, <prop>subHeading</prop>, and <prop>badge</prop>.
-</p>
+</p> --}}
 
 {{/demo-css}}

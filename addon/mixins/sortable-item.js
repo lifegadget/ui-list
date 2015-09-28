@@ -268,7 +268,7 @@ export default Mixin.create({
       .on('mousemove touchmove', drag)
       .on('mouseup touchend', drop);
 
-    this._tellList('prepare');
+    this._tellParent('prepare');
     this.set('isDragging', true);
   },
 
@@ -358,7 +358,7 @@ export default Mixin.create({
       this.set('y', dimension);
     }
 
-    run.throttle(this, '_tellList', 'update', updateInterval);
+    run.throttle(this, '_tellParent', 'update', updateInterval);
   },
 
   /**
@@ -374,7 +374,7 @@ export default Mixin.create({
     this.set('isDragging', false);
     this.set('isDropping', true);
 
-    this._tellList('update');
+    this._tellParent('update');
 
     this._waitForTransition()
       .then(run.bind(this, '_complete'));
@@ -414,7 +414,7 @@ export default Mixin.create({
   _complete() {
     this.set('isDropping', false);
     this.set('wasDropped', true);
-    this._tellList('commit');
+    this._tellParent('commit');
   }
 });
 

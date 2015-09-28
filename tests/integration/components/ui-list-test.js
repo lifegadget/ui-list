@@ -35,7 +35,7 @@ test('inline items rendered', function(assert) {
   this.set('registered', new Ember.A([]));
 
   this.render(hbs`
-    {{ui-list items=items _registeredItems=registered}}
+    {{ui-list items=items _registry=registered}}
   `);
 
   assert.equal(this.$('.item').length, 2, 'two items should exist');

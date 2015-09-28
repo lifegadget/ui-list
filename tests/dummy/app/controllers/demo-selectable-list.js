@@ -3,75 +3,32 @@ const { computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
 
 export default Ember.Controller.extend({
   flashMessages: Ember.inject.service(),
+  queryParams: ['mood','size','skin','selected'],
 
-  queryParams: ['mood','size','skin','compressed'],
-
+  selected: [],
   items: [
-    Ember.Object.create({when: 2, foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'shopping-cart', badge: 1}),
-    Ember.Object.create({when: 3, foo: 'Hospital', bar: 'visit sick uncle Joe', icon: 'ambulance', badge: 6}),
-    Ember.Object.create({when: 4, foo: 'Pub', bar: 'it\'s time for some suds', icon: 'beer'}),
-    Ember.Object.create({when: 5, foo: 'Took Cab', bar: 'took a cab, drinking not driving', icon: 'cab'}),
-    Ember.Object.create({when: 6, foo: 'Had Coffee', bar: 'need to chill out after that beer', icon: 'coffee'}),
-    Ember.Object.create({when: 1, foo: 'Ate Breakfast', bar: 'start of every good morning', icon: 'cutlery'})
+    {title: 'Groceries', subHeading: 'hungry, hungry, hippo', icon: 'cutlery', badge: 6},
+    {title: 'Hospital', subHeading: 'visit sick uncle Joe', icon: 'ambulance', badge: 1},
+    {title: 'Pub', subHeading: 'it\'s time for some suds', icon: 'beer'},
+    {title: 'Took Cab', subHeading: 'took a cab, drinking not driving', icon: 'cab'},
+    {title: 'Had Coffee', subHeading: 'need to chill out after that beer', icon: 'coffee'}
   ],
-  emberItems: [
-    {foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'cutlery', badge: 6},
-    {foo: 'Hospital', bar: 'visit sick uncle Joe', icon: 'ambulance', badge: 1},
-    {foo: 'Pub', bar: 'it\'s time for some suds', icon: 'beer'},
-    {foo: 'Took Cab', bar: 'took a cab, drinking not driving', icon: 'cab'},
-    {foo: 'Had Coffee', bar: 'need to chill out after that beer', icon: 'coffee'}
-  ],
-  map: {
-    title: 'foo',
-    subHeading: 'bar'
-  },
-  sillyLogic: function(item) {
-    let badge = item.get('badge');
-    let moodiness = badge && badge > 5 ? 'error' : 'warning';
-    return badge ? moodiness : null;
-  },
-  sortOrders: [
-    {name: 'Natural', id: null},
-    {name: 'When', id: 'when'},
-    {name: 'Badges', id: 'badge'},
-    {name: 'Title', id: 'title'}
-  ],
-  sortAscending: true,
-  moodStrategy: 'static',
-  enableStaticChooser: on('init',computed('moodStrategy', function() {
-    return this.get('moodStrategy') === 'static';
-  })),
-  listFilter: computed('isFiltered', function() {
-    const FilterFunc = item => { return item.badge > 0; };
-    return this.get('isFiltered') ? FilterFunc : null;
-  }),
-
-  toggledBadge: on('init',computed('showBadge', function() {
-    return this.get('showBadge') ? 4 : null;
-  })),
-  showBadge: true,
-  showIcon: true,
-  showSubHeading: true,
-  toggledIcon: on('init',computed('showIcon', function() {
-    return this.get('showIcon') ? 'envelope' : null;
-  })),
-  toggledSubHeading: on('init',computed('showSubHeading', function() {
-    return this.get('showSubHeading') ? 'ran 12mi in London' : null;
-  })),
   mood: 'default',
   skin: 'default',
   size: 'default',
-  compressed: false,
-  defaultIcon: 'envelope',
   actions: {
-    onSelect: function(action, item) {
+    onChange: function(o) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      flashMessages.success(`onSelect Event: ${action} on ${item.elementId}`);
+      flashMessages.success(`onChange Event: ${o.message}`);
+      console.log('onChange: %o', o);
+      if(o.type === 'selection') {
+        this.set('selected', o.selected);
+      }
     },
-    onError: function(code, item) {
+    onError: function(o) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      const title = Ember.get(item, 'title');
-      flashMessages.warning(`onError event: ${code} when interacting with "${title}"`);
+      flashMessages.warning(`onError event: ${o.message}`);
+      console.log('onError: %o', o);
     }
   },
   min: 0,

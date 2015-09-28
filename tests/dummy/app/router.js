@@ -9,6 +9,7 @@ export default Router.map(function() {
   // LIST
   this.route('demo-list');
   this.route('demo-selectable-list');
+  this.route('demo-nav-list');
   this.route('demo-sortable-list');
 
   // ITEM
@@ -17,10 +18,13 @@ export default Router.map(function() {
   this.route('demo-tabular-item');
   this.route('demo-sortable-item');
 
-  // HELPER
+  // GRANULAR
+  this.route('demo-pane');
+  this.route('demo-aspect');
+  this.route('ui-icon-aspect');
   this.route('ui-aspect-action-bar');
   this.route('ui-aspect-timer');
   this.route('demo-aspect-handle');
 
-  this.resource('not-implemented', {path: '/*badurl'});
+  this.route('not-implemented', {path: '/*badurl'});
 });

@@ -38,89 +38,95 @@ export default Ember.Mixin.create({
     @type Array
   */
   sortedItems: computed(function() {
-    let items = a(this.get('_registeredItems'));
+    let items = a(this.get('_registry').map(item=>item.child));
     let direction = this.get('direction');
 
     return items.sortBy(direction);
   }).volatile(),
 
   /**
-    Prepare for sorting.
-    Main purpose is to stash the current itemPosition so
-    we don’t incur expensive re-layouts.
-    @method prepare
-  */
-  prepare() {
-    this._itemPosition = this.get('itemPosition');
-  },
+   * Messages being received by items via NodeMessenger
+   */
+  _messages: {
+    /**
+      Prepare for sorting.
+      Main purpose is to stash the current itemPosition so
+      we don’t incur expensive re-layouts.
+      @method prepare
+    */
+    prepare() {
+      this._itemPosition = this.get('itemPosition');
+    },
 
-  /**
-    Update item positions.
-    @method update
-  */
-  update() {
-    let sortedItems = this.get('sortedItems');
-    let position = this._itemPosition;
+    /**
+      Update item positions.
+      @method update
+    */
+    update() {
+      let sortedItems = this.get('sortedItems');
+      let position = this._itemPosition;
 
-    // Just in case we haven’t called prepare first.
-    if (position === undefined) {
-      position = this.get('itemPosition');
-    }
-
-    sortedItems.forEach(item => {
-      let dimension;
-      let direction = this.get('direction');
-
-      if (!get(item, 'isDragging')) {
-        set(item, direction, position);
+      // Just in case we haven’t called prepare first.
+      if (position === undefined) {
+        position = this.get('itemPosition');
       }
 
-      if (direction === 'x') {
-        dimension = 'width';
-      }
-      if (direction === 'y') {
-        dimension = 'height';
-      }
+      sortedItems.forEach(item => {
+        let dimension;
+        let direction = this.get('direction');
 
-      position += get(item, dimension);
-    });
-  },
+        if (!get(item, 'isDragging')) {
+          set(item, direction, position);
+        }
 
-  /**
-    @method commit
-  */
-  commit() {
-    let items = this.get('sortedItems');
-    let groupModel = this.get('_registeredItems');
-    let itemModels = items.mapBy('data');
-    let draggedItem = items.findBy('wasDropped', true);
-    let draggedModel;
+        if (direction === 'x') {
+          dimension = 'width';
+        }
+        if (direction === 'y') {
+          dimension = 'height';
+        }
 
-    if (draggedItem) {
-      set(draggedItem, 'wasDropped', false); // Reset
-      draggedModel = get(draggedItem, 'data');
-    }
-
-    delete this._itemPosition;
-
-    run.schedule('render', () => {
-      items.invoke('freeze');
-    });
-
-    run.schedule('afterRender', () => {
-      items.invoke('reset');
-    });
-
-    run.next(() => {
-      run.schedule('render', () => {
-        items.invoke('thaw');
+        position += get(item, dimension);
       });
-    });
+    },
 
-    this.sendAction('onChange', 'sorted', {
-      dragged: draggedModel,
-      new: itemModels,
-      old: groupModel
-    });
+    /**
+      @method commit
+    */
+    commit() {
+      let items = this.get('sortedItems');
+      let groupModel = this.get('_registry').map(item=>item.child);
+      let itemModels = items.mapBy('data');
+      let draggedItem = items.findBy('wasDropped', true);
+      let draggedModel;
+
+      if (draggedItem) {
+        set(draggedItem, 'wasDropped', false); // Reset
+        draggedModel = get(draggedItem, 'data');
+      }
+
+      delete this._itemPosition;
+
+      run.schedule('render', () => {
+        items.invoke('freeze');
+      });
+
+      run.schedule('afterRender', () => {
+        items.invoke('reset');
+      });
+
+      run.next(() => {
+        run.schedule('render', () => {
+          items.invoke('thaw');
+        });
+      });
+
+      this.sendAction('onChange', 'sorted', {
+        dragged: draggedModel,
+        new: itemModels,
+        old: groupModel
+      });
+    }
+
   }
 });
