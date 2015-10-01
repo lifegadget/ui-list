@@ -5,11 +5,12 @@ var merge = require('merge');
 module.exports = {
   name: 'ui-list',
   description: 'List controls for ambitious Ember applications',
+  normalizeEntityName: function() {}, // no-op since we're just adding dependencies
   included: function(app) {
     this._super.included(app);
     var o = merge(
       { fa: false, animate: false, quiet: false, animateOperation: 'override' },
-      app.options['ui-input']
+      app.options['ui-list']
     );
     // component CSS
     app.import('vendor/ui-list/ui-list.css');
@@ -80,7 +81,7 @@ module.exports = {
       });
     }
     if(!o.quiet) {
-      console.log('ui-list:%s, %s', faMessage, animateMessage);
+      console.log('ui-list: %s, %s', faMessage, animateMessage);
     }
 
   }
