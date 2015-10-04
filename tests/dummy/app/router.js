@@ -11,15 +11,20 @@ export default Router.map(function() {
   this.route('demo-selectable-list');
   this.route('demo-nav-list');
   this.route('demo-sortable-list');
+  this.route('demo-tabular-list');
 
   // ITEM
   this.route('demo-item');
   this.route('demo-actionable-item');
   this.route('demo-tabular-item');
   this.route('demo-sortable-item');
+  this.route('demo-row-item');
 
-  // GRANULAR
+  // PANE
   this.route('demo-pane');
+  this.route('demo-column-pane');
+
+  // ASPECTS
   this.route('demo-aspect');
   this.route('ui-icon-aspect');
   this.route('ui-aspect-action-bar');
