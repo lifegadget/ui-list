@@ -1,8 +1,9 @@
-{{#each _columns as |column|}}
-  {{ui-column-pane row=this column=column}}
-{{/each}}
 {{#if hasBlock}}
-  <div class="block-content">
-    {{yield}}
-  </div>
+  <span class="block-content">
+    {{yield this}}
+  </span>
+{{else}}
+  {{#each _columns as |column|}}
+    {{ui-column-pane row=this column=column}}
+  {{/each}}
 {{/if}}

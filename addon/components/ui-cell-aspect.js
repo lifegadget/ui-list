@@ -12,6 +12,8 @@ export default Aspect.extend({
   classNames: ['cell'],
   classNameBindings: ['_type','_isNegative','_isZero','_isEmpty'],
   column: computed.alias('pane'),
+  value: computed.alias('column.column.value'),
+  type: computed.alias('column.column.type'),
   precision: computed.alias('column.column.precision'),
 
   _type: computed('type', function() {

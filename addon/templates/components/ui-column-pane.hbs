@@ -1,4 +1,7 @@
-{{#each aspects as |aspect|}}
-  {{component aspect pane=this options=aspect.options value=this.value type=this.type}}
-{{/each}}
-{{yield}}
+{{#if hasBlock}}
+  {{yield this}}
+{{else}}
+  {{#each aspects as |aspect|}}
+    {{component aspect pane=this options=aspect.options}}
+  {{/each}}
+{{/if}}

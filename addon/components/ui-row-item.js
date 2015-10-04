@@ -17,9 +17,7 @@ export default UiItem.extend({
    * based on the keys available in 'attrs'
    */
   _columns: computed('attrs.columns', function() {
-    console.log('simple config found: %o', keys(get(this,'attrs')));
-    let columns = this.get('attrs.columns.value'); // column definition
-    console.log('columns: ', columns);
+    let columns = this.get('columns'); // column definition
     const defaultConfig = {
       type: 'string',
       alignment: 'left',
@@ -29,7 +27,6 @@ export default UiItem.extend({
 
     // convert CSV string to array with default props
     if(typeOf(columns) === 'string') {
-      console.log('columns are a string');
       columns = columns.split(',');
       columns = columns.map(prop => {
         return {
@@ -40,7 +37,6 @@ export default UiItem.extend({
     }
     // no configuration found, use passed in attrs
     else if(!columns) {
-      console.log('no columns');
       const ignore = a(['skin','size','columns']);
       const props = keys(this.get('attrs')).filter(item=>!ignore.contains(item));
       columns = props.map(prop => {
@@ -50,7 +46,6 @@ export default UiItem.extend({
         };
       });
     }
-    console.log('%s has column definition of: %o', this.get('elementId'), columns);
 
     // return array structure
     if(typeOf(columns) === 'array') {
