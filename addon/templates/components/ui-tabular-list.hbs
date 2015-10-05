@@ -1,1 +1,10 @@
-{{yield}}
+{{#if hasBlock}}
+  {{yield this}}
+{{else}}
+  {{#if header}}
+    {{ui-table-header list=this rows=this.rows columns=this.columns}}
+  {{/if}}
+  {{#each row in rows}}
+    {{ui-row-item list=this data=this.rows columns=this.columns}}
+  {{/each}}
+{{/if}}

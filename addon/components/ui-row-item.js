@@ -3,8 +3,8 @@ const { keys, create } = Object; // jshint ignore:line
 const { computed, observer, $, run, on, typeOf, debug, isPresent } = Ember;  // jshint ignore:line
 const { defineProperty, get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
 const a = Ember.A; // jshint ignore:line
-const dasherize = thingy => {
-  return thingy ? Ember.String.dasherize(thingy) : thingy;
+const camelize = thingy => {
+  return thingy ? Ember.String.camelize(thingy) : thingy;
 };
 import layout from '../templates/components/ui-row-item';
 import UiItem from 'ui-list/components/ui-item';
@@ -16,7 +16,7 @@ export default UiItem.extend({
    * Looks for configuration passed in but if not found then produces generic configuration
    * based on the keys available in 'attrs'
    */
-  _columns: computed('attrs.columns', function() {
+  _columns: computed('attrs.columns','columns.isFulfilled', function() {
     let columns = this.get('columns'); // column definition
     const defaultConfig = {
       type: 'string',
@@ -30,18 +30,18 @@ export default UiItem.extend({
       columns = columns.split(',');
       columns = columns.map(prop => {
         return {
-          id: dasherize(prop),
+          id: camelize(prop),
           name: prop
         };
       });
     }
     // no configuration found, use passed in attrs
     else if(!columns) {
-      const ignore = a(['skin','size','columns']);
+      const ignore = a(['skin','size','columns','list','table']);
       const props = keys(this.get('attrs')).filter(item=>!ignore.contains(item));
       columns = props.map(prop => {
         return {
-          id: dasherize(prop),
+          id: camelize(prop),
           name: prop
         };
       });
@@ -51,7 +51,7 @@ export default UiItem.extend({
     if(typeOf(columns) === 'array') {
       return columns.map(item => {
         if(typeOf(item) === 'string') {
-          item = {id: dasherize(item), name: item};
+          item = {id: camelize(item), name: item};
         }
         item.value = this.get(item.id);
         keys(defaultConfig).map(prop => {
@@ -59,6 +59,7 @@ export default UiItem.extend({
             item[prop] = defaultConfig[prop];
           }
         });
+        console.log(item);
         return item;
       });
     }
