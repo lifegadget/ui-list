@@ -53,8 +53,6 @@ export default UiItem.extend({
         if(typeOf(item) === 'string') {
           item = {id: camelize(item), name: item};
         }
-        item.value = this.get(item.id);
-        console.log('getting %s property for value: %o', item.id, get(item,'value'));
         keys(defaultConfig).map(prop => {
           if(!get(item,prop)) {
             item[prop] = defaultConfig[prop];
@@ -70,6 +68,7 @@ export default UiItem.extend({
     }
   }),
   unpack: computed('_columns', function() {
-    return this.get('_columns').map(item => get(item,'id'));
+    const data = this.get('data');
+    return data ? this.get('_columns').map(item => get(item,'id')) : [];
   })
 });

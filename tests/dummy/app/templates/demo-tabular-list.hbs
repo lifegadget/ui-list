@@ -47,6 +47,12 @@
   {id:'lastName', name:'Last Name'},
   {id:'when', name:'When', type:'date', format:'toNow'}
 ];</code></pre>
+<p>
+  and appointments is simply a <prop>findAll</prop> from ember-data:
+</p>
+<pre><code class="language-js">appointments = computed(function() {
+  return this.store.findAll('appointment');
+});</code></pre>
 
   </description>
 </row>
