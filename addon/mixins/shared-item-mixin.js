@@ -45,46 +45,23 @@ let SharedItem = Ember.Mixin.create({
    * INITIALIZE ITEM COMPONENT
    */
   _init: on('init', function() {
-    this._unpackData();       // data hash populated by list component
+    this._unpackData();       // map the data hash populated by list component onto item object
     this._shortcutAliases();  // add convenience API-surface shortcuts (e.g., 'icon' instead of 'leftIcon', etc.)
     this._defineAspectMappings(); // ensure all mappings are setup as CP's
     this._logicPanes();       // create hasXXX() logic flags for page existance
     this._setDefaultValues();
   }),
 
-  // Unpack data property from a list
+  // Unpack data property passed in from a list
   _unpackData: function() {
-    const ignoredProperties = a(['toString','toArray', 'isTruthy']);
-    const isEmberData = typeOf(get(this, 'data.data')) === 'object' ? true : false;
-    const isDecorated = isEmberData && this.get('data.isTruthy') ? true : false;
-    const notPrivate = property => { return property.substr(0,1) !== '_'; };
-    const notIgnored = property => { return !ignoredProperties.contains(property); };
-    const safeProperties = property => { return notPrivate(property) && notIgnored(property); };
-    const dataSource = isEmberData ? get(this, 'data.data') : get(this,'data');
-    let   reflector = dataSource ? keys(dataSource) : [];
-    const data = get(this, 'data');
-    // NOTE: this whole ED nonsense can be removed if we can get the ProxyMixin working again but until then we
-    // need to detect decorated properties somehow as the Ember.keys() method does not properly reflect ED arrays
-    if(isDecorated) {
-        let decorators = [];
-        for (let property in data) {
-          if(property.substr(0,1) !== '_') {
-            if(!data.hasOwnProperty(property) && property.substr(0,1) !== '_' && typeOf(data[property]) === 'object') {
-              decorators.push(property);
-            }
-          }
-        }
-        reflector = reflector.concat(decorators);
+    const data = this.get('data') || {};
+    const unpack = this.get('unpack') ? this.get('unpack') : keys(data);
+    if(unpack) {
+      unpack.map(prop => {
+        const cp = computed.readOnly(`data.${prop}`);
+        defineProperty(this, prop, cp);
+      });
     }
-    reflector = reflector.concat(this.get('_aspectPanes'));
-    reflector.filter(safeProperties).forEach( key => {
-      // create CP on root and point back to attribute on data hash
-      const cp = computed.readOnly(`data.${key}`);
-      const propValue = this.get(`data.${key}`);
-      if(propValue || propValue === false) {
-        defineProperty(this, key, cp);
-      }
-    });
   },
   _shortcutAliases: function() {
     const defaultAliases = {

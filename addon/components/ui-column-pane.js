@@ -7,7 +7,7 @@ const a = Ember.A; // jshint ignore:line
 import layout from '../templates/components/ui-column-pane';
 import UiPane from 'ui-list/components/ui-pane';
 
-export default UiPane.extend({
+const ColumnPane = UiPane.extend({
   layout: layout,
   row: computed.alias('item'), // allow for a more contextual name for "item"
   classNameBindings: ['id'],
@@ -15,7 +15,11 @@ export default UiPane.extend({
   id: computed.alias('column.id'),
   name: computed.alias('column.name'),
   type: computed.alias('column.type'),
-  value: computed.alias('column.value'),
+  value: computed('id','column', function() {
+    const id = this.get('id');
+    const row = this.get('row');
+    return row.get(id);
+  }),
   horizontal: computed.alias('column.alignment'),
   vertical: computed.alias('column.vertical'),
 
@@ -23,3 +27,6 @@ export default UiPane.extend({
     return ['ui-cell-aspect']; // TODO: make this dynamic based on column definition
   })
 });
+
+ColumnPane[Ember.NAME_KEY] = 'Column Pane';
+export default ColumnPane;

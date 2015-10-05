@@ -9,7 +9,11 @@ export default Ember.Controller.extend({
   appointments: computed(function() {
     return this.store.findAll('appointment');
   }),
-  columns: ['firstName', 'lastName'],
+  columns: [
+    {id:'firstName', name:'First Name'},
+    {id:'lastName', name:'Last Name'},
+    {id:'when', name:'When', type:'date', format:'toNow'}
+  ],
 
   actions: {
     onUpdate(action, info) {

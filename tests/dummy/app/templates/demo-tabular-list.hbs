@@ -26,14 +26,28 @@
       rows=appointments
     }}
   </widget>
-  <code>
-    {{display-component componentName='ui-tabular-list'
-      columns=':columns'
-      rows=':appointments'
-    }}
-  </code>
   <description>
-    description
+    <h4>Basic Inline</h4>
+
+    <p>
+      In this example the list is created with only two parameters: <prop>columns</prop> and <prop>rows</prop>. The
+      <prop>rows</prop> property points to an ember-data array from the model 'appointment' (you can check out its
+      values in the Ember Inspector now if you like). The <prop>columns</prop> property defines which columns to
+      display and provides meta-information to better present them.
+    </p>
+    <p>
+      The template would like this:
+    </p>
+<pre><code class="language-handlebars">\{{ui-tabular-list columns=columns rows=appointments}}</code></pre>
+    <p>
+      The <prop>columns</prop> property is:
+    </p>
+<pre><code class="language-js">columns = [
+  {id:'firstName', name:'First Name'},
+  {id:'lastName', name:'Last Name'},
+  {id:'when', name:'When', type:'date', format:'toNow'}
+];</code></pre>
+
   </description>
 </row>
 

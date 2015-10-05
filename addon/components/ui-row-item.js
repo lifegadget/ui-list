@@ -54,12 +54,12 @@ export default UiItem.extend({
           item = {id: camelize(item), name: item};
         }
         item.value = this.get(item.id);
+        console.log('getting %s property for value: %o', item.id, get(item,'value'));
         keys(defaultConfig).map(prop => {
           if(!get(item,prop)) {
             item[prop] = defaultConfig[prop];
           }
         });
-        console.log(item);
         return item;
       });
     }
@@ -68,5 +68,8 @@ export default UiItem.extend({
       debug(`could not determine column definition for row[${this.get('elementId')}]`);
       return [];
     }
+  }),
+  unpack: computed('_columns', function() {
+    return this.get('_columns').map(item => get(item,'id'));
   })
 });
