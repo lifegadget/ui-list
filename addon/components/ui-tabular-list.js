@@ -19,7 +19,7 @@ export default UiList.extend({
     onClick(o) {
       return { message: `clicked on the "${o.paneName}" column of the ${get(o.item,'elementId')} row` };
     },
-    onChange(o) {
+    onChange() {
       return true;
     },
     onHover(o) {

@@ -1,7 +1,7 @@
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('ui-column-pane', 'Integration | Component | ui column pane', {
+moduleForComponent('ui-column-pane', 'Integration | Component | ui-column-pane', {
   integration: true
 });
 

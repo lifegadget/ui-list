@@ -18,7 +18,7 @@ const ColumnPane = UiPane.extend({
   value: computed('id','column', function() {
     const id = this.get('id');
     const row = this.get('row');
-    return row.get(id);
+    return id ? get(row,id) : null;
   }),
   horizontal: computed.alias('column.horizontal'),
   vertical: computed.alias('column.vertical'),
