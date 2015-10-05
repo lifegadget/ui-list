@@ -11,6 +11,7 @@ import UiItem from 'ui-list/components/ui-item';
 
 export default UiItem.extend({
   layout: layout,
+  classNames: ['row'],
   skin: 'flat',
   /**
    * Looks for configuration passed in but if not found then produces generic configuration
@@ -20,7 +21,8 @@ export default UiItem.extend({
     let columns = this.get('columns'); // column definition
     const defaultConfig = {
       type: 'string',
-      alignment: 'left',
+      horizontal: 'left',
+      vertical: 'top',
       growth: 1,
       shrink: 1
     };

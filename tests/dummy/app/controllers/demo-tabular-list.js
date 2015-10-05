@@ -10,22 +10,23 @@ export default Ember.Controller.extend({
     return this.store.findAll('appointment');
   }),
   columns: [
-    {id:'firstName', name:'First Name'},
-    {id:'lastName', name:'Last Name'},
-    {id:'when', name:'When', type:'date', format:'toNow'}
+    {id:'firstName', name:'First Name', isSortable: true},
+    {id:'lastName', name:'Last Name', isSortable: true},
+    {id:'when', name:'When', type:'date', format:'toNow', horizontal: 'center'}
   ],
 
   actions: {
-    onUpdate(action, info) {
+    onChange(info) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      const titles = new A(info.new).mapBy('foo').join(', ');
-      flashMessages.success(`onChange Event: ${action}; element dragged was "${info.dragged.foo}". Order now: ${titles}`);
-
-      this.set('items', info.new);
+      flashMessages.success(`onChange event[${info.action}]: ${info.message}`);
     },
-    onClick(item, options) {
+    onClick(info) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      flashMessages.success(`onClick Event. Pane was ${options.pane}; item originating was ${item.elementId} ... "${item.get('title')}"`);
+      flashMessages.info(`onClick event: ${info.message}`);
+    },
+    onHover(info) {
+      const flashMessages = Ember.get(this, 'flashMessages');
+      flashMessages.warning(`onHover event: ${info.eventSource} ${info.message}`);
     }
   }
 

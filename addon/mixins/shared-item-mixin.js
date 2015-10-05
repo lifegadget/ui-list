@@ -10,7 +10,7 @@ const dasherize = thingy => {
 
 let SharedItem = Ember.Mixin.create({
   classNames: ['ui-list','item'],
-  classNameBindings: ['selected'],
+  classNameBindings: ['selected','_evenOdd'],
   attributeBindings: ['tabindex'],
   /**
    * meant to be a PK for an item
@@ -23,6 +23,15 @@ let SharedItem = Ember.Mixin.create({
       return dasherize(this.get('title'));
     }
   }),
+  index: null,
+  _evenOdd: computed('index', function() {
+    const index = this.get('index');
+    if(typeOf(index) === 'null') { return null; }
+
+    return index % 2 === 0 ? 'odd' : 'even';
+  }),
+
+
   /**
    * The specific Item components should define which aspects and panes they support, this
    * just bring together the resultant array of aspectPanes which could be targetted/configured by a user

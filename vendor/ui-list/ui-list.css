@@ -107,6 +107,10 @@
 .ui-list.item.squeezed .hpad.right {
     width: 8px;
 }
+/* STRIPING */
+.ui-list.stripe .item.odd {
+  background-color: hsl(0, 0%, 95%)
+}
 
 /* DEFAULT IMAGE SIZING */
 .ui-list .ui-image {

@@ -7,10 +7,6 @@ const a = Ember.A; // jshint ignore:line
 import layout from '../templates/components/ui-cell-aspect';
 import Aspect from 'ui-list/components/ui-aspect';
 import moment from 'moment';
-import momentDuration from 'ember-moment/computeds/duration';
-import momentFormat from 'ember-moment/computeds/format';
-import momentFromNow from 'ember-moment/computeds/from-now';
-import momentToNow from 'ember-moment/computeds/to-now';
 
 export default Aspect.extend({
   layout: layout,

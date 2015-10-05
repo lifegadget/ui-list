@@ -1,6 +1,8 @@
 import Ember from 'ember';
 const { keys, create } = Object; // jshint ignore:line
-const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
+const { computed, observer, $, run, on, typeOf, debug, isPresent } = Ember;  // jshint ignore:line
+const { defineProperty, get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
+const a = Ember.A; // jshint ignore:line
 const capitalize = Ember.String.capitalize;
 const camelize = Ember.String.camelize;
 
@@ -10,14 +12,38 @@ import NodeMessenger from '../mixins/node-messenger';
 
 var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
   classNames: ['ui-list','list-container'],
-  classNameBindings: ['compressed','horizontal:horizontal:vertical', '_skin'],
+  classNameBindings: ['compressed','horizontal:horizontal:vertical', '_skin', 'striping:stripe'],
   _componentType: 'list',
-  sortAscending: true,
+  sort: null,
+  sortDirection: 'ascending',
   layout: layout,
   tagName: 'div',
   tabindex: false,
+  pagination: false,
+  striping: false,
 
-  arrangedContent: computed.alias('content'), // here for historical reasons
+  arrangedContent: computed('content', 'sort', 'sortDirection', function() {
+    const {sort,sortDirection,filter} = this.getProperties('sort','sortDirection','filter');
+    let content = a(this.get('content')).slice(0);
+    const isAscending = sortDirection === 'ascending';
+    if(filter) {
+
+    }
+    if(sort) {
+      content.sort((a,b) => {
+        if(isAscending) {
+          if(get(a,sort) > get(b,sort)) { return -1; }
+          if(get(a,sort) === get(b,sort)) { return 0; }
+          if(get(a,sort) < get(b,sort)) { return 1; }
+        } else {
+          if(get(a,sort) > get(b,sort)) { return 1; }
+          if(get(a,sort) === get(b,sort)) { return 0; }
+          if(get(a,sort) < get(b,sort)) { return -1; }
+        }
+      });
+    }
+    return content;
+  }),
   itemType: computed('type', function() {
     const type = this.get('type');
 
@@ -29,17 +55,17 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
   }),
   mouseEnter(e) {
     this.sendAction('onHover', {
-      origination: this,
       granularity: 'list',
       state: true,
       eventTrigger: 'mouse-enter',
+      originatedBy: this,
       event: e
     });
     return true;
   },
   mouseLeave(e) {
     this.sendAction('onHover', {
-      origination: this,
+      originatedBy: this,
       granularity: 'list',
       state: false,
       eventTrigger: 'mouse-leave',
@@ -51,8 +77,8 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
   type: 'ui-item', // the type of Item contained by this list
   compressed: false, // vertical space compression
   prepareItems() {
-    let result = new A();
-    let items = new A(this.get('items'));
+    let result = a();
+    let items = a(this.get('items'));
     items = typeOf(items) === 'string' ? items.split(',') : items;
     items.forEach(item => {
       switch(typeOf(item)) {
@@ -74,10 +100,9 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
     return result;
   },
   /**
-   * Content is immutable copy of _items with the ability to be filtered
+   * Mild messaging of the input data given by user through the 'items' property
    */
-  content: computed('items.[]','filter','tabindex', function() {
-
+  content: computed('items.length','items.isDirty','tabindex', function() {
     return this.prepareItems();
   }),
   // FILTER SETTING
@@ -114,8 +139,8 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
    * just bring together the resultant array of aspectPanes which can be targetted/configured by a user
    */
   availableAspectPanes: computed('_aspects','_panes',function() {
-    const aspects = new A(this.get('_aspects'));
-    const panes = new A(this.get('_panes'));
+    const aspects = a(this.get('_aspects'));
+    const panes = a(this.get('_panes'));
     let aspectPanes = [];
     if(aspects && panes) {
       aspects.forEach( aspect => {
@@ -126,13 +151,13 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
       });
     }
 
-    return new A(aspectPanes);
+    return a(aspectPanes);
   }),
   _itemProperties: null,
   _listProperties: ['size','mood','skin','squeezed'],
   mappedProperties: computed(function() {
     const mapHash = typeOf(this.get('map')) === 'object' ? this.get('map') : {};
-    const mapProps = new A(keys(this).filter( prop => {
+    const mapProps = a(keys(this).filter( prop => {
       return prop.length > 3 && prop.slice(0,3) === 'map' && prop !== 'mapBinding';
     }));
     mapProps.forEach( propertyMap => {
@@ -144,7 +169,7 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
   _mappedFrom: computed('mappedProperties', function() {
     const mp = this.get('mappedProperties');
 
-    return new A(keys(mp).map(item => {
+    return a(keys(mp).map(item => {
       return mp[item];
     }));
   }),
@@ -164,7 +189,7 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
     const possibleAspectPanes = this.get('availableAspectPanes');
     const mappedFrom = this.get('_mappedFrom');
     let aspectPanes = keys(this.get('mappedProperties'));
-    let otherProperties = new A([]);
+    let otherProperties = a();
     this.get('content').forEach( item => {
       aspectPanes = aspectPanes.concat(
         keys(item).filter( itemProp => {
@@ -178,8 +203,8 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
       );
     });
     return {
-      aspectPanes: new A(aspectPanes).uniq(),
-      otherProperties: new A(otherProperties).uniq()
+      aspectPanes: a(aspectPanes).uniq(),
+      otherProperties: a(otherProperties).uniq()
     };
   })),
   _isMappedProperty: function(prop) {

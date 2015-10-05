@@ -1,0 +1,24 @@
+/*  SORTING  */
+.ui-list .sort-control {
+  display: flex;
+  flex-direction: column;
+  color: hsl(0, 0%, 70%);
+}
+.ui-list .sort-control > span {
+  flex-grow:0;
+}
+.ui-list .sort-control > span:hover {
+  background-color: lightgrey;
+  border-radius: 50%;
+  color: hsl(0, 0%, 60%);
+  cursor: pointer;
+}
+.ui-list .sort-control > span.selected {
+  color: black;
+}
+.ui-list .name {
+  align-self: center;
+}
+.ui-list .sort-control .h-center {
+  text-align: center;
+}

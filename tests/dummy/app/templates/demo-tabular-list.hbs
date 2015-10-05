@@ -24,6 +24,9 @@
     {{ui-tabular-list
       columns=columns
       rows=appointments
+      onChange='onChange'
+      onClick='onClick'
+      onHover='onHover'
     }}
   </widget>
   <description>
@@ -43,9 +46,9 @@
       The <prop>columns</prop> property is:
     </p>
 <pre><code class="language-js">columns = [
-  {id:'firstName', name:'First Name'},
-  {id:'lastName', name:'Last Name'},
-  {id:'when', name:'When', type:'date', format:'toNow'}
+  {id:'firstName', name:'First Name', isSortable: true},
+  {id:'lastName', name:'Last Name', isSortable: true},
+  {id:'when', name:'When', type:'date', format:'toNow', horizontal: 'center'}
 ];</code></pre>
 <p>
   and appointments is simply a <prop>findAll</prop> from ember-data:

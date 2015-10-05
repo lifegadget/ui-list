@@ -2,9 +2,9 @@
   {{yield this}}
 {{else}}
   {{#if header}}
-    {{ui-table-header list=this rows=this.rows columns=this.columns}}
+    {{ui-table-header list=this rows=this.arrangedContent columns=this.columns}}
   {{/if}}
-  {{#each row in rows}}
-    {{ui-row-item list=this data=row _unpack=_unpack columns=this.columns}}
+  {{#each arrangedContent as |row index|}}
+    {{ui-row-item list=this data=row _unpack=_unpack columns=this.columns index=index}}
   {{/each}}
 {{/if}}

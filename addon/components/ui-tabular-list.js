@@ -13,5 +13,22 @@ export default UiList.extend({
   classNames: ['table'],
 
   header: true,
+  striping: true,
 
+  _messages: {
+    onClick(o) {
+      return { message: `clicked on the "${o.paneName}" column of the ${get(o.item,'elementId')} row` };
+    },
+    onChange(o) {
+      return true;
+    },
+    onHover(o) {
+      console.log('hover: %o', o);
+      if(o.eventSource === 'mouse-leave') {
+        return { message: `hover exited "${o.granularity}" with id of ${get(o.originatedBy,'elementId')}` };
+      } else {
+        return { message: `hover entered "${o.granularity}" with id of ${get(o.originatedBy,'elementId')}` };
+      }
+    }
+  }
 });

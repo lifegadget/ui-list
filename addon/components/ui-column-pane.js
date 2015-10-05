@@ -20,7 +20,7 @@ const ColumnPane = UiPane.extend({
     const row = this.get('row');
     return row.get(id);
   }),
-  horizontal: computed.alias('column.alignment'),
+  horizontal: computed.alias('column.horizontal'),
   vertical: computed.alias('column.vertical'),
 
   aspects: computed('column',function() {
