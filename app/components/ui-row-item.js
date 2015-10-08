@@ -1,0 +1,1 @@
+export { default } from 'ui-list/components/ui-row-item';

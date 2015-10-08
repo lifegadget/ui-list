@@ -1,0 +1,64 @@
+{{#demo-css}}
+<h3>Component::<code>ui-tabular-list</code></h3>
+
+<h3>Overview</h3>
+<row>
+  <description>
+    <p>
+      A tabular list contains rows, columns, and cells. From a component structure standpoint,
+      the diagram to right demonstrates this relationship.
+    </p>
+    <p>
+      Like other <prop>ui-list</prop> components <prop>ui-tabular-list</prop> is meant to be used
+      as both an <i>inline</i> and <i>block</i> component.
+    </p>
+  </description>
+  <description class="wide">
+    <img src='images/tabular-list.png' width='100%' />
+  </description>
+</row>
+<br/>
+<h3>Examples</h3>
+<row>
+  <widget class='wide'>
+    {{ui-tabular-list
+      columns=columns
+      rows=appointments
+      onChange='onChange'
+      onClick='onClick'
+      onHover='onHover'
+    }}
+  </widget>
+  <description>
+    <h4>Basic Inline</h4>
+
+    <p>
+      In this example the list is created with only two parameters: <prop>columns</prop> and <prop>rows</prop>. The
+      <prop>rows</prop> property points to an ember-data array from the model 'appointment' (you can check out its
+      values in the Ember Inspector now if you like). The <prop>columns</prop> property defines which columns to
+      display and provides meta-information to better present them.
+    </p>
+    <p>
+      The template would like this:
+    </p>
+<pre><code class="language-handlebars">\{{ui-tabular-list columns=columns rows=appointments}}</code></pre>
+    <p>
+      The <prop>columns</prop> property is:
+    </p>
+<pre><code class="language-js">columns = [
+  {id:'firstName', name:'First Name', isSortable: true},
+  {id:'lastName', name:'Last Name', isSortable: true},
+  {id:'when', name:'When', type:'date', format:'toNow', horizontal: 'center'}
+];</code></pre>
+<p>
+  and appointments is simply a <prop>findAll</prop> from ember-data:
+</p>
+<pre><code class="language-js">appointments = computed(function() {
+  return this.store.findAll('appointment');
+});</code></pre>
+
+  </description>
+</row>
+
+
+{{/demo-css}}

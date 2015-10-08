@@ -37,18 +37,20 @@ var UiItem = Ember.Component.extend(FlexHelper,SharedItem,HeritableProperties,St
   hasSubHeading: computed.and('titleExists','subHeadingExists'),
 
   mouseEnter(e) {
-    this._tellParent('onHover', {
+    this._tellAncestors('onHover', {
       granularity: 'item',
       state: true,
       eventSource: 'mouse-enter',
+      originatedBy: this,
       event: e
     });
   },
   mouseLeave(e) {
-    this._tellParent('onHover', {
+    this._tellAncestors('onHover', {
       granularity: 'item',
       state: false,
       eventSource: 'mouse-leave',
+      originatedBy: this,
       event: e
     });
   },

@@ -10,6 +10,7 @@ const UiSelectableList = UiList.extend({
   layout: layout,
   selectionProperty: 'id',
   selected: [],
+  value: computed.alias('selected'),
   /**
    * Will keep ensure that all registered items 'selected' state is in-line with the list's 'selected' array.
    * Also sets '_selected' as an Ember array of 'selected' (useful for containment checks)

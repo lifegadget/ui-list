@@ -44,6 +44,7 @@ export default Ember.Component.extend(NodeMessenger,{
         eventSource: eventSource,
         granularity: this.get('_componentType'),
         aspect: this,
+        originatedBy: this,
         aspectType: this.get(this.get('_componentNameProperty')),
       });
     }

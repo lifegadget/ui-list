@@ -1,0 +1,10 @@
+{{#if hasBlock}}
+  {{yield this}}
+{{else}}
+  {{#if header}}
+    {{ui-table-header list=this rows=this.arrangedContent columns=this.columns}}
+  {{/if}}
+  {{#each arrangedContent as |row index|}}
+    {{ui-row-item list=this data=row _unpack=_unpack columns=this.columns index=index}}
+  {{/each}}
+{{/if}}

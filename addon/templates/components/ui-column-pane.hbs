@@ -1,0 +1,7 @@
+{{#if hasBlock}}
+  {{yield this}}
+{{else}}
+  {{#each aspects as |aspect|}}
+    {{component aspect pane=this options=aspect.options}}
+  {{/each}}
+{{/if}}

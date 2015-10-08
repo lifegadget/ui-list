@@ -1,7 +1,7 @@
 {{#if hasBlock}}
   {{yield this}}
 {{else}}
-{{#each arrangedContent as |item|}}
+{{#each arrangedContent as |item index|}}
     {{component itemType
         list=this
         data=item
@@ -14,6 +14,7 @@
         style=style
         mood=mood
         squeezed=squeezed
+        index=index
     }}
 {{/each}}
 {{/if}}
