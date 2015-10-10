@@ -8,6 +8,8 @@
 Lists are everywhere and now you've got a companion for your lists. Whether you want sort them, take action on them, 
 or just have a smart way of displaying them. 
 
+[![](https://i.vimeocdn.com/video/539171647_640x358.jpg)](https://vimeo.com/141975827)
+
 ## Install ##
 
 - Ember-CLI versions 0.2.3+
