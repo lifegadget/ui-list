@@ -2,7 +2,7 @@
   {{yield}}
 {{else}}
   {{#each columns as |column|}}
-    <span class="column-heading h-{{column.horizontal}}">
+    <span class="column-heading h-{{column.horizontal}} {{column.id}}">
       <span class="name">{{column.name}}</span>
       {{#if column.isSortable}}
         <span class="sort">

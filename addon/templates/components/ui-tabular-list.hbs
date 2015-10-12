@@ -5,6 +5,11 @@
     {{ui-table-header list=this rows=this.arrangedContent columns=this.columns}}
   {{/if}}
   {{#each arrangedContent as |row index|}}
-    {{ui-row-item list=this data=row _unpack=_unpack columns=this.columns index=index}}
-  {{/each}}
+    {{#if (and (lt index this._stop) (gte index this._start))}}
+      {{ui-row-item list=this data=row _unpack=_unpack columns=this.columns index=index}}
+    {{/if}}
+  {{/each}} 
+  {{#if limit}}
+    {{ui-pagination-control list=this}}
+  {{/if}}
 {{/if}}

@@ -7,6 +7,9 @@ export default Ember.Route.extend({
 
   model: function() {
     return this.store.peekAll('activity');
-  }
-
+  },
+  title: function(tokens) {
+    return tokens.join(' - ') + ' | ui-list';
+  },
+  titleToken: 'demo app'
 });

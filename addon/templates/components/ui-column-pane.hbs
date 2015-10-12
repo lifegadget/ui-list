@@ -2,6 +2,11 @@
   {{yield this}}
 {{else}}
   {{#each aspects as |aspect|}}
-    {{component aspect pane=this options=aspect.options}}
+    {{component aspect
+      pane=this
+      options=this.options
+      format=this.format
+      value=value
+    }}
   {{/each}}
 {{/if}}

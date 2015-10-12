@@ -16,6 +16,7 @@ module.exports = {
     app.import('vendor/ui-list/ui-list.css');
     app.import('vendor/ui-list/ui-item.css');
     app.import('vendor/ui-list/ui-table.css');
+    app.import('vendor/ui-list/ui-pagination.css');
     app.import('vendor/ui-list/ui-controls.css');
     app.import('vendor/ui-list/ui-list-sorting.css');
     app.import('vendor/ui-list/ui-list-layout.css');

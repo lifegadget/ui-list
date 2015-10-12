@@ -63,5 +63,4 @@ export default Aspect.extend({
 
     return value;
   })
-
 });
