@@ -58,6 +58,9 @@ export default Aspect.extend({
         case 'date-uk':
           value = moment(value).format('D MMM, YYYY');
           break;
+
+        default:
+          value = moment(value).format(format);
       }
     }
 
