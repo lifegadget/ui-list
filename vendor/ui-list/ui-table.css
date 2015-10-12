@@ -17,6 +17,11 @@
   flex-shrink: 0;
   margin-right: 10px;
 }
+.ui-list .column.selection,
+.ui-list .column-heading.selection {
+  flex: 0;
+  margin: 0 10px 0 10px;
+}
 
 /* Default Skin */
 .ui-list.table .row {

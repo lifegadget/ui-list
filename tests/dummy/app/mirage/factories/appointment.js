@@ -7,6 +7,7 @@ export default Mirage.Factory.extend({
     return 'person' + i + '@email.com';
   },
   when: faker.date.future,
+  quantity: faker.random.number,
   avatar: faker.image.avatar,
   topic: faker.lorem.words
 });

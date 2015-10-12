@@ -15,16 +15,29 @@ const ColumnPane = UiPane.extend({
   id: computed.alias('column.id'),
   name: computed.alias('column.name'),
   type: computed.alias('column.type'),
-  value: computed('id','column', function() {
-    const id = this.get('id');
-    const row = this.get('row');
-    return id ? get(row,id) : null;
+  format: computed.alias('column.format'),
+  options: computed.alias('column.options'),
+  value: computed('id','column','column.value', function() {
+    const {id,row} = this.getProperties('id','row');
+    const value = this.get('column.value');
+    if(value) { return value; }
+    else {return id ? get(row,id) : null;}
   }),
   horizontal: computed.alias('column.horizontal'),
   vertical: computed.alias('column.vertical'),
 
   aspects: computed('column',function() {
-    return ['ui-cell-aspect']; // TODO: make this dynamic based on column definition
+    const {type,options,buttons} = this.getProperties('type','options','buttons');
+    if (type === 'buttons') {
+      this.set('options', merge(options,buttons));
+      return ['ui-buttons-aspect'];
+    }
+    else if (type === 'selection') {
+      return ['ui-selection-aspect'];
+    }
+    else {
+      return ['ui-cell-aspect'];
+    }
   })
 });
 

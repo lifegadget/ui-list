@@ -15,6 +15,14 @@ export default UiList.extend({
   header: true,
   striping: true,
 
+  limit: null,
+  offset: 0,
+  _start: computed.alias('offset'),
+  _stop: computed('offset', 'limit', function() {
+    const {limit,offset, arrangedContent} = this.getProperties('limit','offset','arrangedContent');
+    return limit ? offset + limit : arrangedContent.length;
+  }),
+
   _messages: {
     onClick(o) {
       return { message: `clicked on the "${o.paneName}" column of the ${get(o.item,'elementId')} row` };

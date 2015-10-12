@@ -22,7 +22,7 @@
 <row>
   <widget class='wide'>
     {{ui-tabular-list
-      columns=columns
+      columns=basic
       rows=appointments
       onChange='onChange'
       onClick='onClick'
@@ -48,7 +48,8 @@
 <pre><code class="language-js">columns = [
   {id:'firstName', name:'First Name', isSortable: true},
   {id:'lastName', name:'Last Name', isSortable: true},
-  {id:'when', name:'When', type:'date', format:'toNow', horizontal: 'center'}
+  {id:'howMany', name:'Quantity', type:'number', format: {showCommas: true} },
+  {id:'when', name:'When', type:'date', format:'toNow', horizontal: 'center'},
 ];</code></pre>
 <p>
   and appointments is simply a <prop>findAll</prop> from ember-data:
@@ -60,5 +61,53 @@
   </description>
 </row>
 
+<row>
+  <widget class='wide'>
+    {{ui-tabular-list
+      columns=advanced
+      rows=appointments
+      limit=5
+      offset=0
+      onChange='onChange'
+      onClick='onClick'
+      onHover='onHover'
+    }}
+  </widget>
+  <description>
+    <h4>Beyond the Basics</h4>
 
+    <p>
+      In this follow-on example we're first demonstrating the use of the <b>limit</b> and <b>offset</b> properties
+      which in this case are limiting the displayed table to 5 rows at a time. As soon as you set the limit
+      you'll also notice that the <prop>ui-pagination-control</prop> has been added to the canvas to help
+      navigating between "pages".
+    </p>
+    <p>
+      In addition, we're also demontrating how easy it is to add a "selection" checkbox
+      and an action button(s) which trigger with a row level context. In both cases we swap out the
+      <i>cell</i> aspect with a specialised aspect for the task (<i>selection</i> and <i>buttons</i> aspects
+      repectively).
+    </p>
+    <p>
+      The template would like this:
+    </p>
+<pre><code class="language-handlebars">\{{ui-tabular-list limit=5 offset=0 columns=columns rows=appointments}}</code></pre>
+    <p>
+      The <prop>columns</prop> property is:
+    </p>
+<pre><code class="language-js">columns = [
+  {id:'selector', name:'', type:'selector', horizontal: 'center'},
+  {id:'firstName', name:'First Name', isSortable: true},
+  {id:'lastName', name:'Last Name', isSortable: true},
+  {id:'action', name:'Action', type:'buttons', value: ['do-it'], format: {size: 'small', mood:'success', icon: 'arrow-circle-o-right'}, horizontal: 'center'},
+];</code></pre>
+<p>
+  and appointments code remains the same:
+</p>
+<pre><code class="language-js">appointments = computed(function() {
+  return this.store.findAll('appointment');
+});</code></pre>
+
+  </description>
+</row>
 {{/demo-css}}

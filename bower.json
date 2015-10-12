@@ -18,7 +18,9 @@
     "Faker": "~3.0.0",
     "prism": "~1.1.0",
     "moment": ">= 2.8.0",
-    "moment-timezone": ">= 0.1.0"
+    "moment-timezone": ">= 0.1.0",
+    "hammer-time": "0.3.0",
+    "hammerjs": "runspired/hammer.js#develop"
   },
   "devDependencies": {
     "highlightjs": "~8.5.0",
