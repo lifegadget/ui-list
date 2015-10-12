@@ -11,7 +11,7 @@ export default Ember.Controller.extend({
   basic: [
     {id:'firstName', name:'First Name', isSortable: true},
     {id:'lastName', name:'Last Name', isSortable: true},
-    {id:'howMany', name:'Quantity', type:'number', format: {showCommas: true} },
+    {id:'quantity', name:'Quantity', type:'number', isSortable: true, horizontal: 'right', format: {showCommas: true} },
     {id:'when', name:'When', type:'date', format:'toNow', horizontal: 'center'},
   ],
   advanced: [

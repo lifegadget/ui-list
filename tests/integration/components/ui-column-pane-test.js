@@ -6,14 +6,15 @@ moduleForComponent('ui-column-pane', 'Integration | Component | ui-column-pane',
 });
 
 test('it renders', function(assert) {
-  assert.expect(2);
-
+  // assert.expect(2);
   // Set any properties with this.set('myProperty', 'value');
   // Handle any actions with this.on('myAction', function(val) { ... });
+  this.set('column',{});
 
-  this.render(hbs`{{ui-column-pane}}`);
+  this.render(hbs`{{ui-column-pane column=column}}`);
 
   assert.equal(this.$().text().trim(), '');
+
 
   // Template block usage:
   this.render(hbs`

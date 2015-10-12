@@ -16,8 +16,7 @@ export default Ember.Component.extend({
   limit: computed.alias('list.limit'),
   offset: computed.alias('list.offset'),
   page: computed('offset', function() {
-    const {offset,limit,pages} = this.getProperties('offset','limit','pages');
-    const size = this.get('list.items.length');
+    const {offset,limit} = this.getProperties('offset','limit');
     return offset / limit === parseInt(offset / limit,10) ? (offset/limit) + 1: Math.floor(offset/limit) + 2;
   }),
   pages: computed('offset','list.items.length',function() {
@@ -30,7 +29,7 @@ export default Ember.Component.extend({
     return page >= pages ? 'no-upward-paging' : 'upward-paging';
   }),
   pageDownNav: computed('pages','page', function() {
-    const {pages,page} = this.getProperties('pages', 'page');
+    const {page} = this.getProperties('page');
     return page <= 1 ? 'no-downward-paging' : 'downward-paging';
   }),
   sortedByMessage: computed('list.sort', function() {
@@ -55,7 +54,7 @@ export default Ember.Component.extend({
       }
     },
     pageDown() {
-      const {page,pages,limit} = this.getProperties('page','pages','limit');
+      const {page,limit} = this.getProperties('page','limit');
       if(page === 1) {
         this.list.sendAction('onError', {
           'code': 'paginationation-constraint',
