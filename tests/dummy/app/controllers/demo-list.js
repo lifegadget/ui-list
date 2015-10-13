@@ -71,7 +71,6 @@ export default Ember.Controller.extend({
     onClick(o) {
       const flashMessages = Ember.get(this, 'flashMessages');
       flashMessages.success(`onClick Event. Click originated from ${o.granularity}; item was ${o.itemTitle}`);
-      console.log('container click: %o', o);
     },
     onHover(o) {
       const flashMessages = Ember.get(this, 'flashMessages');

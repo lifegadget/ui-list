@@ -22,7 +22,6 @@ export default Ember.Controller.extend({
     // in demo we'll accept all changes and send back into component
     onChange(o) {
       const flashMessages = Ember.get(this, 'flashMessages');
-      console.log('changed: %o', o);
       if(o.action==='toggle') {
         flashMessages.success(`onChange Event: ${o.message}`);
       } else {

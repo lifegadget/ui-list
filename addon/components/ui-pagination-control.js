@@ -49,7 +49,6 @@ export default Ember.Component.extend({
         });
       } else {
         let newOffset = (limit * page);
-        console.log('newOffset %s', newOffset);
         this.set('list.offset', newOffset);
       }
     },

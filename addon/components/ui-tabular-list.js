@@ -31,7 +31,6 @@ export default UiList.extend({
       return true;
     },
     onHover(o) {
-      console.log('hover: %o', o);
       if(o.eventSource === 'mouse-leave') {
         return { message: `hover exited "${o.granularity}" with id of ${get(o.originatedBy,'elementId')}` };
       } else {

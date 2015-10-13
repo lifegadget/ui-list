@@ -5,7 +5,6 @@ const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, se
 const ListMessaging = Ember.Mixin.create({
 
     eventPropagation(event, item, ...args) {
-      console.log(`event ${event} was propagated.`);
       this.sendAction(event, item, ...args);
     }
 });
