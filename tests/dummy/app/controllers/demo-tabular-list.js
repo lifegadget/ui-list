@@ -15,6 +15,7 @@ export default Ember.Controller.extend({
     {id:'when', name:'When', type:'date', format:'toNow', horizontal: 'center'},
   ],
   advanced: [
+    {id:'id', hidden:true},
     {id:'selection', name:'', type:'selection', horizontal: 'center'},
     {id:'firstName', name:'First Name', isSortable: true},
     {id:'lastName', name:'Last Name', isSortable: true},

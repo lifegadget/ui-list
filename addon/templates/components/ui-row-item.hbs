@@ -4,6 +4,8 @@
   </span>
 {{else}}
   {{#each _columns as |column|}}
-    {{ui-column-pane row=this column=column}}
+    {{#if column.hidden}}{{else}}
+      {{ui-column-pane row=this column=column}}
+    {{/if}}
   {{/each}}
 {{/if}}
