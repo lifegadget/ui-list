@@ -97,10 +97,9 @@
     </p>
 <pre><code class="language-js">columns = [
   {id:'id', hidden:true},
-  {id:'selector', name:'', type:'selector', horizontal: 'center'},
   {id:'firstName', name:'First Name', isSortable: true},
   {id:'lastName', name:'Last Name', isSortable: true},
-  {id:'action', name:'Action', type:'buttons', value: ['do-it'], format: {size: 'small', mood:'success', icon: 'arrow-circle-o-right'}, horizontal: 'center'},
+  {id:'action', name:'Action', type:'buttons', value: ['do-it'], format: {size: 'small', mood:'success', icon: 'arrow-circle-o-right'}, horizontal: 'center'}
 ];</code></pre>
 <p>
   and appointments code remains the same:
@@ -108,6 +107,57 @@
 <pre><code class="language-js">appointments = computed(function() {
   return this.store.findAll('appointment');
 });</code></pre>
+
+  </description>
+</row>
+
+<row>
+  <widget class='wide'>
+    {{ui-tabular-list
+      columns=statusColumns
+      rows=appointments
+      onChange='onChange'
+      onClick='onClick'
+    }}
+  </widget>
+  <description>
+    <h4>Stylish Features</h4>
+
+    <p>
+      Now let's look at some dynamic styling we can apply to a column.
+    </p>
+    <p>
+      The template would like this:
+    </p>
+<pre><code class="language-handlebars">\{{ui-tabular-list limit=5 offset=0 columns=columns rows=appointments}}</code></pre>
+    <p>
+      The <prop>columns</prop> property is:
+    </p>
+<pre><code class="language-js">columns = [
+  {id:'firstName', name:'First Name', isSortable: true},
+  {id:'status', name:'Status - f()', class=classyFunction},
+  {id:'status', name:'Status - map', class=classyMap}
+];
+</code></pre>
+<p>
+  same appointments code, but we've added a <code>classyFunction</code> definition as well as a <code>classyMap</code> mapper object:
+</p>
+<pre><code class="language-js">appointments = computed(function() {
+  return this.store.findAll('appointment');
+});
+classyFunction(context) {
+  if(get(context,'value').substr(-3) === 'ing') {
+    return 'label label-warning';
+  } else {
+    return 'label label-success';
+  }
+};
+classyMap = {
+  executed: 'label label-success',
+  verifying: 'label label-warning',
+  executing: 'label label-danger'
+};
+</code></pre>
 
   </description>
 </row>

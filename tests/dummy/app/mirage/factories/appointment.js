@@ -9,5 +9,6 @@ export default Mirage.Factory.extend({
   when: faker.date.future,
   quantity: faker.random.number,
   avatar: faker.image.avatar,
-  topic: faker.lorem.words
+  topic: faker.lorem.words,
+  status: faker.list.random('downloaded','verifying','verified','scheduling','scheduled','preparing','executing','executed')
 });
