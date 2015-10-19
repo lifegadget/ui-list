@@ -30,6 +30,7 @@ export default Aspect.extend({
         return classy ? value : null;
     }
   }),
+  empty: computed.alias('column.column.empty'),
 
   _type: computed('type', function() {
     return `${this.get('type')}-type`;
@@ -47,8 +48,11 @@ export default Aspect.extend({
     return isEmpty(value) ? 'empty' : null;
   }),
   _value: computed('value', function() {
-    const {precision,type,format,empty} = this.getProperties('precision', 'type', 'format','empty');
+    const {precision,type,format,empty,_isEmpty} = this.getProperties('precision', 'type', 'format','empty','_isEmpty');
     let value = this.get('value');
+    if(_isEmpty && empty) {
+      return empty;
+    }
     // Numbers
     if(type === 'number' && precision) {
       value = value ? value.toFixed(precision) : value;
