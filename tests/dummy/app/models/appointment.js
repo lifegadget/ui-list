@@ -7,5 +7,6 @@ export default DS.Model.extend({
 	lastName: attr('string'),
   topic: attr('string'),
   avatar: attr('string'),
-  quantity: attr('number')
+  quantity: attr('number'),
+  status: attr('string')
 });

@@ -11,12 +11,25 @@ import moment from 'moment';
 export default Aspect.extend({
   layout: layout,
   classNames: ['cell'],
-  classNameBindings: ['_type','_isNegative','_isZero','_isEmpty'],
+  classNameBindings: ['_type','_isNegative','_isZero','_isEmpty','_classy'],
   column: computed.alias('pane'),
   value: computed.alias('column.value'),
   type: computed.alias('column.column.type'),
   precision: computed.alias('column.column.precision'),
   format: computed.alias('column.column.format'),
+  classy: computed.alias('column.column.class'),
+  _classy: computed('classy',function() {
+    const {classy,value} = this.getProperties('classy','value');
+    const type = typeOf(classy);
+    switch(type) {
+      case 'function':
+        return classy(this);
+      case 'object':
+        return classy[value] ? classy[value] : null;
+      case 'boolean':
+        return classy ? value : null;
+    }
+  }),
 
   _type: computed('type', function() {
     return `${this.get('type')}-type`;
@@ -34,7 +47,7 @@ export default Aspect.extend({
     return isEmpty(value) ? 'empty' : null;
   }),
   _value: computed('value', function() {
-    const {precision,type,format} = this.getProperties('precision', 'type', 'format');
+    const {precision,type,format,empty} = this.getProperties('precision', 'type', 'format','empty');
     let value = this.get('value');
     // Numbers
     if(type === 'number' && precision) {
@@ -42,6 +55,9 @@ export default Aspect.extend({
     }
     // Dates
     else if(type === 'date') {
+      if(!value) {
+        return empty ? empty : null;
+      }
       switch(format) {
         case 'toNow':
           value = moment(value).fromNow();
