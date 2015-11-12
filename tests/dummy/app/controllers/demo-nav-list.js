@@ -13,6 +13,9 @@ export default Ember.Controller.extend({
     {title: 'Took Cab', subHeading: 'took a cab, drinking not driving', icon: 'cab'},
     {title: 'Had Coffee', subHeading: 'need to chill out after that beer', icon: 'coffee'}
   ],
+  itemsJson: computed('items', function() {
+    return JSON.stringify(this.get('items'), null, 2);
+  }),
   position: 'left',
   selected: ['groceries'],
   mood: 'default',
