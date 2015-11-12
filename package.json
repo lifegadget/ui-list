@@ -1,6 +1,6 @@
 {
   "name": "ui-list",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "List controls for ambitious Ember applications.",
   "directories": {
     "doc": "doc",
@@ -34,7 +34,7 @@
   "devDependencies": {
     "broccoli-asset-rev": "^2.2.0",
     "demo-helper": "0.0.20",
-    "ember-cli": "1.13.10",
+    "ember-cli": "1.13.11",
     "ember-cli-app-version": "^1.0.0",
     "ember-cli-autoprefixer": "0.4.1",
     "ember-cli-babel": "^5.1.5",
