@@ -1,6 +1,6 @@
 {
   "name": "ui-list",
-  "version": "0.3.13",
+  "version": "0.3.14",
   "description": "List controls for ambitious Ember applications.",
   "directories": {
     "doc": "doc",
@@ -19,10 +19,11 @@
   "license": "MIT",
   "main": "index.js",
   "files": [
-    "Brocfile.js",
+    "ember-cli.js",
     "LICENSE.md",
     "README.md",
     "addon",
+    "blueprints",
     "app",
     "bower.json",
     "index.js",
