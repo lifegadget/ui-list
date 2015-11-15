@@ -3,10 +3,10 @@
 
 ## Overview ##
 
-![ ](tests/dummy/public/images/hl-design.png)
+![ ](tests/dummy/public/images/ui-list.gif)
 
-Lists are everywhere and now you've got a companion for your lists. Whether you want sort them, take action on them, 
-or just have a smart way of displaying them. 
+Lists are everywhere and now you've got a companion for your lists. Whether you want sort them, take action on them,
+or just have a smart way of displaying them.
 
 [![](https://i.vimeocdn.com/video/539171647_640x358.jpg)](https://vimeo.com/141975827)
 
@@ -26,7 +26,7 @@ or just have a smart way of displaying them.
 ## Usage ##
 For more details on the syntax, documentation, and general goodness check out the interactive demo:
 
-> [ui-list demo](http://development.ui-list.divshot.io)
+> [ui-list demo](https://ui-list.firebaseapp.com/)
 
 
 ## Version Compatibility
@@ -38,7 +38,7 @@ This may very well work with older version of Ember and Ember-CLI but it was int
 
 ## Repo Contribution
 
-We're open to your creative suggestions but please move past the "idea" stage 
+We're open to your creative suggestions but please move past the "idea" stage
 and send us a PR so we can incorporate your ideas without killing ourselves. :)
 
 ## Licensing

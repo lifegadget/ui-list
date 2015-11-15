@@ -60,7 +60,7 @@ const UiSelectableList = UiList.extend({
           this.sendAction('onError', {
             type: 'selection',
             code: 'deselect-min-constraint',
-            message: `attempted to remove "${item.get('title')}" but this list must have at least ${min} items.`,
+            message: `attempted to remove "${get(item, 'title')}" but this list must have at least ${min} items.`,
             min: min,
             selected: _selected,
             item: item,
@@ -87,7 +87,7 @@ const UiSelectableList = UiList.extend({
         this.sendAction('onChange', {
           type: 'selection',
           action: 'toggle',
-          message: `toggled from "${oldSelected.get('title')}" to "${item.get('title')}"`,
+          message: `toggled from "${get(oldSelected, 'title')}" to "${get(item, 'title')}"`,
           added: item,
           removed: oldSelected,
           selected: a([itemId])
@@ -100,7 +100,7 @@ const UiSelectableList = UiList.extend({
           this.sendAction('onError', {
             type: 'selection',
             code: 'select-max-constraint',
-            message: `attempted to add "${item.get('title')}" but this list can only have a maximum of ${max} items.`,
+            message: `attempted to add "${get(item, 'title')}" but this list can only have a maximum of ${max} items.`,
             max: max,
             selected: _selected,
             item: item,
@@ -114,7 +114,7 @@ const UiSelectableList = UiList.extend({
           this.sendAction('onChange', {
             type: 'selection',
             action: 'select',
-            message: `added "${item.get('title')}" to the selection (${selection.length} items selected)`,
+            message: `added "${get(item,'title')}" to the selection (${selection.length} items selected)`,
             added: item,
             id: itemId,
             selected: selection

@@ -63,7 +63,7 @@ let NodeMessenger = Ember.Mixin.create({
       [ value ] = args;
     }
     let result = this.get('_registry').find(i=>get(i, 'child.' + property) === value);
-    return result.child || null;
+    return result && result.child ? result.child : {};
   },
   _filterByRegistry(...args) {
     let property = 'elementId';
