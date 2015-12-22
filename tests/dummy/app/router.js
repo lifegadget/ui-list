@@ -17,7 +17,13 @@ export default Router.map(function() {
   });
 
   this.route('demo-sortable-list');
-  this.route('demo-tabular-list');
+  this.route('demo-tabular-list', function() {
+    this.route('overview');
+    this.route('basic-inline');
+    this.route('limits-and-offsets');
+    this.route('styling');
+    this.route('block-form');
+  });
 
   // ITEM
   this.route('demo-item');

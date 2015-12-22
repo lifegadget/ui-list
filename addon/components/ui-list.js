@@ -12,15 +12,61 @@ const camelize = Ember.String.camelize;
 import layout from '../templates/components/ui-list';
 import ListMessaging from '../mixins/list-messaging';
 import NodeMessenger from '../mixins/node-messenger';
+import SharedStylist from 'ember-cli-stylist/mixins/shared-stylist';
 
-const expandStringCSV = function(items) {
+/**
+ * from a string looks for meta information to build out
+ * the most complete structured representation of the object
+ */
+const smartContext = item => {
+  let title;
+  let value;
+  if(item.indexOf('::') !== -1) {
+    // literal value definition
+    [title, value] = item.split('::');
+  } else {
+    // lack of specificity
+    title = item;
+    value = dasherize(item);
+  }
+
+  return {
+    id: value,
+    title: title,
+    value: value
+  };
+};
+
+/**
+ * Converts a String (CSV if multiple records) input and coverts it
+ * to an array of objects.
+ */
+const stringParser = function(items) {
   return a(items.split(',').map(item => {
-    return {id: camelize(item), title: item, value: dasherize(item)};
+    return smartContext(item);
   }));
 };
 
-const sorted = items => {
-  return items;
+const sorted = (list, property, direction) => {
+  // let content = a(this.get('content')).slice(0);
+  // const isAscending = direction === 'ascending';
+  // if(filter) {
+  //
+  // }
+  // if(sort) {
+  //   content.sort((a,b) => {
+  //     if(isAscending) {
+  //       if(get(a, sort) > get(b,sort)) { return -1; }
+  //       if(get(a, sort) === get(b,sort)) { return 0; }
+  //       if(get(a, sort) < get(b,sort)) { return 1; }
+  //     } else {
+  //       if(get(a, sort) > get(b,sort)) { return 1; }
+  //       if(get(a, sort) === get(b,sort)) { return 0; }
+  //       if(get(a, sort) < get(b,sort)) { return -1; }
+  //     }
+  //   });
+  // }
+  return list;
 };
 
 const filtered = items => {
@@ -28,7 +74,7 @@ const filtered = items => {
 };
 
 
-var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
+var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,SharedStylist,{
   classNames: ['ui-list','list-container'],
   classNameBindings: ['compressed','horizontal:horizontal:vertical', '_skin', 'striping:stripe'],
   _componentType: 'list',
@@ -42,7 +88,7 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
   items: null,
   _items: computed('items', function() {
     let items = this.get('items');
-    items = typeOf(items) === 'string' ? expandStringCSV(items) : a(items);
+    items = typeOf(items) === 'string' ? stringParser(items) : a(items);
 
     return sorted(filtered(items));
   }),
@@ -69,31 +115,6 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
   padEnds: 0, // allows setting both ends equally
   gaps: 10, // padding between items
 
-
-
-
-  arrangedContent: computed('content', 'sort', 'sortDirection', function() {
-    const {sort,sortDirection,filter} = this.getProperties('sort','sortDirection','filter');
-    let content = a(this.get('content')).slice(0);
-    const isAscending = sortDirection === 'ascending';
-    if(filter) {
-
-    }
-    if(sort) {
-      content.sort((a,b) => {
-        if(isAscending) {
-          if(get(a,sort) > get(b,sort)) { return -1; }
-          if(get(a,sort) === get(b,sort)) { return 0; }
-          if(get(a,sort) < get(b,sort)) { return 1; }
-        } else {
-          if(get(a,sort) > get(b,sort)) { return 1; }
-          if(get(a,sort) === get(b,sort)) { return 0; }
-          if(get(a,sort) < get(b,sort)) { return -1; }
-        }
-      });
-    }
-    return content;
-  }),
   itemType: computed('type', function() {
     const type = this.get('type');
 

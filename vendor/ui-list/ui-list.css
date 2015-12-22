@@ -50,8 +50,11 @@
   margin: auto;
 }
 
-.ui-list .orient-horizontal {
+.ui-list .item.full {
   flex: 1 1;
+}
+.ui-list .item {
+  flex: initial;
 }
 
 

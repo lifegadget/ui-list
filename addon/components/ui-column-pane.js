@@ -17,11 +17,11 @@ const ColumnPane = UiPane.extend({
   type: computed.alias('column.type'),
   format: computed.alias('column.format'),
   options: computed.alias('column.options'),
-  value: computed('id','column','column.value', function() {
-    const {id,row} = this.getProperties('id','row');
-    const value = this.get('column.value');
-    if(value) { return value; }
-    else {return id ? get(row,id) : null;}
+  value: null,
+  _value: on('init', function() {
+    const prop = this.get('id');
+    const cp = computed.alias(`data.${prop}`);
+    defineProperty(this, 'value', cp);
   }),
   horizontal: computed.alias('column.horizontal'),
   vertical: computed.alias('column.vertical'),

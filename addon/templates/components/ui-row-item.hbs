@@ -5,7 +5,7 @@
 {{else}}
   {{#each _columns as |column|}}
     {{#if column.hidden}}{{else}}
-      {{ui-column-pane row=this column=column}}
+      {{ui-column-pane row=this column=column data=this.data}}
     {{/if}}
   {{/each}}
 {{/if}}

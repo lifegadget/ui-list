@@ -1,15 +1,25 @@
 {{#if hasBlock}}
   {{yield this}}
 {{else}}
+  {{#if (gt ends 0)}}
+    <div class="ui-end start" style="flex-basis: {{ends}}px"></div>
+  {{/if}}
   {{#if header}}
     {{ui-table-header list=this rows=this.arrangedContent columns=this.columns}}
   {{/if}}
-  {{#each arrangedContent as |row index|}}
-    {{#if (and (lt index this._stop) (gte index this._start))}}
-      {{ui-row-item list=this data=row _unpack=_unpack columns=this.columns index=index}}
+  {{#each _items as |row index|}}
+    {{#if (gt index 0)}}
+      {{#if (gt gaps 0)}}
+        <div class="ui-gap" style="flex-basis: {{gaps}}px"></div>
+      {{/if}}
     {{/if}}
-  {{/each}} 
+    {{ui-row-item list=this data=row _unpack=_unpack columns=this.columns index=index}}
+
+  {{/each}}
   {{#if limit}}
     {{ui-pagination-control list=this}}
+  {{/if}}
+  {{#if (gt ends 0)}}
+    <div class="ui-end stop" style="flex-basis: {{ends}}px"></div>
   {{/if}}
 {{/if}}

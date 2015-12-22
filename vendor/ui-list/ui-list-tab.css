@@ -65,6 +65,9 @@
   border-bottom: 5px solid rgba(234, 234, 234, 0.78);
   justify-content: space-around;
 }
+.ui-list.list-container.top.skin-tab {
+  border-bottom: 1px solid hsl(0, 0%, 90%);
+}
 .ui-list.list-container.top .ui-list.item.skin-tab {
   transition: 0.25s;
   border-top-left-radius: 10px;
@@ -74,20 +77,26 @@
   height: 100%;
   font-weight: 500;
   align-self: flex-end;
+  position: relative;
+  bottom: -1px;
 }
 .ui-list.list-container.top .ui-list.item.skin-tab.selected {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border: 1px solid hsl(0, 0%, 75%);
+  border-bottom: 1px solid hsl(0, 0%, 90%);
   background-color: hsl(0, 0%, 91%);
-  padding-top: 4px;
   font-weight: 900;
+  align-self: flex-end;
 }
 
 /* BOTTOM */
 .ui-list.list-container.bottom .ui-list.item.skin-tab {
   border-bottom: 5px solid rgba(234, 234, 234, 0.78);
   justify-content: space-around;
+}
+.ui-list.list-container.bottom.skin-tab {
+  border-top: 1px solid hsl(0, 0%, 90%);
 }
 .ui-list.list-container.bottom .ui-list.item.skin-tab {
   transition: 0.25s;
@@ -98,13 +107,15 @@
   height: 100%;
   font-weight: 500;
   align-self: flex-start;
+  position: relative;
+  top: -1px;
 }
 .ui-list.list-container.bottom .ui-list.item.skin-tab.selected {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   border: 1px solid hsl(0, 0%, 75%);
   background-color: hsl(0, 0%, 91%);
-  padding-bottom: 4px;
+  border-top: 1px solid hsl(0, 0%, 90%);
   font-weight: 900;
 }
 .ui-list.list-container.left .ui-list.item.skin-tab:hover {

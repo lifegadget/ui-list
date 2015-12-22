@@ -67,7 +67,7 @@ let SharedItem = Ember.Mixin.create({
     const unpack = this.get('unpack') ? this.get('unpack') : keys(data);
     if(unpack) {
       unpack.map(prop => {
-        const cp = computed.readOnly(`data.${prop}`);
+        const cp = computed.alias(`data.${prop}`);
         defineProperty(this, prop, cp);
       });
     }

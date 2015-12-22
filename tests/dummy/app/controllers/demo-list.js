@@ -80,7 +80,6 @@ export default Ember.Controller.extend({
       } else {
         flashMessages.warning(`onHover Event. Mouse left ${o.granularity.toUpperCase()} component.`);
       }
-      console.log('container hover: %o', o);
     }
   }
 

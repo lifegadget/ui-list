@@ -23,6 +23,9 @@ export default UiList.extend({
     return limit ? offset + limit : arrangedContent.length;
   }),
 
+  /**
+   * Hash of functions to message up and down the list hierarchy
+   */
   _messages: {
     onClick(o) {
       return { message: `clicked on the "${o.paneName}" column of the ${get(o.item,'elementId')} row` };

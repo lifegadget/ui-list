@@ -30,20 +30,7 @@
   <description>
     As stated in the overview, this component's behaviours are <i>largely</i> taken from the "selectable" list but with a navigation mention the cardinatlity, the min/max settings are preset as they typically would not need to be changed (you can override if you need to). Instead the main variables are:
     <h4>Positioning</h4>
-    <controls>
-      <control>
-        <span class='title'>position</span>
-        <span>{{radio-buttons buttons='left,right,top,bottom' defaultValue=0 value=position}}</span>
-      </control>
-      <control>
-        <span class='title'>size</span>
-        <span>{{radio-buttons buttons='tiny,small,default,large,huge' defaultValue='default' value=size}}</span>
-      </control>
-      <control>
-        <span class='title'>mood</span>
-        <span>{{radio-buttons buttons='default,success,info,warning,error' value=mood defaultValue='default'}}</span>
-      </control>
-    </controls>
+    
     <p>
       If you have an item selected you'll see that all it's really doing is setting a <b>css</b> property which in turn puts the border highlighting to the appropriate side of the item.
     </p>
