@@ -50,6 +50,9 @@
   margin: auto;
 }
 
+.ui-list .orient-horizontal {
+  flex: 1 1;
+}
 
 
 .ui-list .sub-heading {

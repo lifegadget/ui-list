@@ -19,7 +19,7 @@ var UiItem = Ember.Component.extend(FlexHelper,SharedItem,HeritableProperties,St
   disabled: false,
   selected: false,
   _aspects: ['title','subHeading','icon','image','badge'],
-  _panes: ['left','center', 'right'],
+  _panes: ['left', 'center', 'right'],
   _parentalProperty: 'list',
   _componentType: 'item',
   _componentNameProperty: 'title',
@@ -59,7 +59,7 @@ var UiItem = Ember.Component.extend(FlexHelper,SharedItem,HeritableProperties,St
    */
   _messages: {
     /**
-     * Collect all clicks from sibliings and add context to the curry up to ui-list
+     * Collect all clicks from siblings and add context to the curry up to ui-list
      * @param  {object} originator The component which originated the click event
      * @param  {object} options    Hash of additional context
      * @return {boolean}           returns false to block the bubbling of the original event

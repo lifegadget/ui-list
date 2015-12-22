@@ -9,7 +9,13 @@ export default Router.map(function() {
   // LIST
   this.route('demo-list');
   this.route('demo-selectable-list');
-  this.route('demo-nav-list');
+  this.route('demo-nav-list', function() {
+    this.route('simple');
+    this.route('styling');
+    this.route('advanced');
+    this.route('actions');
+  });
+
   this.route('demo-sortable-list');
   this.route('demo-tabular-list');
 

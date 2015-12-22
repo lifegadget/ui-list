@@ -4,7 +4,7 @@ const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, se
 
 export default Ember.Controller.extend({
   flashMessages: Ember.inject.service(),
-  queryParams: ['mood','size','skin','position','selected'],
+  navigator: Ember.inject.service(),
 
   items: [
     {title: 'Groceries', subHeading: 'hungry, hungry, hippo', icon: 'cutlery', badge: 6},
@@ -17,10 +17,10 @@ export default Ember.Controller.extend({
     return JSON.stringify(this.get('items'), null, 2);
   }),
   position: 'left',
-  selected: ['groceries'],
   mood: 'default',
   skin: 'default',
   size: 'default',
+  subNavigation: computed.alias('navigator.secondaryRoute'),
   actions: {
     // in demo we'll accept all changes and send back into component
     onChange(o) {
@@ -30,13 +30,16 @@ export default Ember.Controller.extend({
       } else {
         flashMessages.warning(`onChange Event: ${o.message}`);
       }
-      if(o.type === 'selection') {
-        this.set('selected', o.selected);
-      }
     },
     onError(o) {
       const flashMessages = Ember.get(this, 'flashMessages');
       flashMessages.danger(`onError event: ${o.message}`);
+    },
+    changeSubNavigation(o) {
+      if (o.type === 'selection') {
+        this.set('subNavigation', o.selected);
+        this.transitionToRoute(`demo-nav-list.${o.selected}`);
+      }
     }
   }
 });

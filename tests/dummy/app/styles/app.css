@@ -344,3 +344,15 @@ text-centered {
 .downer {
   margin-top: 15px;
 }
+
+.row {
+  display: flex;
+}
+
+.row > .title {
+	width: 20%;
+}
+
+.row > .control {
+	width: 75%;
+}

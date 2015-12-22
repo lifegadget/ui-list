@@ -1,7 +1,15 @@
 {{#if hasBlock}}
   {{yield this}}
 {{else}}
-{{#each arrangedContent as |item index|}}
+  {{#if (gt ends 0)}}
+    <div class="ui-end start" style="flex-basis: {{ends}}px"></div>
+  {{/if}}
+  {{#each _items as |item index|}}
+    {{#if (gt index 0)}}
+      {{#if (gt gaps 0)}}
+        <div class="ui-gap" style="flex-basis: {{gaps}}px"></div>
+      {{/if}}
+    {{/if}}
     {{component itemType
         list=this
         data=item
@@ -16,5 +24,8 @@
         squeezed=squeezed
         index=index
     }}
-{{/each}}
+  {{/each}}
+  {{#if (gt ends 0)}}
+    <div class="ui-end stop" style="flex-basis: {{ends}}px"></div>
+  {{/if}}
 {{/if}}

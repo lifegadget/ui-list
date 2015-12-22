@@ -10,6 +10,9 @@ export default UiSelectableList.extend({
   classNameBindings: ['position', 'horizontal'],
   min: 1,
   max: 1,
+  gaps: 0, // space between nav items
+  padEnds: 0, // space on both ends
+
   cardinality: '1:1',
   skin: 'nav',
   iconRight: '',

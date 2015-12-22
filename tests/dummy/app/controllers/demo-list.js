@@ -10,6 +10,7 @@ export default Ember.Controller.extend({
     {title: 'Inline', subHeading:'using inline component syntax'},
     {title: 'Block', subHeading:'using block component syntax'}
   ],
+  gaps: 15,
 
   items: [
     Ember.Object.create({when: 2, foo: 'Groceries', bar: 'hungry, hungry, hippo', icon: 'shopping-cart', badge: 1}),

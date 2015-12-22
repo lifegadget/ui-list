@@ -1,0 +1,54 @@
+<row>
+  <description>
+
+  </description>
+</row>
+<div>
+  <section class='col-xs-3'>
+      {{ui-nav-list
+        items='Foo,Bar,Baz'
+        selected=selected
+        onChange='onChange'
+      }}
+  </section>
+
+  <section class='col-xs-5'>
+    The template would look like:
+<code class='language-handlebars'><pre>\{{ui-nav-list
+  items='Foo,Bar,Baz'
+  selected=selected
+  onChange='onChange'
+}}</pre></code>
+    and the <prop>onChange</prop> event in demo is:
+
+<pre><code class='language-javascript'>actions: {
+  onChange(o) {
+    const flashMessages = Ember.get(this, 'flashMessages');
+    if(o.action==='toggle') {
+      flashMessages.success(`onChange Event: ${o.message}`);
+    } else {
+      flashMessages.warning(`onChange Event: ${o.message}`);
+    }
+    if(o.type === 'selection') {
+      this.set('selected', o.selected);
+    }
+  }
+}
+</code></pre>
+and the <prop>selected</prop> is initialized to <prop>foo</prop>.
+  </section>
+
+  <section class='col-xs-4'>
+    A simple navigation list is defined by only three properties:
+    <br/>
+    <ul>
+      <li>items - the navigational choices</li>
+      <li>selected - the choice that is selected</li>
+      <li>onChange - the event listener for a change in navigation selection</li>
+    </ul>
+    <p>
+      This simple examples the minimal amount of templating that is needed to get a navigation menu up and running. Continue onto the <i>styling</i> section to understand the major cosmetic changes you can make.
+    </p>
+
+  </section>
+</div>

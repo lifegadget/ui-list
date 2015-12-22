@@ -4,11 +4,29 @@ const { computed, observer, $, run, on, typeOf, debug, isPresent } = Ember;  // 
 const { defineProperty, get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
 const a = Ember.A; // jshint ignore:line
 const capitalize = Ember.String.capitalize;
+const dasherize = thingy => {
+  return thingy ? Ember.String.dasherize(thingy) : thingy;
+};
 const camelize = Ember.String.camelize;
 
 import layout from '../templates/components/ui-list';
 import ListMessaging from '../mixins/list-messaging';
 import NodeMessenger from '../mixins/node-messenger';
+
+const expandStringCSV = function(items) {
+  return a(items.split(',').map(item => {
+    return {id: camelize(item), title: item, value: dasherize(item)};
+  }));
+};
+
+const sorted = items => {
+  return items;
+};
+
+const filtered = items => {
+  return items;
+};
+
 
 var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
   classNames: ['ui-list','list-container'],
@@ -21,6 +39,38 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
   tabindex: false,
   pagination: false,
   striping: false,
+  items: null,
+  _items: computed('items', function() {
+    let items = this.get('items');
+    items = typeOf(items) === 'string' ? expandStringCSV(items) : a(items);
+
+    return sorted(filtered(items));
+  }),
+
+  // PADDING PARAMETERS
+  padStart: computed('ends', {
+    set(_, value) {
+      return value;
+    },
+    get() {
+      const ends = this.get('ends');
+      return ends ? ends : 0;
+    }
+  }),
+  padStop: computed('ends', {
+    set(_, value) {
+      return value;
+    },
+    get() {
+      const ends = this.get('ends');
+      return ends ? ends : 0;
+    }
+  }),
+  padEnds: 0, // allows setting both ends equally
+  gaps: 10, // padding between items
+
+
+
 
   arrangedContent: computed('content', 'sort', 'sortDirection', function() {
     const {sort,sortDirection,filter} = this.getProperties('sort','sortDirection','filter');
@@ -76,35 +126,35 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
 
   type: 'ui-item', // the type of Item contained by this list
   compressed: false, // vertical space compression
-  prepareItems() {
-    let result = a();
-    let items = a(this.get('items'));
-    items = typeOf(items) === 'string' ? items.split(',') : items;
-    items.forEach(item => {
-      switch(typeOf(item)) {
-        case 'instance':
-          result.pushObject(item);
-          break;
-        case 'object':
-          result.pushObject(Ember.Object.create(item));
-          break;
-        case 'string':
-        case 'number':
-          result.pushObject(Ember.Object.create({title:item}));
-          break;
-        default:
-          debug('item of unknown type passed into items array');
-      }
-    });
-
-    return result;
-  },
-  /**
-   * Mild messaging of the input data given by user through the 'items' property
-   */
-  content: computed('items.length','items.isDirty','tabindex', function() {
-    return this.prepareItems();
-  }),
+  // prepareItems() {
+  //   let result = a();
+  //   let items = this.get('items') || [];
+  //   items = typeOf(items) === 'string' ? items.split(',') : items;
+  //   items.forEach(item => {
+  //     switch(typeOf(item)) {
+  //       case 'instance':
+  //         result.pushObject(item);
+  //         break;
+  //       case 'object':
+  //         result.pushObject(Ember.Object.create(item));
+  //         break;
+  //       case 'string':
+  //       case 'number':
+  //         result.pushObject(Ember.Object.create({title:item}));
+  //         break;
+  //       default:
+  //         debug('item of unknown type passed into items array');
+  //     }
+  //   });
+  //
+  //   return result;
+  // },
+  // /**
+  //  * Mild messaging of the input data given by user through the 'items' property
+  //  */
+  // content: computed('items','items.length','items.isDirty','tabindex', function() {
+  //   return this.prepareItems();
+  // }),
   // FILTER SETTING
   // ------------------
   filter: null,
@@ -179,39 +229,6 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,{
       return true;
     }
 
-  },
-
-  /**
-   * Keeps track of what properties are set across _items so that _items components can be more
-   * conservative on their observer usage
-   */
-  _itemSetProperties: on('beforeRender',computed('_items', function() {
-    const possibleAspectPanes = this.get('availableAspectPanes');
-    const mappedFrom = this.get('_mappedFrom');
-    let aspectPanes = keys(this.get('mappedProperties'));
-    let otherProperties = a();
-    this.get('content').forEach( item => {
-      aspectPanes = aspectPanes.concat(
-        keys(item).filter( itemProp => {
-            return possibleAspectPanes.contains(itemProp);
-        })
-      );
-      otherProperties = otherProperties.concat(
-        keys(item).filter( itemProp => {
-          return !possibleAspectPanes.contains(itemProp) && itemProp.slice(0,1) !== '_' && !mappedFrom.contains(itemProp);
-        })
-      );
-    });
-    return {
-      aspectPanes: a(aspectPanes).uniq(),
-      otherProperties: a(otherProperties).uniq()
-    };
-  })),
-  _isMappedProperty: function(prop) {
-    const mp = this.get('mappedProperties');
-    const mappedFrom = this.get('_mappedFrom');
-
-    return mappedFrom.contains(prop) ? mp[prop] : false;
   }
 });
 

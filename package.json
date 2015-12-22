@@ -58,7 +58,9 @@
     "ember-resolver": "2.0.3",
     "ember-try": "~0.0.8",
     "ui-button": "0.6.3",
-    "ui-input": "0.5.1"
+    "ui-ember-slider": "0.2.5",
+    "ui-input": "0.5.1",
+    "ui-navigator-service": "0.1.2"
   },
   "keywords": [
     "ember-addon"

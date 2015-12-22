@@ -8,102 +8,7 @@
         it's main function is to proxy properties into the items it contains as well manage actions coming out of them.
     </desc>
 </div>
-{{! ------------------------------------------------------------------------------------------ }}
 <h4>Interactive Demo</h4>
-{{!-- <row style='max-width:600px'>
-  {{ui-nav-list items=tabs position='top'}}
-</row>
-<row>
-  <widget class="wide">
-    {{#if moodFunction}}
-      {{ui-list
-        items=items
-        filter=listFilter
-        map=map
-        size=size
-        mood=sillyLogic
-        skin=skin
-        defaultIcon=defaultIcon
-        compressed=compressed
-        squeezed=squeezed
-        onClick='onClick'
-        onHover='onHover'
-      }}
-    {{else}}
-      {{ui-list
-        items=items
-        filter=listFilter
-        map=map
-        size=size
-        mood=staticMood
-        skin=skin
-        defaultIcon=defaultIcon
-        compressed=compressed
-        squeezed=squeezed
-        onClick='onClick'
-        onHover='onHover'
-      }}
-    {{/if}}
-  </widget>
-  <code>
-    &nbsp;<br/>
-    {{#if moodFunction}}
-      {{display-component componentName='ui-list'
-        items=':items'
-        filter=listFilter
-        map=':map'
-        size=size
-        mood=sillyLogic
-        skin=skin
-        defaultIcon=defaultIcon
-        compressed=compressed
-        squeezed=squeezed
-        onClick='onClick'
-        onHover='onHover'
-      }}
-    {{else}}
-      {{display-component componentName='ui-list'
-        items=':items'
-        filter=listFilter
-        map=':map'
-        size=size
-        mood=staticMood
-        skin=skin
-        defaultIcon=defaultIcon
-        compressed=compressed
-        squeezed=squeezed
-        onClick='onClick'
-        onHover='onHover'
-      }}
-    {{/if}}
-  </code>
-  <description>
-    <h4>Inline Syntax</h4>
-    <p>
-      This list container uses the compact <i>inline</i> syntax and passes in an array of data for the <i>items</i> which it would like to have rendered. The data structures passed in are:
-    </p>
-    <pre style="font-size:6pt">
-items: [
-  {foo: "Groceries", bar: "hungry, hungry, hippo", icon: "cutlery", badge: 6},
-  {foo: "Hospital", bar: "visit sick uncle Joe", icon: "ambulance", badge: 1},
-  {foo: "Pub", bar: "it's time for some suds", icon: "beer"},
-  {foo: "Took Cab", bar: "took a cab, drinking not driving", icon: "cab"},
-  {foo: "Had Coffee", bar: "need to chill out after that beer", icon: "coffee"}
-],
-map: {
-  title: 'foo',
-  subHeading: 'bar'
-},
-sillyLogic(item) {
-  let badge = item.get('badge');
-  let moodiness = badge && badge > 5 ? 'error' : 'warning';
-  return badge ? moodiness : null;
-}
-    </pre>
-  </description>
-</row> --}}
-
-
 <row>
   <widget class='wide'>
   {{#if moodFunction}}
@@ -115,6 +20,7 @@ sillyLogic(item) {
         compressed=compressed
         squeezed=squeezed
         sort=sortBy
+        gaps=gaps
         sortAscending=sortAscending
         onClick='onClick'
         as |list|
@@ -132,6 +38,7 @@ sillyLogic(item) {
         compressed=compressed
         squeezed=squeezed
         sort=sortBy
+        gaps=gaps
         sortAscending=sortAscending
         onClick='onClick'
         onHover='onHover'
@@ -154,6 +61,7 @@ sillyLogic(item) {
       compressed=compressed
       squeezed=squeezed
       sort=sortBy
+      gaps=gaps
       sortAscending=sortAscending
       onClick='onClick'
       onHover='onHover'
@@ -165,9 +73,9 @@ sillyLogic(item) {
     {{/display-component}}
   </code>
   <description>
-    <h4>Block Format</h4>
+    <h4>Inline Format</h4>
     <p>
-      The block format allows you full control on how you'd like to style your items. If you use the <prop>ui-item</prop> or derived classes then passing the list's block parameter into the <prop>list</prop> property on the item will ensure that messaging between item and list is maintained.
+      Here we are using the inline format but the block format is also available. The one consideration when using block is that vertical gaps are not provided for automatically so you will need to insert <prop>div</prop> tags with the class "gaps" to get spacing set correctly.
     </p>
   </description>
 </row>
@@ -177,7 +85,6 @@ sillyLogic(item) {
   <description>
     List Size: <br/>
     <p>{{radio-buttons buttons='tiny,small,default,large,huge' value=size size='small' defaultValue='default'}}</p><br/>
-    Vertically Compressed: {{ui-toggle-button value=compressed on='compressed' off='normal' size='small'}}<br/>
   </description>
   <description>
     Mood: <br/>
@@ -194,17 +101,5 @@ sillyLogic(item) {
     {{ui-buttons cardinality='1:1' buttons='default,plus,flat,simple' value=skin size='small' stretch=true}}<br/>
   </description>
 </row>
-
-{{!-- <h4>Heritable Properties and Sensitivity</h4>
-<p>
-  This is probably a terrible name but didn't have a lot of time to think about it. Basically it's a set of properties which are owned by the item but the list will take over responsibility for any items which it manages. Examples are <prop>mood</prop>, <prop>size</prop>, <prop>skin</prop>, and <prop>squeezed</prop>.
-</p>
-<p>
-  In most regards this is a <prop>ui-item</prop> discussion rather than a <prop>ui-list</prop> one but it is mentioned here for one reason ... each of these properties can be a discrete value or a function which determines what the value should be. The <b>sillyLogic</b> example is illustrative of this. When a function is detected it then uses "sensitivities" properties. These sensitivities are the properties that the function is observing to calculate its value. So in the case of sillyLogic we're triggering a mood off of the <i>badge</i> number. The configuration for this would be:
-
-  <code>moodSensitivities=['badge']</code>
-
-  You'll notice that we didn't actually do that but that's because any function is <i>by default</i> given the following observable properties: <prop>mood</prop>, <prop>title</prop>, <prop>subHeading</prop>, and <prop>badge</prop>.
-</p> --}}
 
 {{/demo-css}}
