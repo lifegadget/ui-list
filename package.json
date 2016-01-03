@@ -72,7 +72,7 @@
     "ember-new-computed": "^1.0.1",
     "ember-truth-helpers": "^1.2.0",
     "merge": "^1.2.0",
-    "ui-icon": "0.5.1",
+    "ui-icon": "^0.7.3",
     "ui-image": "0.0.3",
     "ui-responsive-toolbelt": "0.0.8"
   },
