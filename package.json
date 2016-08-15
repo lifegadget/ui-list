@@ -61,7 +61,7 @@
     "ui-button": "0.6.3",
     "ui-ember-slider": "0.2.5",
     "ui-input": "0.5.1",
-    "ui-navigator-service": "0.1.2"
+    "ui-navigator-service": "0.2.5"
   },
   "keywords": [
     "ember-addon"
