@@ -18,6 +18,61 @@ var UiItem = Ember.Component.extend(FlexHelper,SharedItem,HeritableProperties,St
   tagName: 'div',
   disabled: false,
   selected: false,
+  /**
+   * Tooltips can be a simple string or an object with various modifying properties.
+   * The _tooltipXXX computed properties ensure that this information is properly 
+   * handled in both input scenarios
+   */
+  tooltip: '',
+  badgeTooltip: '',
+  iconTooltip: '',
+  _tooltip: computed('tooltip', function() {
+    return this._getTooltip(this.get('tooltip'));
+  }),
+  _badgeTooltip: computed('badgeTooltip', function() {
+    return this._getTooltip(this.get('badgeTooltip'));
+  }),
+  _iconTooltip: computed('iconTooltip', function() {
+    return this._getTooltip(this.get('iconTooltip'));
+  }),
+  _tooltipPosition: computed('tooltip', function() {
+    return this._getTooltipPosition(this.get('tooltip'));
+  }),
+  _badgeTooltipPosition: computed('badgeTooltip', function() {
+    return this._getTooltipPosition(this.get('badgeTooltip'));
+  }),
+  _iconTooltipPosition: computed('iconTooltip', function() {
+    return this._getTooltipPosition(this.get('iconTooltip'));
+  }),
+
+
+  _getTooltip(tooltip) {
+    switch(typeof tooltip) {
+      case 'string':
+        return tooltip;
+      case 'number':
+      case 'boolean':
+        return String(tooltip);
+      case 'object':
+        if(!tooltip) {
+          return undefined;
+        }
+        // "text/html content" found object/hash 
+        else if(get(tooltip, 'content')) {
+          return get(tooltip, 'content');
+        }
+        else {
+          debug(`tooltip content was not handled`, JSON.stringify(tooltip));
+          return undefined;
+        }
+    }
+  },
+  _getTooltipPosition(tooltip) {
+    if(tooltip && get(tooltip, 'position')) {
+      return get(tooltip, 'position');
+    }
+  },
+
   _aspects: ['title','subHeading','icon','image','badge'],
   _panes: ['left', 'center', 'right'],
   _parentalProperty: 'list',
