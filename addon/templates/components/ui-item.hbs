@@ -30,13 +30,17 @@
 
   {{#if hasRightPane}}
     {{#ui-pane name='right' item=this as |pane|}}
-      {{#if badgeRight}}<span class="aspect badge">{{badgeRight}}</span>{{/if}}
+      {{#if badgeRight}}
+        <span class="aspect badge" data-tooltip={{_badgeTooltip}} data-position={{_badgeTooltipPosition}}>
+          {{badgeRight}}
+        </span>
+      {{/if}}
       {{#if titleRight}}<span class='aspect title'>{{title}}</span>{{/if}}
       {{#if titleRight}}<span class="divider"> | </span>{{/if}}
       {{#if subHeadingRight}}{{ui-sub-heading-aspect value=subHeading pane=pane}}{{/if}}
       {{#if iconRight}}
         <div class="aspect icon">
-          {{ui-icon class="icon-right" icon=iconRight fw=false}}
+          {{ui-icon iconRight class="icon-right" fw=false}}
         </div>
       {{/if}}
       {{#if handleRight}}<div class="aspect handle">{{ui-aspect-handle value=handleRight onMouseDown="mouseDown" onTouchStart="touchStart"}}</div>{{/if}}
