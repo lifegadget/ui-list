@@ -20,8 +20,8 @@ export default Ember.Controller.extend({
 
   statusColumns: [
     {id:'firstName', name:'First Name', isSortable: true},
-    {id:'status', name:'Status - f()', class:classyFunction},
-    {id:'status', name:'Status - map', class:classyMap}
+    {id:'status', name:'Status - f()', class: 'classyFunction'},
+    {id:'status', name:'Status - map', class: 'classyMap'}
   ],
 
 });

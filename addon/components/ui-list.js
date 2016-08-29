@@ -47,7 +47,7 @@ const stringParser = function(items) {
   }));
 };
 
-const sorted = (list, property, direction) => {
+const sorted = (list) => {
   // let content = a(this.get('content')).slice(0);
   // const isAscending = direction === 'ascending';
   // if(filter) {
