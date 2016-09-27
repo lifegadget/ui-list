@@ -40,9 +40,9 @@ let SharedItem = Ember.Mixin.create({
     const aspects = a(this.get('_aspects'));
     const panes = a(this.get('_panes'));
     let aspectPanes = [];
-    aspects.forEach( aspect => {
+    aspects.map( aspect => {
       aspectPanes.push(aspect);
-      panes.forEach( pane => {
+      panes.map( pane => {
         aspectPanes.push(aspect + capitalize(pane));
       });
     });
@@ -78,7 +78,7 @@ let SharedItem = Ember.Mixin.create({
       subHeading: 'centerSubHeading'
     };
     const paneAliases = merge(defaultAliases,this.get('paneAliases'));
-    keys(paneAliases).forEach( key => {
+    keys(paneAliases).map( key => {
       // if property exists (as it will if data hash has mapped a CP there already), create reverse alias
       let cp;
       if(!this.get(key)) {
@@ -97,7 +97,7 @@ let SharedItem = Ember.Mixin.create({
   _logicPanes: function() {
     const panes = a(this.get('_panes'));
     const aspects = a(this.get('_aspects'));
-    panes.forEach( pane => {
+    panes.map( pane => {
       const property = 'has' + capitalize(pane) + 'Pane';
       const relevantAspects = aspects.map(aspect=>{ return aspect + capitalize(pane); });
       const cp = computed.or(...relevantAspects);
@@ -112,7 +112,7 @@ let SharedItem = Ember.Mixin.create({
 	// of the variety item.fooMap = 'mappedTo'
   _defineAspectMappings: function() {
     const aspectPanes = a(this.get('_aspectPanes'));
-    aspectPanes.forEach( aspectPane => {
+    aspectPanes.map( aspectPane => {
       if(this._getMap(aspectPane)) {
         let cp = computed.readOnly(this._getMap(aspectPane));
         defineProperty(this, aspectPane, cp);
@@ -126,7 +126,7 @@ let SharedItem = Ember.Mixin.create({
   // Default Values
   _setDefaultValues: function() {
     const aspectPanes = this.get('_aspectPanes');
-    aspectPanes.forEach( item => {
+    aspectPanes.map( item => {
       const defaultKey = 'default' + capitalize(item);
       if(!this.get(item) && this[defaultKey]) {
         this.set(item, this[defaultKey]);

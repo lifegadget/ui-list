@@ -71,7 +71,7 @@ export default Ember.Mixin.create({
         position = this.get('itemPosition');
       }
 
-      sortedItems.forEach(item => {
+      sortedItems.map(item => {
         let dimension;
         let direction = this.get('direction');
 

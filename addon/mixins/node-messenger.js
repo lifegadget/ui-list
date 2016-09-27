@@ -11,7 +11,7 @@ let NodeMessenger = Ember.Mixin.create({
   // CSS CLASS BINDING
   classNameBindings: ['_name','_hasChildren:has-children:no-children','_hasParent:has-parent:no-parent'],
   // DEFAULT VALUES
-  _parentalProperty: 'parentView', // change this on component where possible
+  _parentalProperty: null, // change this on component where possible
   _parentalPropertyHistoric: null,
   _componentType: 'undefined',
   _componentNameProperty: 'name',
@@ -74,7 +74,7 @@ let NodeMessenger = Ember.Mixin.create({
       [ value ] = args;
     }
     value = typeOf(value) === 'array' ? a(value) : a([value]);
-    return this._getRegistryItems().filter( i => value.contains(get(i,property)) );
+    return this._getRegistryItems().filter( i => value.includes(get(i,property)) );
   },
   /**
    * Returns the register objects (without other meta that was captured in registration)
@@ -91,11 +91,11 @@ let NodeMessenger = Ember.Mixin.create({
   },
   _tellChildren(msg, options) {
     let {_registry} = this.getProperties( '_registry');
-    _registry.forEach( item => item.child._message(msg, options) );
+    _registry.map( item => item.child._message(msg, options) );
   },
   _tellDescendants(msg, options) {
     let {_registry} = this.getProperties( '_registry');
-    _registry.forEach( item => {
+    _registry.map( item => {
       if(item.child._message(msg, options) !== false) {
         item.child._tellDescendants(msg, options);
       }

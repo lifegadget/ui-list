@@ -121,8 +121,8 @@ test('mappedProperties set from map hash', function(assert) {
   assert.equal(component.get('mappedProperties'), initialMap, 'mapped properties are setup on initialization of map property');
   let mappedFrom = component.get('_mappedFrom');
   assert.equal(mappedFrom.length, 2, '_mappedFrom is correct length');
-  assert.ok(mappedFrom.contains('foo'), '_mappedFrom contains foo');
-  assert.ok(mappedFrom.contains('bar'), '_mappedFrom contains bar');
+  assert.ok(mappedFrom.includes('foo'), '_mappedFrom contains foo');
+  assert.ok(mappedFrom.includes('bar'), '_mappedFrom contains bar');
 });
 
 test('mappedProperties set only with map properties', function(assert) {
@@ -140,8 +140,8 @@ test('mappedProperties set only with map properties', function(assert) {
   // NOTE: this stupid form of testing is based on QUnit doing some pretty odd things right now with testing the array in more direct fashion. Annoying!
   let mappedFrom = component.get('_mappedFrom');
   assert.equal(mappedFrom.length, 2, '_mappedFrom is correct length');
-  assert.ok(mappedFrom.contains('foo'), '_mappedFrom contains foo');
-  assert.ok(mappedFrom.contains('bar'), '_mappedFrom contains bar');
+  assert.ok(mappedFrom.includes('foo'), '_mappedFrom contains foo');
+  assert.ok(mappedFrom.includes('bar'), '_mappedFrom contains bar');
 });
 
 test('mappedProperties with combined map property and map hash', function(assert) {
@@ -164,9 +164,9 @@ test('mappedProperties with combined map property and map hash', function(assert
   // NOTE: this stupid form of testing is based on QUnit doing some pretty odd things right now with testing the array in more direct fashion. Annoying!
   let mappedFrom = component.get('_mappedFrom');
   assert.equal(mappedFrom.length, 3, '_mappedFrom is correct length');
-  assert.ok(mappedFrom.contains('foo'), '_mappedFrom contains foo');
-  assert.ok(mappedFrom.contains('bar'), '_mappedFrom contains bar');
-  assert.ok(mappedFrom.contains('walk'), '_mappedFrom contains walk');
+  assert.ok(mappedFrom.includes('foo'), '_mappedFrom contains foo');
+  assert.ok(mappedFrom.includes('bar'), '_mappedFrom contains bar');
+  assert.ok(mappedFrom.includes('walk'), '_mappedFrom contains walk');
 });
 
 
@@ -182,9 +182,9 @@ test('availableAspectPanes is set', function(assert) {
     subHeading: 'bar'
   });
   const aspectPanes = new A(component.get('availableAspectPanes'));
-  assert.ok(aspectPanes.contains('iconRight'), 'iconRight should be set by default');
-  assert.ok(aspectPanes.contains('title'), 'title should be set by default');
-  assert.ok(aspectPanes.contains('subHeading'), 'subHeading should be set by default');
+  assert.ok(aspectPanes.includes('iconRight'), 'iconRight should be set by default');
+  assert.ok(aspectPanes.includes('title'), 'title should be set by default');
+  assert.ok(aspectPanes.includes('subHeading'), 'subHeading should be set by default');
 });
 
 test('list managed properties propagated down to items (size, skin, mood, squeezed)', function(assert) {
@@ -238,12 +238,12 @@ test('Items are registered, mapped and appear in DOM', function(assert) {
     let foey = component.get('_registry').map(i => i.child.get('foo'));
     let arrangedFoey = new A(component.get('arrangedContent').map(i=> i.get('foo')));
     assert.ok(
-      foey.every(item => { return arrangedFoey.contains(item);} ),
+      foey.every(item => { return arrangedFoey.includes(item);} ),
       'Foo properties were equivalent between list\'s arrangedContent and the registered item components: ' + JSON.stringify(foey)
     );
     let icon = component.get('_registry').map(i=>i.child.get('icon'));
     assert.ok(
-      foey.every(item => { return arrangedFoey.contains(item);} ),
+      foey.every(item => { return arrangedFoey.includes(item);} ),
       'Icon properties were equivalent between list\'s arrangedContent and the registered item components: ' + JSON.stringify(icon)
     );
     assert.deepEqual(

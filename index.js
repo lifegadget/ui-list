@@ -75,7 +75,7 @@ module.exports = {
         }
       }
 
-      animations.forEach(function(cssFile) {
+      animations.map(function(cssFile) {
         if(cssFile.slice(0,1) === '/' ) {
           cssFile = 'app/ui-icon/' + cssFile;
         } else {

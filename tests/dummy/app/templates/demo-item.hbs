@@ -86,11 +86,11 @@
     <controls>
       <control>
         <span class='name'>foo -> title</span>
-        <span>{{text-input placeholder='title' value=foo}}</span>
+        <span>{{text-input placeholder='title' value=foo  onChange=(mut foo)}}</span>
       </control>
       <control>
         <span class='name'>bar -> subHeading</span>
-        <span>{{text-input placeholder='subHeading' value=bar}}</span>
+        <span>{{text-input placeholder='subHeading' value=bar onChange=(mut bar)}}</span>
       </control>
       <control>
         <span>mood</span>

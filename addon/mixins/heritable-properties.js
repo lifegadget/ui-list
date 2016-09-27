@@ -56,7 +56,7 @@ const HeritableProperties = Ember.Mixin.create({
   _squeezed: computed('squeezed', 'list.squeezed', '_squeezeMutex', function() {
     const _squeezed = this.get('squeezed');
     const listSqueezed = this.get('list.squeezed');
-    return new A(['null','undefined']).contains(typeOf(listSqueezed)) ? listSqueezed : _squeezed;
+    return new A(['null','undefined']).includes(typeOf(listSqueezed)) ? listSqueezed : _squeezed;
   }),
 
   // DISABLED
@@ -64,14 +64,14 @@ const HeritableProperties = Ember.Mixin.create({
   _disabled: computed('disabled', 'list.disabled', '_disabledMutex', function() {
     const disabled = this.get('disabled');
     const listdisabled = this.get('list.disabled');
-    return new A(['null','undefined']).contains(typeOf(listdisabled)) ? disabled : listdisabled;
+    return new A(['null','undefined']).includes(typeOf(listdisabled)) ? disabled : listdisabled;
   }),
 
   // DYNAMIC OBSERVATION
   _defaultSensitivities: ['title', 'subHeading', 'mood', 'badge'],
   initiateDynamicObservers: on('didInitAttrs', function() {
     this._dynObservers = {};
-    new A(observedProperties).forEach(prop => {
+    new A(observedProperties).map(prop => {
       this._dynObservers[prop] = new A([]);
       const propType = typeOf(this.get(prop));
       if(propType === 'function') {

@@ -20,7 +20,7 @@ const UiSelectableList = UiList.extend({
     selected = typeOf(selected) === 'array' ? a(selected) : a([selected]);
     run.schedule('afterRender', () => {
       this._getRegistryItems().map(item => {
-        if ( selected.contains(item.get(selectionProperty)) ) {
+        if ( selected.includes(item.get(selectionProperty)) ) {
           item.set('selected', true);
         } else {
           item.set('selected', false);

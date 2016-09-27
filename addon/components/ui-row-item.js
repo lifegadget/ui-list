@@ -40,7 +40,7 @@ export default UiItem.extend({
     // no configuration found, use passed in attrs
     else if(!columns) {
       const ignore = a(['skin','size','columns','list','table']);
-      const props = keys(this.get('attrs')).filter(item=>!ignore.contains(item));
+      const props = keys(this.get('attrs')).filter(item=>!ignore.includes(item));
       columns = props.map(prop => {
         return {
           id: camelize(prop),

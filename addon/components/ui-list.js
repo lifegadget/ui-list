@@ -151,7 +151,7 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,SharedStylist,{
   //   let result = a();
   //   let items = this.get('items') || [];
   //   items = typeOf(items) === 'string' ? items.split(',') : items;
-  //   items.forEach(item => {
+  //   items.map(item => {
   //     switch(typeOf(item)) {
   //       case 'instance':
   //         result.pushObject(item);
@@ -214,9 +214,9 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,SharedStylist,{
     const panes = a(this.get('_panes'));
     let aspectPanes = [];
     if(aspects && panes) {
-      aspects.forEach( aspect => {
+      aspects.map( aspect => {
         aspectPanes.push(aspect);
-        panes.forEach( pane => {
+        panes.map( pane => {
           aspectPanes.push(aspect + capitalize(pane));
         });
       });
@@ -231,7 +231,7 @@ var UiList = Ember.Component.extend(ListMessaging,NodeMessenger,SharedStylist,{
     const mapProps = a(keys(this).filter( prop => {
       return prop.length > 3 && prop.slice(0,3) === 'map' && prop !== 'mapBinding';
     }));
-    mapProps.forEach( propertyMap => {
+    mapProps.map( propertyMap => {
       const key = camelize(propertyMap.slice(3));
       mapHash[key] = this.get(propertyMap);
     });

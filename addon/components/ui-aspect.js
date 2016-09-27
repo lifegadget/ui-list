@@ -38,7 +38,7 @@ export default Ember.Component.extend(NodeMessenger,{
     evt.preventDefault();
     evt.stopPropagation();
     let eventsPropagated = new A(this.get('eventsPropagated'));
-    if(eventsPropagated.contains(eventSource)) {
+    if(eventsPropagated.includes(eventSource)) {
       this._tellAncestors(msg, {
         evt: evt,
         eventSource: eventSource,
