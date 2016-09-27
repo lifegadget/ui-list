@@ -20,11 +20,11 @@ let NodeMessenger = Ember.Mixin.create({
   _hasChildren: computed('_registry.length', function() {
     return this.get('_registry.length') > 0;
   }),
-  _hasParent: computed('_parentalProperty','_parentalPropertyDidChange', function() {
+  _hasParent: computed('_parentalPropertyDidChange', function() {
     const {_parentalProperty} = this.getProperties('_parentalProperty');
     return _parentalProperty && get(this,_parentalProperty);
   }),
-  _hasMessagingParent: computed('_parentalProperty','_parentalPropertyDidChange', function() {
+  _hasMessagingParent: computed('_parentalPropertyDidChange', function() {
     const {_parentalProperty, _hasParent} = this.getProperties('_parentalProperty', '_hasParent');
     return _hasParent && get(this,_parentalProperty + '._message');
   }),
