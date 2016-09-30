@@ -9,33 +9,37 @@ declare class JQuery {}
 declare module 'ember' {
   export namespace Ember {
     /**
-     * Define an assertion that will throw an exception if the condition is not met. Ember build tools will remove any calls to `Ember.assert()` when doing a production build. Example:
+     * Framework objects in an Ember application (components, services, routes, etc.) are created via a factory and dependency injection system. Each of these objects is the responsibility of an "owner", which handled its instantiation and manages its lifetime.
      */
-    function assert(desc: string, test: boolean|Function);
+    function getOwner(object: {}): {};
     /**
-     * Display a warning with the provided message. Ember build tools will remove any calls to `Ember.warn()` when doing a production build.
+     * `setOwner` forces a new owner on a given object instance. This is primarily useful in some testing cases.
      */
-    function warn(message: string, test: boolean);
+    function setOwner(object: {}): {};
+    /**
+     * Display a deprecation warning with the provided message and a stack trace (Chrome and Firefox only). Ember build tools will remove any calls to `Ember.deprecate()` when doing a production build.
+     */
+    function deprecate(message: string, test: boolean, options: {});
+    /**
+     * Define an assertion that will throw an exception if the condition is not met. Ember build tools will remove any calls to `Ember.assert()` when doing an Ember.js framework production build and will make the assertion a no-op for an application production build. Example:
+     */
+    function assert(desc: string, test: boolean);
     /**
      * Display a debug notice. Ember build tools will remove any calls to `Ember.debug()` when doing a production build.
      */
     function debug(message: string);
     /**
-     * Display a deprecation warning with the provided message and a stack trace (Chrome and Firefox only). Ember build tools will remove any calls to `Ember.deprecate()` when doing a production build.
-     */
-    function deprecate(message: string, test: boolean|Function, options: {});
-    /**
      * Run a function meant for debugging. Ember build tools will remove any calls to `Ember.runInDebug()` when doing a production build.
      */
     function runInDebug(func: Function);
     /**
-     * Identical to `Object.create()`. Implements if not available natively.
+     * Display a warning with the provided message. Ember build tools will remove any calls to `Ember.warn()` when doing a production build.
      */
-    function create();
+    function warn(message: string, test: boolean, options: {});
     /**
-     * Array polyfills to support ES5 features in older browsers.
+     * Copy properties from a source object to a target object.
      */
-    var ArrayPolyfills: any;
+    function assign(original: {}, args: {}): {};
     /**
      * Debug parameter you can turn on. This will log all bindings that fire to the console. This should be disabled in production code. Note that you can also enable this from the console or temporarily.
      */
@@ -44,7 +48,6 @@ declare module 'ember' {
      * Global helper method to create a new binding. Just pass the root object along with a `to` and `from` path to create and connect the binding.
      */
     function bind(obj: {}, to: string, from: string): Binding;
-    function oneWay(obj: {}, to: string, from: string): Binding;
     /**
      * Returns the cached value for a property, if one exists. This can be useful for peeking at the value of a computed property that is generated lazily, without accidentally causing it to be created.
      */
@@ -65,10 +68,6 @@ declare module 'ember' {
      * The `LOG_STACKTRACE_ON_DEPRECATION` property, when true, tells Ember to log a full stack trace during deprecation warnings.
      */
     var LOG_STACKTRACE_ON_DEPRECATION: boolean;
-    /**
-     * The `SHIM_ES5` property, when true, tells Ember to add ECMAScript 5 Array shims to older browsers.
-     */
-    var SHIM_ES5: boolean;
     /**
      * The `LOG_VERSION` property, when true, tells Ember to log versions of all dependent libraries in use.
      */
@@ -117,12 +116,24 @@ declare module 'ember' {
      * Merge the contents of two objects together into the first object.
      */
     function merge(original: {}, updates: {}): {};
+    /**
+     * Makes a method available via an additional name.
+     */
+    function aliasMethod(methodName: string);
+    /**
+     * Specify a method that observes property changes.
+     */
+    function observer(propertyNames: string, func: Function): void;
     function addObserver(obj: any, _path: string, target: {}|Function, method: Function|string);
     function removeObserver(obj: any, path: string, target: {}|Function, method: Function|string);
     /**
      * Gets the value of a property on an object. If the property is computed, the function will be invoked. If the property is not defined but the object implements the `unknownProperty` method then that will be invoked.
      */
     function get(obj: {}, keyName: string): {};
+    /**
+     * Retrieves the value of a property from an Object, or a default value in the case that the property returns `undefined`.
+     */
+    function getWithDefault(obj: {}, keyName: string, defaultValue: {}): {};
     /**
      * Sets the value of a property on an object, respecting computed properties and notifying observers and other listeners of the change. If the property is not defined but the object implements the `setUnknownProperty` method then that will be invoked as well.
      */
@@ -136,25 +147,27 @@ declare module 'ember' {
      */
     function setProperties(obj: any, properties: {}): void;
     /**
+     * Returns a unique id for the object. If the object does not yet have a guid, one will be assigned to it. You can call this on any object, `Ember.Object`-based or not, but be aware that it will add a `_guid` property.
+     */
+    function guidFor(obj: {}): string;
+    /**
      * Checks to see if the `methodName` exists on the `obj`, and if it does, invokes it with the arguments passed.
      */
     function tryInvoke(obj: {}, methodName: string, args: Ember.Array): any;
-    /**
-     * DEPRECATED: 
-     * Creates a computed property which operates on dependent arrays and is updated with "one at a time" semantics. When items are added or removed from the dependent array(s) a reduce computed only operates on the change instead of re-evaluating the entire array.
-     */
-    function reduceComputed(...dependentKeys: string[]): ComputedProperty;
-    function reduceComputed(options: {}): ComputedProperty;
     /**
      * Creates an `Ember.NativeArray` from an Array like object. Does not modify the original object. Ember.A is not needed if `Ember.EXTEND_PROTOTYPES` is `true` (the default value). However, it is recommended that you use Ember.A when creating addons for ember or when you can not guarantee that `Ember.EXTEND_PROTOTYPES` will be `true`.
      */
     function A(): NativeArray;
     /**
-     * Creates a clone of the passed object. This function can take just about any type of object and create a clone of it, including primitive values (which are not actually cloned because they are immutable).
+     * Compares two javascript values and returns:
+     */
+    function compare(v: {}, w: {}): number;
+    /**
+     * Creates a shallow copy of the passed object. A deep copy of the object is returned if the optional `deep` argument is `true`.
      */
     function copy(obj: {}, deep: boolean): {};
     /**
-     * Compares two objects, returning true if they are logically equal. This is a deeper comparison than a simple triple equal. For sets it will compare the internal objects. For any other object that implements `isEqual()` it will respect that method.
+     * Compares two objects, returning true if they are equal.
      */
     function isEqual(a: {}, b: {}): boolean;
     /**
@@ -162,13 +175,40 @@ declare module 'ember' {
      */
     function isArray(obj: {}): boolean;
     /**
-     * Returns a consistent type for the passed item.
+     * Returns a consistent type for the passed object.
      */
     function typeOf(item: {}): string;
     /**
      * Alias for jQuery
      */
     function $();
+    export namespace ApplicationInstance {
+      /**
+       * A list of boot-time configuration options for customizing the behavior of an `Ember.ApplicationInstance`.
+       */
+      export class BootOptions {
+        /**
+         * Run in a full browser environment.
+         */
+        isBrowser: boolean;
+        /**
+         * Disable rendering completely.
+         */
+        shouldRender: boolean;
+        /**
+         * If present, render into the given `Document` object instead of the global `window.document` object.
+         */
+        document: Document;
+        /**
+         * If present, overrides the application's `rootElement` property on the instance. This is useful for testing environment, where you might want to append the root view to a fixture area.
+         */
+        rootElement: string|Element;
+        /**
+         * If present, overrides the router's `location` property with this value. This is useful for environments where trying to modify the URL would be inappropriate.
+         */
+        location: string;
+      }
+    }
     export namespace Templates {
       export class helpers {
         /**
@@ -176,11 +216,19 @@ declare module 'ember' {
          */
         concat();
         /**
+         * The `{{each-in}}` helper loops over properties on an object. It is unbound, in that new (or removed) properties added to the target object will not be rendered.
+         */
+        'each-in'();
+        /**
          * The `{{#each}}` helper loops over elements in a collection. It is an extension of the base Handlebars `{{#each}}` helper.
          */
         each();
         /**
-         * Use the `if` block helper to conditionally render a block depending on a property. If the property is "falsey", for example: `false`, `undefined `null`, `""`, `0` or an empty array, the block will not be rendered.
+         * Use the `{{hash}}` helper to create a hash to pass as an option to your components. This is specially useful for contextual components where you can just yield a hash:
+         */
+        hash(options: {}): {};
+        /**
+         * Use the `if` block helper to conditionally render a block depending on a property. If the property is "falsey", for example: `false`, `undefined`, `null`, `""`, `0`, `NaN` or an empty array, the block will not be rendered.
          */
         if();
         /**
@@ -213,6 +261,10 @@ declare module 'ember' {
          */
         debugger();
         /**
+         * Dynamically look up a property on an object. The second argument to `{{get}}` should have a string value, although it can be bound.
+         */
+        get();
+        /**
          * The `{{input}}` helper lets you create an HTML `<input />` component. It causes an `Ember.TextField` component to be rendered.  For more info, see the [Ember.TextField](/api/classes/Ember.TextField.html) docs and the [templates guide](http://emberjs.com/guides/templates/input-helpers/).
          */
         input(options: {});
@@ -221,7 +273,7 @@ declare module 'ember' {
          */
         mut(attr: {});
         /**
-         * The `{{outlet}}` helper lets you specify where a child routes will render in your template. An important use of the `{{outlet}}` helper is in your application's `application.hbs` file: ```handlebars {{! app/templates/application.hbs }} <!-- header content goes here, and will always display --> {{my-header}} <div class="my-dynamic-content"> <!-- this content will change based on the current route, which depends on the current URL --> {{outlet}} </div> <!-- footer content goes here, and will always display --> {{my-footer}} ``` See [templates guide](http://emberjs.com/guides/templates/the-application-template/) for additional information on using `{{outlet}}` in `application.hbs`. You may also specify a name for the `{{outlet}}`, which is useful when using more than one `{{outlet}}` in a template: ```handlebars {{outlet "menu"}} {{outlet "sidebar"}} {{outlet "main"}} ``` Your routes can then render into a specific one of these `outlet`s by specifying the `outlet` attribute in your `renderTemplate` function: ```javascript // app/routes/menu.js export default Ember.Route.extend({ renderTemplate() { this.render({ outlet: 'menu' }); } }); ``` See the [routing guide](http://emberjs.com/guides/routing/rendering-a-template/) for more information on how your `route` interacts with the `{{outlet}}` helper. Note: Your content __will not render__ if there isn't an `{{outlet}}` for it.
+         * The `{{outlet}}` helper lets you specify where a child routes will render in your template. An important use of the `{{outlet}}` helper is in your application's `application.hbs` file:
          */
         outlet(name: string);
         /**
@@ -250,37 +302,18 @@ declare module 'ember' {
          */
         action();
         /**
-         * The `{{link-to}}` helper renders a link to the supplied `routeName` passing an optionally supplied model to the route as its `model` context of the route. The block for `{{link-to}}` becomes the innerHTML of the rendered element:
+         * Calling ``{{render}}`` from within a template will insert another template that matches the provided name. The inserted template will access its properties on its own controller (rather than the controller of the parent template). If a view class with the same name exists, the view class also will be used. Note: A given controller may only be used *once* in your app in this manner. A singleton instance of the controller will be created for you. Example:
+         */
+        render(name: string, context: {}, options: {}): string;
+        /**
+         * The `{{link-to}}` component renders a link to the supplied `routeName` passing an optionally supplied model to the route as its `model` context of the route. The block for `{{link-to}}` becomes the innerHTML of the rendered element:
          */
         'link-to'(routeName: string, context: {}, options: {}): string;
-      }
-    }
-    export namespace Handlebars {
-      /**
-       * DEPRECATED: 
-       * Lookup both on root and on window. If the path starts with a keyword, the corresponding object will be looked up in the template's data hash and used to resolve the path.
-       */
-      function get(root: {}, path: string, options: {});
-      export class helpers {
-        /**
-         * DEPRECATED: 
-         * `bind-attr` allows you to create a binding between DOM element attributes and Ember objects. For example:
-         */
-        'bind-attr'(options: {}): string;
-        /**
-         * DEPRECATED: 
-         * See `bind-attr`
-         */
-        bindAttr(context: Function, options: {}): string;
       }
     }
     export namespace streams {
       export namespace Ember {
         export class stream {
-          /**
-           * Generate a new stream by providing a source stream and a function that can be used to transform the stream's value. In the case of a non-stream object, returns the result of the function.
-           */
-          chain(value: {}|Stream, fn: Function): {}|Stream;
         }
       }
       export class Dependency {
@@ -421,57 +454,14 @@ declare module 'ember' {
       }
     }
     /**
-     * `Ember.ControllerMixin` provides a standard interface for all classes that compose Ember's controller layer: `Ember.Controller`, `Ember.ArrayController`, and `Ember.ObjectController`.
+     * The `ApplicationInstance` encapsulates all of the stateful aspects of a running `Application`.
      */
-    export class ControllerMixin implements ActionHandler {
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       * An array of other controller objects available inside instances of this controller via the `controllers` property:
-       */
-      needs: Ember.Array;
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       */
-      controllerFor();
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       * Stores the instances of other controllers available from within this controller. Any controller listed by name in the `needs` property will be accessible by name through this property.
-       */
-      controllers: {};
-      /**
-       * Defines which query parameters the controller accepts. If you give the names ['category','page'] it will bind the values of these query parameters to the variables `this.category` and `this.page`
-       */
-      queryParams: any;
-      /**
-       * Transition the application into another route. The route may be either a single route or route path:
-       */
-      transitionToRoute(name: string, ...models: any[]);
-      transitionToRoute(name: string, options: {});
-      /**
-       * The controller's current model. When retrieving or modifying a controller's model, this property should be used instead of the `content` property.
-       */
-      model: any;
-      /**
-       * The collection of functions, keyed by name, available on this `ActionHandler` as action targets.
-       */
-      actions: {};
-      /**
-       * Triggers a named action on the `ActionHandler`. Any parameters supplied after the `actionName` string will be passed as arguments to the action target function.
-       */
-      send(actionName: string, context: any);
+    export class ApplicationInstance extends EngineInstance {
     }
     /**
      * An instance of `Ember.Application` is the starting point for every Ember application. It helps to instantiate, initialize and coordinate the many objects that make up your app.
      */
-    export class Application extends Namespace {
-      /**
-       * The application instance's container. The container stores all of the instance-specific state for this application run.
-       */
-      container: Container;
-      /**
-       * The DOM events for which the event dispatcher should listen.
-       */
-      customEvents: {};
+    export class Application extends Engine implements RegistryProxyMixin {
       /**
        * The root DOM element of the Application. This can be specified as an element or a [jQuery-compatible selector string](http://api.jquery.com/category/selectors/).
        */
@@ -481,9 +471,9 @@ declare module 'ember' {
        */
       eventDispatcher: EventDispatcher;
       /**
-       * This creates a registry with the default Ember naming conventions.
+       * The DOM events for which the event dispatcher should listen.
        */
-      static buildRegistry(namespace: Application): Registry;
+      customEvents: {};
       /**
        * Use this to defer readiness until some condition is true.
        */
@@ -493,29 +483,139 @@ declare module 'ember' {
        */
       advanceReadiness();
       /**
-       * Registers a factory that can be used for dependency injection (with `App.inject`) or for service lookup. Each factory is registered with a full name including two parts: `type:name`.
+       * Reset the application. This is typically used only in tests. It cleans up the application in the following order:
+       */
+      reset();
+      /**
+       * Boot a new instance of `Ember.ApplicationInstance` for the current application and navigate it to the given `url`. Returns a `Promise` that resolves with the instance when the initial routing and rendering is complete, or rejects with any error that occured during the boot process.
+       */
+      visit(url: string, options: ApplicationInstance.BootOptions): Promise<Ember.ApplicationInstance|Error>;
+      /**
+       * This creates a registry with the default Ember naming conventions.
+       */
+      static buildRegistry(namespace: Application): Registry;
+      /**
+       * Given a fullName return the corresponding factory.
+       */
+      resolveRegistration(fullName: string): Function;
+      /**
+       * Registers a factory that can be used for dependency injection (with `inject`) or for service lookup. Each factory is registered with a full name including two parts: `type:name`.
        */
       register(fullName: string, factory: Function, options: {});
+      /**
+       * Unregister a factory.
+       */
+      unregister(fullName: string);
+      /**
+       * Check if a factory is registered.
+       */
+      hasRegistration(fullName: string): boolean;
+      /**
+       * Register an option for a particular factory.
+       */
+      registerOption(fullName: string, optionName: string, options: {});
+      /**
+       * Return a specific registered option for a particular factory.
+       */
+      registeredOption(fullName: string, optionName: string): {};
+      /**
+       * Register options for a particular factory.
+       */
+      registerOptions(fullName: string, options: {});
+      /**
+       * Return registered options for a particular factory.
+       */
+      registeredOptions(fullName: string): {};
+      /**
+       * Allow registering options for all factories of a type.
+       */
+      registerOptionsForType(type: string, options: {});
+      /**
+       * Return the registered options for all factories of a type.
+       */
+      registeredOptionsForType(type: string): {};
+      /**
+       * Define a dependency injection onto a specific factory or all factories of a type.
+       */
+      inject(factoryNameOrType: string, property: string, injectionName: string);
+    }
+    /**
+     * The `EngineInstance` encapsulates all of the stateful aspects of a running `Engine`.
+     */
+    export class EngineInstance extends Object implements RegistryProxyMixin, ContainerProxyMixin {
+      /**
+       * Unregister a factory.
+       */
+      unregister(fullName: string);
+      /**
+       * Given a fullName return the corresponding factory.
+       */
+      resolveRegistration(fullName: string): Function;
+      /**
+       * Registers a factory that can be used for dependency injection (with `inject`) or for service lookup. Each factory is registered with a full name including two parts: `type:name`.
+       */
+      register(fullName: string, factory: Function, options: {});
+      /**
+       * Check if a factory is registered.
+       */
+      hasRegistration(fullName: string): boolean;
+      /**
+       * Register an option for a particular factory.
+       */
+      registerOption(fullName: string, optionName: string, options: {});
+      /**
+       * Return a specific registered option for a particular factory.
+       */
+      registeredOption(fullName: string, optionName: string): {};
+      /**
+       * Register options for a particular factory.
+       */
+      registerOptions(fullName: string, options: {});
+      /**
+       * Return registered options for a particular factory.
+       */
+      registeredOptions(fullName: string): {};
+      /**
+       * Allow registering options for all factories of a type.
+       */
+      registerOptionsForType(type: string, options: {});
+      /**
+       * Return the registered options for all factories of a type.
+       */
+      registeredOptionsForType(type: string): {};
       /**
        * Define a dependency injection onto a specific factory or all factories of a type.
        */
       inject(factoryNameOrType: string, property: string, injectionName: string);
       /**
-       * Reset the application. This is typically used only in tests. It cleans up the application in the following order:
+       * Returns an object that can be used to provide an owner to a manually created instance.
        */
-      reset();
+      ownerInjection(): {};
       /**
-       * Set this to provide an alternate class to `Ember.DefaultResolver`
+       * Given a fullName return a corresponding instance.
        */
-      resolver: any;
+      lookup(fullName: string, options: {}): any;
+    }
+    /**
+     * The `Engine` class contains core functionality for both applications and engines.
+     */
+    export class Engine extends Namespace {
+      /**
+       * This creates a registry with the default Ember naming conventions.
+       */
+      static buildRegistry(namespace: Application): Registry;
       /**
        * The goal of initializers should be to register dependencies and injections. This phase runs once. Because these initializers may load code, they are allowed to defer application readiness and advance it. If you need to access the container or store you should use an InstanceInitializer that will be run after all initializers and therefore after all code is loaded and the app is ready.
        */
       initializer(initializer: {});
       /**
-       * InstanceInitializers run after all initializers have run. Because instanceInitializers run after the app is fully set up. We have access to the store, container, and other items. However, these initializers run after code has loaded and are not allowed to defer readiness.
+       * Instance initializers run after all initializers have run. Because instance initializers run after the app is fully set up. We have access to the store, container, and other items. However, these initializers run after code has loaded and are not allowed to defer readiness.
        */
       instanceInitializer(instanceInitializer: any);
+      /**
+       * Set this to provide an alternate class to `Ember.DefaultResolver`
+       */
+      resolver: any;
     }
     /**
      * The DefaultResolver defines the default lookup rules to resolve container lookups before consulting the container for registered items:
@@ -570,14 +670,20 @@ declare module 'ember' {
        */
       resolveOther(parsedName: {});
     }
+    export class Debug {
+      /**
+       * Allows for runtime registration of handler functions that override the default deprecation behavior. Deprecations are invoked by calls to [Ember.deprecate](http://emberjs.com/api/classes/Ember.html#method_deprecate). The following example demonstrates its usage by registering a handler that throws an error if the message contains the word "should", otherwise defers to the default handler.
+       */
+      static registerDeprecationHandler(handler: Function);
+      /**
+       * Allows for runtime registration of handler functions that override the default warning behavior. Warnings are invoked by calls made to [Ember.warn](http://emberjs.com/api/classes/Ember.html#method_warn). The following example demonstrates its usage by registering a handler that does nothing overriding Ember's default warning behavior.
+       */
+      static registerWarnHandler(handler: Function);
+    }
     /**
      * The `ContainerDebugAdapter` helps the container and resolver interface with tools that debug Ember such as the [Ember Extension](https://github.com/tildeio/ember-extension) for Chrome and Firefox.
      */
     export class ContainerDebugAdapter extends Object {
-      /**
-       * The container of the application being debugged. This property will be injected on creation.
-       */
-      container: any;
       /**
        * The resolver instance of the application being debugged. This property will be injected on creation.
        */
@@ -595,10 +701,6 @@ declare module 'ember' {
      * The `DataAdapter` helps a data persistence library interface with tools that debug Ember such as the [Ember Extension](https://github.com/tildeio/ember-extension) for Chrome and Firefox.
      */
     export class DataAdapter {
-      /**
-       * The container of the application being debugged. This property will be injected on creation.
-       */
-      container: any;
       /**
        * The container-debug-adapter which is used to list all models.
        */
@@ -631,6 +733,7 @@ declare module 'ember' {
        */
       static htmlSafe(): Handlebars.SafeString;
       /**
+       * DEPRECATED: Use ES6 template strings instead: http://babeljs.io/docs/learn-es2015/#template-strings
        * Apply formatting options to the string. This will look for occurrences of "%@" in your string and substitute them with the arguments you pass into this method. If you want to control the specific order of replacement, you can add a number after the key as well to indicate which argument you want to insert.
        */
       fmt(str: string, formats: Ember.Array): string;
@@ -684,12 +787,6 @@ declare module 'ember' {
        */
       static helper(helper: Function);
     }
-    export class platform {
-      /**
-       * Identical to `Object.defineProperty()`. Implements as much functionality as possible if not available natively.
-       */
-      defineProperty(obj: {}, keyName: string, desc: {}): void;
-    }
     /**
      * An `Ember.Binding` connects the properties of two objects so that whenever the value of one property changes, the other property will be changed also.
      */
@@ -707,10 +804,9 @@ declare module 'ember' {
        */
       to(path: string|any[]): Binding;
       /**
-       * DEPRECATED: 
-       * Creates a new Binding instance and makes it apply in a single direction. A one-way binding will relay changes on the `from` side object (supplied as the `from` argument) the `to` side, but not the other way around. This means that if you change the "to" side directly, the "from" side may have a different value.
+       * Configures the binding as one way. A one-way binding will relay changes on the `from` side to the `to` side, but not the other way around. This means that if you change the `to` side directly, the `from` side may have a different value.
        */
-      oneWay(from: string, flag: boolean): Binding;
+      oneWay(): Binding;
       toString(): string;
       /**
        * Attempts to connect this binding instance so that it can receive and relay changes. This method will raise an exception if you have not set the from/to properties yet.
@@ -722,14 +818,9 @@ declare module 'ember' {
       disconnect(obj: {}): Binding;
     }
     /**
-     * A computed property transforms an object's function into a property.
+     * A computed property transforms an object literal with object's accessor function(s) into a property.
      */
     export class ComputedProperty {
-      /**
-       * DEPRECATED: All computed properties are cacheble by default. Use `volatile()` instead to opt-out to caching.
-       * Properties are cacheable by default. Computed property will automatically cache the return value of your function until one of the dependent keys changes.
-       */
-      cacheable(aFlag: boolean): ComputedProperty;
       /**
        * Call on a computed property to set it into non-cached mode. When in this mode the computed property will not automatically cache the return value.
        */
@@ -753,7 +844,7 @@ declare module 'ember' {
       /**
        * Set the value of a computed property. If the function that backs your computed property does not accept arguments then the default action for setting would be to define the property on the current object, and set the value of the property to the value being set.
        */
-      set(keyName: string, newValue: {}, oldValue: string): {};
+      set(keyName: string, newValue: {}): {};
     }
     /**
      * This helper returns a new property descriptor that wraps the passed computed property function. You can use this helper to define properties with mixins or via `Ember.defineProperty()`.
@@ -780,7 +871,7 @@ declare module 'ember' {
        */
       bool(dependentKey: string): ComputedProperty;
       /**
-       * A computed property which matches the original value for the dependent property against a given RegExp, returning `true` if they values matches the RegExp and `false` if it does not.
+       * A computed property which matches the original value for the dependent property against a given RegExp, returning `true` if the value matches the RegExp and `false` if it does not.
        */
       match(dependentKey: string, regexp: RegExp): ComputedProperty;
       /**
@@ -812,15 +903,6 @@ declare module 'ember' {
        */
       or(dependentKey: string): ComputedProperty;
       /**
-       * DEPRECATED: Use `Ember.computed.or` instead.
-       * A computed property that returns the first truthy value from a list of dependent properties.
-       */
-      any(dependentKey: string): ComputedProperty;
-      /**
-       * A computed property that returns the array of values for the provided dependent properties.
-       */
-      collect(dependentKey: string): ComputedProperty;
-      /**
        * Creates a new property that is an alias for another property on an object. Calls to `get` or `set` this property behave as though they were called on the original property.
        */
       alias(dependentKey: string): ComputedProperty;
@@ -837,16 +919,11 @@ declare module 'ember' {
        */
       readOnly(dependentKey: string): ComputedProperty;
       /**
-       * DEPRECATED: Use `Ember.computed.oneWay` or custom CP with default instead.
-       * A computed property that acts like a standard getter and setter, but returns the value at the provided `defaultPath` if the property itself has not been set to a value
-       */
-      defaultTo(defaultPath: string): ComputedProperty;
-      /**
        * Creates a new property that is an alias for another property on an object. Calls to `get` or `set` this property behave as though they were called on the original property, but also print a deprecation warning.
        */
       deprecatingAlias(dependentKey: string): ComputedProperty;
       /**
-       * A computed property that returns the sum of the value in the dependent array.
+       * A computed property that returns the sum of the values in the dependent array.
        */
       sum(dependentKey: string): ComputedProperty;
       /**
@@ -866,10 +943,6 @@ declare module 'ember' {
        */
       mapBy(dependentKey: string, propertyKey: string): ComputedProperty;
       /**
-       * DEPRECATED: Use `Ember.computed.mapBy` instead
-       */
-      mapProperty(dependentKey: any, propertyKey: any);
-      /**
        * Filters the array by the callback.
        */
       filter(dependentKey: string, callback: Function): ComputedProperty;
@@ -877,10 +950,6 @@ declare module 'ember' {
        * Filters the array by the property and value
        */
       filterBy(dependentKey: string, propertyKey: string, value: any): ComputedProperty;
-      /**
-       * DEPRECATED: Use `Ember.computed.filterBy` instead
-       */
-      filterProperty(dependentKey: any, propertyKey: any, value: any);
       /**
        * A computed property which returns a new array with all the unique elements from one or more dependent arrays.
        */
@@ -898,9 +967,18 @@ declare module 'ember' {
        */
       setDiff(setAProperty: string, setBProperty: string): ComputedProperty;
       /**
+       * A computed property that returns the array of values for the provided dependent properties.
+       */
+      collect(dependentKey: string): ComputedProperty;
+      /**
        * A computed property which returns a new array with all the properties from the first dependent array sorted based on a property or sort function.
        */
       sort(itemsKey: string, sortDefinition: string): ComputedProperty;
+    }
+    /**
+     * A subclass of the JavaScript Error object for use in Ember.
+     */
+    export class Error {
     }
     /**
      * The hash of enabled Canary features. Add to this, any canary features before creating your application.
@@ -910,62 +988,6 @@ declare module 'ember' {
        * Determine whether the specified `feature` is enabled. Used by Ember's build tools to exclude experimental features from beta/stable builds.
        */
       isEnabled(feature: string): boolean;
-    }
-    /**
-     * DEPRECATED: 
-     * Defines some convenience methods for working with Enumerables. `Ember.EnumerableUtils` uses `Ember.ArrayPolyfills` when necessary.
-     */
-    export class EnumerableUtils {
-      /**
-       * DEPRECATED: Use ES5's Array.prototype.map instead.
-       * Calls the map function on the passed object with a specified callback. This uses `Ember.ArrayPolyfill`'s-map method when necessary.
-       */
-      map(obj: {}, callback: Function, thisArg: {}): Ember.Array;
-      /**
-       * DEPRECATED: Use ES5's Array.prototype.forEach instead.
-       * Calls the forEach function on the passed object with a specified callback. This uses `Ember.ArrayPolyfill`'s-forEach method when necessary.
-       */
-      forEach(obj: {}, callback: Function, thisArg: {});
-      /**
-       * DEPRECATED: Use ES5's Array.prototype.filter instead.
-       * Calls the filter function on the passed object with a specified callback. This uses `Ember.ArrayPolyfill`'s-filter method when necessary.
-       */
-      filter(obj: {}, callback: Function, thisArg: {}): Ember.Array;
-      /**
-       * DEPRECATED: Use ES5's Array.prototype.indexOf instead.
-       * Calls the indexOf function on the passed object with a specified callback. This uses `Ember.ArrayPolyfill`'s-indexOf method when necessary.
-       */
-      indexOf(obj: {}, index: {});
-      /**
-       * DEPRECATED: 
-       * Returns an array of indexes of the first occurrences of the passed elements on the passed object.
-       */
-      indexesOf(obj: {}, elements: Ember.Array): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Adds an object to an array. If the array already includes the object this method has no effect.
-       */
-      addObject(array: Ember.Array, item: {}): void;
-      /**
-       * DEPRECATED: 
-       * Removes an object from an array. If the array does not contain the passed object this method has no effect.
-       */
-      removeObject(array: Ember.Array, item: {}): void;
-      /**
-       * DEPRECATED: 
-       * Replaces objects in an array with the passed objects.
-       */
-      replace(array: Ember.Array, idx: number, amt: number, objects: Ember.Array): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Calculates the intersection of two arrays. This method returns a new array filled with the records that the two passed arrays share with each other. If there is no intersection, an empty array will be returned.
-       */
-      intersection(array1: Ember.Array, array2: Ember.Array): Ember.Array;
-    }
-    /**
-     * A subclass of the JavaScript Error object for use in Ember.
-     */
-    export class Error {
     }
     /**
      * Read-only property that returns the result of a container lookup.
@@ -1029,6 +1051,11 @@ declare module 'ember' {
      */
     export class run {
       /**
+       * DEPRECATED: 
+       * Replaces objects in an array with the passed objects.
+       */
+      replace(array: Ember.Array, idx: number, amt: number, objects: Ember.Array): Ember.Array;
+      /**
        * If no run-loop is present, it creates a new one. If a run loop is present it will queue itself to run on the existing run-loops action queue.
        */
       join(target: {}, method: Function|string, ...args: any[]): {};
@@ -1066,7 +1093,7 @@ declare module 'ember' {
        */
       next(target: {}, method: Function|string, ...args: any[]): {};
       /**
-       * Cancels a scheduled item. Must be a value returned by `run.later()`, `run.once()`, `run.next()`, `run.debounce()`, or `run.throttle()`.
+       * Cancels a scheduled item. Must be a value returned by `run.later()`, `run.once()`, `run.scheduleOnce()`, `run.next()`, `run.debounce()`, or `run.throttle()`.
        */
       cancel(timer: {}): boolean;
       /**
@@ -1079,6 +1106,33 @@ declare module 'ember' {
        */
       throttle(target: {}, method: Function|string, ...args: any[]): Ember.Array;
       throttle(target: {}, method: Function|string, spacing: number, immediate: boolean): Ember.Array;
+    }
+    export class ControllerMixin implements ActionHandler {
+      /**
+       * Defines which query parameters the controller accepts. If you give the names `['category','page']` it will bind the values of these query parameters to the variables `this.category` and `this.page`
+       */
+      queryParams: any;
+      /**
+       * Transition the application into another route. The route may be either a single route or route path:
+       */
+      transitionToRoute(name: string, ...models: any[]);
+      transitionToRoute(name: string, options: {});
+      /**
+       * The object to which actions from the view should be sent.
+       */
+      target: any;
+      /**
+       * The controller's current model. When retrieving or modifying a controller's model, this property should be used instead of the `content` property.
+       */
+      model: any;
+      /**
+       * The collection of functions, keyed by name, available on this `ActionHandler` as action targets.
+       */
+      actions: {};
+      /**
+       * Triggers a named action on the `ActionHandler`. Any parameters supplied after the `actionName` string will be passed as arguments to the action target function.
+       */
+      send(actionName: string, context: any);
     }
     /**
      * Ember.Location returns an instance of the correct implementation of the `location` API.
@@ -1113,6 +1167,10 @@ declare module 'ember' {
        * Configuration hash for this route's queryParams. The possible configuration options and their defaults are as follows (assuming a query param whose controller property is `page`):
        */
       queryParams: {};
+      /**
+       * The name of the route, dot-delimited.
+       */
+      routeName: string;
       /**
        * Retrieves parameters, for current route using the state.params variable and getQueryParamsFor, using the supplied routeName.
        */
@@ -1151,9 +1209,17 @@ declare module 'ember' {
       transitionTo(name: string, ...models: any[]): Transition;
       transitionTo(name: string, options: {}): Transition;
       /**
+       * Perform a synchronous transition into another route without attempting to resolve promises, update the URL, or abort any currently active asynchronous transitions (i.e. regular transitions caused by `transitionTo` or URL changes).
+       */
+      intermediateTransitionTo(name: string, ...models: any[]);
+      /**
        * Refresh the model on this route and any child routes, firing the `beforeModel`, `model`, and `afterModel` hooks in a similar fashion to how routes are entered when transitioning in from other route. The current route params (e.g. `article_id`) will be passed in to the respective model hooks, and if a different model is returned, `setupController` and associated route hooks will re-fire as well.
        */
       refresh(): Transition;
+      /**
+       * Transition into another route while replacing the current URL, if possible. This will replace the current history entry instead of adding a new one. Beside that, it is identical to `transitionTo` in all other respects. See 'transitionTo' for additional information regarding multiple models.
+       */
+      replaceWith(name: string, ...models: any[]): Transition;
       /**
        * Sends an action to the router, which will delegate it to the currently active route hierarchy per the bubbling rules explained under `actions`.
        */
@@ -1187,7 +1253,7 @@ declare module 'ember' {
        */
       controllerFor(name: string): Controller;
       /**
-       * Returns the model of a parent (or any ancestor) route in a route hierarchy.  During a transition, all routes must resolve a model object, and if a route needs access to a parent route's model in order to resolve a model (or just reuse the model from a parent), it can call `this.modelFor(theNameOfParentRoute)` to retrieve it.
+       * Returns the resolved model of a parent (or any ancestor) route in a route hierarchy.  During a transition, all routes must resolve a model object, and if a route needs access to a parent route's model in order to resolve a model (or just reuse the model from a parent), it can call `this.modelFor(theNameOfParentRoute)` to retrieve it. If the ancestor route's model was a promise, its resolved result is returned.
        */
       modelFor(name: string): {};
       /**
@@ -1198,6 +1264,10 @@ declare module 'ember' {
        * `render` is used to render a template into a region of another template (indicated by an `{{outlet}}`). `render` is used both during the entry phase of routing (via the `renderTemplate` hook) and later in response to user interaction.
        */
       render(name: string, options: {});
+      /**
+       * Disconnects a view that has been rendered into an outlet.
+       */
+      disconnectOutlet(options: {}|string);
       /**
        * The collection of functions, keyed by name, available on this `ActionHandler` as action targets.
        */
@@ -1244,7 +1314,7 @@ declare module 'ember' {
        */
       willTransition();
       /**
-       * The `Router.map` function allows you to define mappings from URLs to routes and resources in your application. These mappings are defined within the supplied callback function using `this.resource` and `this.route`.
+       * The `Router.map` function allows you to define mappings from URLs to routes in your application. These mappings are defined within the supplied callback function using `this.route`.
        */
       map(callback: any);
       /**
@@ -1273,7 +1343,7 @@ declare module 'ember' {
      */
     export class LinkComponent extends Component {
       /**
-       * Used to determine when this LinkComponent is active.
+       * Used to determine when this `LinkComponent` is active.
        */
       currentWhen: any;
       /**
@@ -1297,201 +1367,17 @@ declare module 'ember' {
        */
       replace: boolean;
       /**
-       * By default the `{{link-to}}` helper will bind to the `href` and `title` attributes. It's discouraged that you override these defaults, however you can push onto the array if needed.
+       * By default the `{{link-to}}` component will bind to the `href` and `title` attributes. It's discouraged that you override these defaults, however you can push onto the array if needed.
        */
       attributeBindings: Ember.Array;
       /**
-       * By default the `{{link-to}}` helper will bind to the `active`, `loading`, and `disabled` classes. It is discouraged to override these directly.
+       * By default the `{{link-to}}` component will bind to the `active`, `loading`, and `disabled` classes. It is discouraged to override these directly.
        */
       classNameBindings: Ember.Array;
     }
-    /**
-     * A computed property whose dependent keys are arrays and which is updated with "one at a time" semantics.
-     */
-    export class ReduceComputedProperty extends ComputedProperty {
-    }
-    /**
-     * DEPRECATED: 
-     * `Ember.ArrayController` provides a way for you to publish a collection of objects so that you can easily bind to the collection from a Handlebars `#each` helper, an `Ember.CollectionView`, or other controllers.
-     */
-    export class ArrayController extends ArrayProxy implements SortableMixin, ControllerMixin {
-      /**
-       * DEPRECATED: 
-       * __Required.__ You must implement this method to apply this mixin.
-       */
-      addObject(object: {}): {};
-      /**
-       * DEPRECATED: 
-       * Adds each object in the passed enumerable to the receiver.
-       */
-      addObjects(objects: Enumerable): {};
-      /**
-       * DEPRECATED: 
-       * __Required.__ You must implement this method to apply this mixin.
-       */
-      removeObject(object: {}): {};
-      /**
-       * DEPRECATED: 
-       * Removes each object in the passed enumerable from the receiver.
-       */
-      removeObjects(objects: Enumerable): {};
-      /**
-       * DEPRECATED: 
-       * Helper method returns the first object from a collection. This is usually used by bindings and other parts of the framework to extract a single object if the enumerable contains only one item.
-       */
-      firstObject: any;
-      /**
-       * DEPRECATED: 
-       * Helper method returns the last object from a collection. If your enumerable contains only one object, this method should always return that object. If your enumerable is empty, this method should return `undefined`.
-       */
-      lastObject: any;
-      /**
-       * DEPRECATED: 
-       * Returns `true` if the passed object can be found in the receiver. The default version will iterate through the enumerable until the object is found. You may want to override this with a more efficient version.
-       */
-      contains(obj: {}): boolean;
-      /**
-       * DEPRECATED: 
-       * Iterates through the enumerable, calling the passed function on each item. This method corresponds to the `forEach()` method defined in JavaScript 1.6.
-       */
-      forEach(callback: Function, target: {}): {};
-      /**
-       * DEPRECATED: 
-       * Alias for `mapBy`
-       */
-      getEach(key: string): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Sets the value on the named property for each member. This is more efficient than using other methods defined on this helper. If the object implements Ember.Observable, the value will be changed to `set(),` otherwise it will be set directly. `null` objects are skipped.
-       */
-      setEach(key: string, value: {}): {};
-      /**
-       * DEPRECATED: 
-       * Maps all of the items in the enumeration to another value, returning a new array. This method corresponds to `map()` defined in JavaScript 1.6.
-       */
-      map(callback: Function, target: {}): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Similar to map, this specialized function returns the value of the named property on all items in the enumeration.
-       */
-      mapBy(key: string): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns an array with all of the items in the enumeration that the passed function returns true for. This method corresponds to `filter()` defined in JavaScript 1.6.
-       */
-      filter(callback: Function, target: {}): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns an array with all of the items in the enumeration where the passed function returns false. This method is the inverse of filter().
-       */
-      reject(callback: Function, target: {}): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns an array with just the items with the matched property. You can pass an optional second argument with the target value. Otherwise this will match any property that evaluates to `true`.
-       */
-      filterBy(key: string, value: any): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns an array with the items that do not have truthy values for key.  You can pass an optional second argument with the target value.  Otherwise this will match any property that evaluates to false.
-       */
-      rejectBy(key: string, value: string): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns the first item in the array for which the callback returns true. This method works similar to the `filter()` method defined in JavaScript 1.6 except that it will stop working on the array once a match is found.
-       */
-      find(callback: Function, target: {}): {};
-      /**
-       * DEPRECATED: 
-       * Returns the first item with a property matching the passed value. You can pass an optional second argument with the target value. Otherwise this will match any property that evaluates to `true`.
-       */
-      findBy(key: string, value: string): {};
-      /**
-       * DEPRECATED: 
-       * Returns `true` if the passed function returns true for every item in the enumeration. This corresponds with the `every()` method in JavaScript 1.6.
-       */
-      every(callback: Function, target: {}): boolean;
-      /**
-       * DEPRECATED: Use `isEvery` instead
-       */
-      everyBy(key: string, value: string): boolean;
-      /**
-       * DEPRECATED: 
-       * Returns `true` if the passed property resolves to the value of the second argument for all items in the enumerable. This method is often simpler/faster than using a callback.
-       */
-      isEvery(key: string, value: string): boolean;
-      /**
-       * DEPRECATED: 
-       * Returns a copy of the array with all `null` and `undefined` elements removed.
-       */
-      compact(): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns a new enumerable that excludes the passed value. The default implementation returns an array regardless of the receiver type unless the receiver does not contain the value.
-       */
-      without(value: {}): Enumerable;
-      /**
-       * DEPRECATED: 
-       * Converts the enumerable into an array and sorts by the keys specified in the argument.
-       */
-      sortBy(property: string): Ember.Array;
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       * An array of other controller objects available inside instances of this controller via the `controllers` property:
-       */
-      needs: Ember.Array;
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       */
-      controllerFor();
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       * Stores the instances of other controllers available from within this controller. Any controller listed by name in the `needs` property will be accessible by name through this property.
-       */
-      controllers: {};
-      /**
-       * DEPRECATED: 
-       * Defines which query parameters the controller accepts. If you give the names ['category','page'] it will bind the values of these query parameters to the variables `this.category` and `this.page`
-       */
-      queryParams: any;
-      /**
-       * DEPRECATED: 
-       * Transition the application into another route. The route may be either a single route or route path:
-       */
-      transitionToRoute(name: string, ...models: any[]);
-      transitionToRoute(name: string, options: {});
-      /**
-       * DEPRECATED: 
-       * The controller's current model. When retrieving or modifying a controller's model, this property should be used instead of the `content` property.
-       */
-      model: any;
-      /**
-       * DEPRECATED: 
-       * The collection of functions, keyed by name, available on this `ActionHandler` as action targets.
-       */
-      actions: {};
-      /**
-       * DEPRECATED: 
-       * Triggers a named action on the `ActionHandler`. Any parameters supplied after the `actionName` string will be passed as arguments to the action target function.
-       */
-      send(actionName: string, context: any);
-    }
     export class Controller extends Object implements ControllerMixin {
       /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       * An array of other controller objects available inside instances of this controller via the `controllers` property:
-       */
-      needs: Ember.Array;
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       */
-      controllerFor();
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       * Stores the instances of other controllers available from within this controller. Any controller listed by name in the `needs` property will be accessible by name through this property.
-       */
-      controllers: {};
-      /**
-       * Defines which query parameters the controller accepts. If you give the names ['category','page'] it will bind the values of these query parameters to the variables `this.category` and `this.page`
+       * Defines which query parameters the controller accepts. If you give the names `['category','page']` it will bind the values of these query parameters to the variables `this.category` and `this.page`
        */
       queryParams: any;
       /**
@@ -1499,6 +1385,10 @@ declare module 'ember' {
        */
       transitionToRoute(name: string, ...models: any[]);
       transitionToRoute(name: string, options: {});
+      /**
+       * The object to which actions from the view should be sent.
+       */
+      target: any;
       /**
        * The controller's current model. When retrieving or modifying a controller's model, this property should be used instead of the `content` property.
        */
@@ -1526,58 +1416,12 @@ declare module 'ember' {
       service(name: string): InjectedProperty;
     }
     /**
-     * DEPRECATED: 
-     * `Ember.ObjectController` is part of Ember's Controller layer. It is intended to wrap a single object, proxying unhandled attempts to `get` and `set` to the underlying model object, and to forward unhandled action attempts to its `target`.
-     */
-    export class ObjectController extends ObjectProxy implements ControllerMixin {
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       * An array of other controller objects available inside instances of this controller via the `controllers` property:
-       */
-      needs: Ember.Array;
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       */
-      controllerFor();
-      /**
-       * DEPRECATED: Use `Ember.inject.controller()` instead.
-       * Stores the instances of other controllers available from within this controller. Any controller listed by name in the `needs` property will be accessible by name through this property.
-       */
-      controllers: {};
-      /**
-       * DEPRECATED: 
-       * Defines which query parameters the controller accepts. If you give the names ['category','page'] it will bind the values of these query parameters to the variables `this.category` and `this.page`
-       */
-      queryParams: any;
-      /**
-       * DEPRECATED: 
-       * Transition the application into another route. The route may be either a single route or route path:
-       */
-      transitionToRoute(name: string, ...models: any[]);
-      transitionToRoute(name: string, options: {});
-      /**
-       * DEPRECATED: 
-       * The controller's current model. When retrieving or modifying a controller's model, this property should be used instead of the `content` property.
-       */
-      model: any;
-      /**
-       * DEPRECATED: 
-       * The collection of functions, keyed by name, available on this `ActionHandler` as action targets.
-       */
-      actions: {};
-      /**
-       * DEPRECATED: 
-       * Triggers a named action on the `ActionHandler`. Any parameters supplied after the `actionName` string will be passed as arguments to the action target function.
-       */
-      send(actionName: string, context: any);
-    }
-    /**
      * `Ember.ProxyMixin` forwards all properties not defined by the proxy itself to a proxied `content` object.  See Ember.ObjectProxy for more details.
      */
     export class ProxyMixin {
     }
     /**
-     * The `Ember.ActionHandler` mixin implements support for moving an `actions` property to an `_actions` property at extend time, and adding `_actions` to the object's mergedProperties list.
+     * `Ember.ActionHandler` is available on some familiar classes including `Ember.Route`, `Ember.View`, `Ember.Component`, and `Ember.Controller`. (Internally the mixin is used by `Ember.CoreView`, `Ember.ControllerMixin`, and `Ember.Route` and available to the above classes through inheritance.)
      */
     export class ActionHandler {
       /**
@@ -1706,13 +1550,29 @@ declare module 'ember' {
        */
       every(callback: Function, target: {}): boolean;
       /**
-       * DEPRECATED: Use `isEvery` instead
-       */
-      everyBy(key: string, value: string): boolean;
-      /**
        * Returns `true` if the passed property resolves to the value of the second argument for all items in the enumerable. This method is often simpler/faster than using a callback.
        */
       isEvery(key: string, value: string): boolean;
+      /**
+       * Returns `true` if the passed function returns true for any item in the enumeration. This corresponds with the `some()` method in JavaScript 1.6.
+       */
+      any(callback: Function, target: {}): boolean;
+      /**
+       * Returns `true` if the passed property resolves to the value of the second argument for any item in the enumerable. This method is often simpler/faster than using a callback.
+       */
+      isAny(key: string, value: string): boolean;
+      /**
+       * This will combine the values of the enumerator into a single value. It is a useful way to collect a summary value from an enumeration. This corresponds to the `reduce()` method defined in JavaScript 1.8.
+       */
+      reduce(callback: Function, initialValue: {}, reducerProperty: string): {};
+      /**
+       * Invokes the named method on every object in the receiver that implements it. This method corresponds to the implementation in Prototype 1.6.
+       */
+      invoke(methodName: string, ...args: any[]): Ember.Array;
+      /**
+       * Simply converts the enumerable into a genuine array. The order is not guaranteed. Corresponds to the method implemented by Prototype.
+       */
+      toArray(): Ember.Array;
       /**
        * Returns a copy of the array with all `null` and `undefined` elements removed.
        */
@@ -1721,6 +1581,10 @@ declare module 'ember' {
        * Returns a new enumerable that excludes the passed value. The default implementation returns an array regardless of the receiver type unless the receiver does not contain the value.
        */
       without(value: {}): Enumerable;
+      /**
+       * Returns a new enumerable that contains only unique values. The default implementation returns an array regardless of the receiver type.
+       */
+      uniq(): Enumerable;
       /**
        * Converts the enumerable into an array and sorts by the keys specified in the argument.
        */
@@ -1735,8 +1599,6 @@ declare module 'ember' {
      * Implements some standard methods for copying an object. Add this mixin to any object you create that can create a copy of itself. This mixin is added automatically to the built-in array.
      */
     export class Copyable {
-    }
-    export class Deferred {
     }
     /**
      * This mixin defines the common interface implemented by enumerable objects in Ember. Most of these methods follow the standard Array iteration API defined up to JavaScript 1.8 (excluding language-specific features that cannot be emulated in older versions of JavaScript).
@@ -1803,13 +1665,29 @@ declare module 'ember' {
        */
       every(callback: Function, target: {}): boolean;
       /**
-       * DEPRECATED: Use `isEvery` instead
-       */
-      everyBy(key: string, value: string): boolean;
-      /**
        * Returns `true` if the passed property resolves to the value of the second argument for all items in the enumerable. This method is often simpler/faster than using a callback.
        */
       isEvery(key: string, value: string): boolean;
+      /**
+       * Returns `true` if the passed function returns true for any item in the enumeration. This corresponds with the `some()` method in JavaScript 1.6.
+       */
+      any(callback: Function, target: {}): boolean;
+      /**
+       * Returns `true` if the passed property resolves to the value of the second argument for any item in the enumerable. This method is often simpler/faster than using a callback.
+       */
+      isAny(key: string, value: string): boolean;
+      /**
+       * This will combine the values of the enumerator into a single value. It is a useful way to collect a summary value from an enumeration. This corresponds to the `reduce()` method defined in JavaScript 1.8.
+       */
+      reduce(callback: Function, initialValue: {}, reducerProperty: string): {};
+      /**
+       * Invokes the named method on every object in the receiver that implements it. This method corresponds to the implementation in Prototype 1.6.
+       */
+      invoke(methodName: string, ...args: any[]): Ember.Array;
+      /**
+       * Simply converts the enumerable into a genuine array. The order is not guaranteed. Corresponds to the method implemented by Prototype.
+       */
+      toArray(): Ember.Array;
       /**
        * Returns a copy of the array with all `null` and `undefined` elements removed.
        */
@@ -1818,6 +1696,10 @@ declare module 'ember' {
        * Returns a new enumerable that excludes the passed value. The default implementation returns an array regardless of the receiver type unless the receiver does not contain the value.
        */
       without(value: {}): Enumerable;
+      /**
+       * Returns a new enumerable that contains only unique values. The default implementation returns an array regardless of the receiver type.
+       */
+      uniq(): Enumerable;
       /**
        * Converts the enumerable into an array and sorts by the keys specified in the argument.
        */
@@ -1855,7 +1737,7 @@ declare module 'ember' {
     export class Freezable {
     }
     /**
-     * This mixin defines the API for modifying array-like objects. These methods can be applied only to a collection that keeps its items in an ordered set. It builds upon the Array mixin and adds methods to modify the array. Concrete implementations of this class include ArrayProxy and ArrayController.
+     * This mixin defines the API for modifying array-like objects. These methods can be applied only to a collection that keeps its items in an ordered set. It builds upon the Array mixin and adds methods to modify the array. One concrete implementations of this class include ArrayProxy.
      */
     export class MutableArray implements Ember.Array, MutableEnumerable {
       /**
@@ -2027,13 +1909,29 @@ declare module 'ember' {
        */
       every(callback: Function, target: {}): boolean;
       /**
-       * DEPRECATED: Use `isEvery` instead
-       */
-      everyBy(key: string, value: string): boolean;
-      /**
        * Returns `true` if the passed property resolves to the value of the second argument for all items in the enumerable. This method is often simpler/faster than using a callback.
        */
       isEvery(key: string, value: string): boolean;
+      /**
+       * Returns `true` if the passed function returns true for any item in the enumeration. This corresponds with the `some()` method in JavaScript 1.6.
+       */
+      any(callback: Function, target: {}): boolean;
+      /**
+       * Returns `true` if the passed property resolves to the value of the second argument for any item in the enumerable. This method is often simpler/faster than using a callback.
+       */
+      isAny(key: string, value: string): boolean;
+      /**
+       * This will combine the values of the enumerator into a single value. It is a useful way to collect a summary value from an enumeration. This corresponds to the `reduce()` method defined in JavaScript 1.8.
+       */
+      reduce(callback: Function, initialValue: {}, reducerProperty: string): {};
+      /**
+       * Invokes the named method on every object in the receiver that implements it. This method corresponds to the implementation in Prototype 1.6.
+       */
+      invoke(methodName: string, ...args: any[]): Ember.Array;
+      /**
+       * Simply converts the enumerable into a genuine array. The order is not guaranteed. Corresponds to the method implemented by Prototype.
+       */
+      toArray(): Ember.Array;
       /**
        * Returns a copy of the array with all `null` and `undefined` elements removed.
        */
@@ -2042,6 +1940,10 @@ declare module 'ember' {
        * Returns a new enumerable that excludes the passed value. The default implementation returns an array regardless of the receiver type unless the receiver does not contain the value.
        */
       without(value: {}): Enumerable;
+      /**
+       * Returns a new enumerable that contains only unique values. The default implementation returns an array regardless of the receiver type.
+       */
+      uniq(): Enumerable;
       /**
        * Converts the enumerable into an array and sorts by the keys specified in the argument.
        */
@@ -2136,13 +2038,29 @@ declare module 'ember' {
        */
       every(callback: Function, target: {}): boolean;
       /**
-       * DEPRECATED: Use `isEvery` instead
-       */
-      everyBy(key: string, value: string): boolean;
-      /**
        * Returns `true` if the passed property resolves to the value of the second argument for all items in the enumerable. This method is often simpler/faster than using a callback.
        */
       isEvery(key: string, value: string): boolean;
+      /**
+       * Returns `true` if the passed function returns true for any item in the enumeration. This corresponds with the `some()` method in JavaScript 1.6.
+       */
+      any(callback: Function, target: {}): boolean;
+      /**
+       * Returns `true` if the passed property resolves to the value of the second argument for any item in the enumerable. This method is often simpler/faster than using a callback.
+       */
+      isAny(key: string, value: string): boolean;
+      /**
+       * This will combine the values of the enumerator into a single value. It is a useful way to collect a summary value from an enumeration. This corresponds to the `reduce()` method defined in JavaScript 1.8.
+       */
+      reduce(callback: Function, initialValue: {}, reducerProperty: string): {};
+      /**
+       * Invokes the named method on every object in the receiver that implements it. This method corresponds to the implementation in Prototype 1.6.
+       */
+      invoke(methodName: string, ...args: any[]): Ember.Array;
+      /**
+       * Simply converts the enumerable into a genuine array. The order is not guaranteed. Corresponds to the method implemented by Prototype.
+       */
+      toArray(): Ember.Array;
       /**
        * Returns a copy of the array with all `null` and `undefined` elements removed.
        */
@@ -2151,6 +2069,10 @@ declare module 'ember' {
        * Returns a new enumerable that excludes the passed value. The default implementation returns an array regardless of the receiver type unless the receiver does not contain the value.
        */
       without(value: {}): Enumerable;
+      /**
+       * Returns a new enumerable that contains only unique values. The default implementation returns an array regardless of the receiver type.
+       */
+      uniq(): Enumerable;
       /**
        * Converts the enumerable into an array and sorts by the keys specified in the argument.
        */
@@ -2171,11 +2093,11 @@ declare module 'ember' {
       /**
        * Sets the provided key or path to the value.
        */
-      set(keyName: string, value: {}): Observable;
+      set(keyName: string, value: {}): {};
       /**
        * Sets a list of properties at once. These properties are set inside a single `beginPropertyChanges` and `endPropertyChanges` batch, so observers will be buffered.
        */
-      setProperties(hash: {}): Observable;
+      setProperties(hash: {}): {};
       /**
        * Convenience method to call `propertyWillChange` and `propertyDidChange` in succession.
        */
@@ -2210,7 +2132,7 @@ declare module 'ember' {
       cacheFor(keyName: string): {};
     }
     /**
-     * A low level mixin making ObjectProxy, ObjectController or ArrayControllers promise-aware.
+     * A low level mixin making ObjectProxy promise-aware.
      */
     export class PromiseProxyMixin {
       /**
@@ -2249,107 +2171,6 @@ declare module 'ember' {
        * An alias to the proxied promise's `finally`.
        */
       finally(callback: Function): RSVP.Promise<any>;
-    }
-    /**
-     * `Ember.SortableMixin` provides a standard interface for array proxies to specify a sort order and maintain this sorting when objects are added, removed, or updated without changing the implicit order of their underlying model array:
-     */
-    export class SortableMixin implements MutableEnumerable {
-      /**
-       * __Required.__ You must implement this method to apply this mixin.
-       */
-      addObject(object: {}): {};
-      /**
-       * Adds each object in the passed enumerable to the receiver.
-       */
-      addObjects(objects: Enumerable): {};
-      /**
-       * __Required.__ You must implement this method to apply this mixin.
-       */
-      removeObject(object: {}): {};
-      /**
-       * Removes each object in the passed enumerable from the receiver.
-       */
-      removeObjects(objects: Enumerable): {};
-      /**
-       * Helper method returns the first object from a collection. This is usually used by bindings and other parts of the framework to extract a single object if the enumerable contains only one item.
-       */
-      firstObject: any;
-      /**
-       * Helper method returns the last object from a collection. If your enumerable contains only one object, this method should always return that object. If your enumerable is empty, this method should return `undefined`.
-       */
-      lastObject: any;
-      /**
-       * Returns `true` if the passed object can be found in the receiver. The default version will iterate through the enumerable until the object is found. You may want to override this with a more efficient version.
-       */
-      contains(obj: {}): boolean;
-      /**
-       * Iterates through the enumerable, calling the passed function on each item. This method corresponds to the `forEach()` method defined in JavaScript 1.6.
-       */
-      forEach(callback: Function, target: {}): {};
-      /**
-       * Alias for `mapBy`
-       */
-      getEach(key: string): Ember.Array;
-      /**
-       * Sets the value on the named property for each member. This is more efficient than using other methods defined on this helper. If the object implements Ember.Observable, the value will be changed to `set(),` otherwise it will be set directly. `null` objects are skipped.
-       */
-      setEach(key: string, value: {}): {};
-      /**
-       * Maps all of the items in the enumeration to another value, returning a new array. This method corresponds to `map()` defined in JavaScript 1.6.
-       */
-      map(callback: Function, target: {}): Ember.Array;
-      /**
-       * Similar to map, this specialized function returns the value of the named property on all items in the enumeration.
-       */
-      mapBy(key: string): Ember.Array;
-      /**
-       * Returns an array with all of the items in the enumeration that the passed function returns true for. This method corresponds to `filter()` defined in JavaScript 1.6.
-       */
-      filter(callback: Function, target: {}): Ember.Array;
-      /**
-       * Returns an array with all of the items in the enumeration where the passed function returns false. This method is the inverse of filter().
-       */
-      reject(callback: Function, target: {}): Ember.Array;
-      /**
-       * Returns an array with just the items with the matched property. You can pass an optional second argument with the target value. Otherwise this will match any property that evaluates to `true`.
-       */
-      filterBy(key: string, value: any): Ember.Array;
-      /**
-       * Returns an array with the items that do not have truthy values for key.  You can pass an optional second argument with the target value.  Otherwise this will match any property that evaluates to false.
-       */
-      rejectBy(key: string, value: string): Ember.Array;
-      /**
-       * Returns the first item in the array for which the callback returns true. This method works similar to the `filter()` method defined in JavaScript 1.6 except that it will stop working on the array once a match is found.
-       */
-      find(callback: Function, target: {}): {};
-      /**
-       * Returns the first item with a property matching the passed value. You can pass an optional second argument with the target value. Otherwise this will match any property that evaluates to `true`.
-       */
-      findBy(key: string, value: string): {};
-      /**
-       * Returns `true` if the passed function returns true for every item in the enumeration. This corresponds with the `every()` method in JavaScript 1.6.
-       */
-      every(callback: Function, target: {}): boolean;
-      /**
-       * DEPRECATED: Use `isEvery` instead
-       */
-      everyBy(key: string, value: string): boolean;
-      /**
-       * Returns `true` if the passed property resolves to the value of the second argument for all items in the enumerable. This method is often simpler/faster than using a callback.
-       */
-      isEvery(key: string, value: string): boolean;
-      /**
-       * Returns a copy of the array with all `null` and `undefined` elements removed.
-       */
-      compact(): Ember.Array;
-      /**
-       * Returns a new enumerable that excludes the passed value. The default implementation returns an array regardless of the receiver type unless the receiver does not contain the value.
-       */
-      without(value: {}): Enumerable;
-      /**
-       * Converts the enumerable into an array and sorts by the keys specified in the argument.
-       */
-      sortBy(property: string): Ember.Array;
     }
     /**
      * `Ember.TargetActionSupport` is a mixin that can be included in a class to add a `triggerAction` method with semantics similar to the Handlebars `{{action}}` helper. In normal Ember usage, the `{{action}}` helper is usually the best choice. This mixin is most often useful when you are doing more complex event handling in View objects.
@@ -2529,13 +2350,29 @@ declare module 'ember' {
        */
       every(callback: Function, target: {}): boolean;
       /**
-       * DEPRECATED: Use `isEvery` instead
-       */
-      everyBy(key: string, value: string): boolean;
-      /**
        * Returns `true` if the passed property resolves to the value of the second argument for all items in the enumerable. This method is often simpler/faster than using a callback.
        */
       isEvery(key: string, value: string): boolean;
+      /**
+       * Returns `true` if the passed function returns true for any item in the enumeration. This corresponds with the `some()` method in JavaScript 1.6.
+       */
+      any(callback: Function, target: {}): boolean;
+      /**
+       * Returns `true` if the passed property resolves to the value of the second argument for any item in the enumerable. This method is often simpler/faster than using a callback.
+       */
+      isAny(key: string, value: string): boolean;
+      /**
+       * This will combine the values of the enumerator into a single value. It is a useful way to collect a summary value from an enumeration. This corresponds to the `reduce()` method defined in JavaScript 1.8.
+       */
+      reduce(callback: Function, initialValue: {}, reducerProperty: string): {};
+      /**
+       * Invokes the named method on every object in the receiver that implements it. This method corresponds to the implementation in Prototype 1.6.
+       */
+      invoke(methodName: string, ...args: any[]): Ember.Array;
+      /**
+       * Simply converts the enumerable into a genuine array. The order is not guaranteed. Corresponds to the method implemented by Prototype.
+       */
+      toArray(): Ember.Array;
       /**
        * Returns a copy of the array with all `null` and `undefined` elements removed.
        */
@@ -2544,6 +2381,10 @@ declare module 'ember' {
        * Returns a new enumerable that excludes the passed value. The default implementation returns an array regardless of the receiver type unless the receiver does not contain the value.
        */
       without(value: {}): Enumerable;
+      /**
+       * Returns a new enumerable that contains only unique values. The default implementation returns an array regardless of the receiver type.
+       */
+      uniq(): Enumerable;
       /**
        * Converts the enumerable into an array and sorts by the keys specified in the argument.
        */
@@ -2566,6 +2407,10 @@ declare module 'ember' {
        * Defines the properties that will be concatenated from the superclass (instead of overridden).
        */
       concatenatedProperties: Ember.Array;
+      /**
+       * Defines the properties that will be merged from the superclass (instead of overridden).
+       */
+      mergedProperties: Ember.Array;
       /**
        * Destroyed object property flag.
        */
@@ -2602,6 +2447,11 @@ declare module 'ember' {
        * Augments a constructor's own properties and functions:
        */
       reopenClass();
+    }
+    /**
+     * This is the object instance returned when you get the `@each` property on an array. It uses the unknownProperty handler to automatically create EachArray instances for property names.
+     */
+    export class EachProxy {
     }
     /**
      * A Namespace is an object usually used to contain other objects or methods such as an application or framework. Create a namespace anytime you want to define one of these new containers.
@@ -2781,13 +2631,29 @@ declare module 'ember' {
        */
       every(callback: Function, target: {}): boolean;
       /**
-       * DEPRECATED: Use `isEvery` instead
-       */
-      everyBy(key: string, value: string): boolean;
-      /**
        * Returns `true` if the passed property resolves to the value of the second argument for all items in the enumerable. This method is often simpler/faster than using a callback.
        */
       isEvery(key: string, value: string): boolean;
+      /**
+       * Returns `true` if the passed function returns true for any item in the enumeration. This corresponds with the `some()` method in JavaScript 1.6.
+       */
+      any(callback: Function, target: {}): boolean;
+      /**
+       * Returns `true` if the passed property resolves to the value of the second argument for any item in the enumerable. This method is often simpler/faster than using a callback.
+       */
+      isAny(key: string, value: string): boolean;
+      /**
+       * This will combine the values of the enumerator into a single value. It is a useful way to collect a summary value from an enumeration. This corresponds to the `reduce()` method defined in JavaScript 1.8.
+       */
+      reduce(callback: Function, initialValue: {}, reducerProperty: string): {};
+      /**
+       * Invokes the named method on every object in the receiver that implements it. This method corresponds to the implementation in Prototype 1.6.
+       */
+      invoke(methodName: string, ...args: any[]): Ember.Array;
+      /**
+       * Simply converts the enumerable into a genuine array. The order is not guaranteed. Corresponds to the method implemented by Prototype.
+       */
+      toArray(): Ember.Array;
       /**
        * Returns a copy of the array with all `null` and `undefined` elements removed.
        */
@@ -2796,6 +2662,10 @@ declare module 'ember' {
        * Returns a new enumerable that excludes the passed value. The default implementation returns an array regardless of the receiver type unless the receiver does not contain the value.
        */
       without(value: {}): Enumerable;
+      /**
+       * Returns a new enumerable that contains only unique values. The default implementation returns an array regardless of the receiver type.
+       */
+      uniq(): Enumerable;
       /**
        * Converts the enumerable into an array and sorts by the keys specified in the argument.
        */
@@ -2819,11 +2689,11 @@ declare module 'ember' {
       /**
        * Sets the provided key or path to the value.
        */
-      set(keyName: string, value: {}): Observable;
+      set(keyName: string, value: {}): {};
       /**
        * Sets a list of properties at once. These properties are set inside a single `beginPropertyChanges` and `endPropertyChanges` batch, so observers will be buffered.
        */
-      setProperties(hash: {}): Observable;
+      setProperties(hash: {}): {};
       /**
        * Convenience method to call `propertyWillChange` and `propertyDidChange` in succession.
        */
@@ -2872,11 +2742,11 @@ declare module 'ember' {
       /**
        * Sets the provided key or path to the value.
        */
-      set(keyName: string, value: {}): Observable;
+      set(keyName: string, value: {}): {};
       /**
        * Sets a list of properties at once. These properties are set inside a single `beginPropertyChanges` and `endPropertyChanges` batch, so observers will be buffered.
        */
-      setProperties(hash: {}): Observable;
+      setProperties(hash: {}): {};
       /**
        * Convenience method to call `propertyWillChange` and `propertyDidChange` in succession.
        */
@@ -2917,150 +2787,54 @@ declare module 'ember' {
     }
     export class Service extends Object {
     }
-    /**
-     * DEPRECATED: 
-     * An unordered collection of objects.
-     */
-    export class Set extends CoreObject implements MutableEnumerable, Copyable, Freezable {
-      /**
-       * DEPRECATED: 
-       * __Required.__ You must implement this method to apply this mixin.
-       */
-      addObject(object: {}): {};
-      /**
-       * DEPRECATED: 
-       * Adds each object in the passed enumerable to the receiver.
-       */
-      addObjects(objects: Enumerable): {};
-      /**
-       * DEPRECATED: 
-       * __Required.__ You must implement this method to apply this mixin.
-       */
-      removeObject(object: {}): {};
-      /**
-       * DEPRECATED: 
-       * Removes each object in the passed enumerable from the receiver.
-       */
-      removeObjects(objects: Enumerable): {};
-      /**
-       * DEPRECATED: 
-       * Helper method returns the first object from a collection. This is usually used by bindings and other parts of the framework to extract a single object if the enumerable contains only one item.
-       */
-      firstObject: any;
-      /**
-       * DEPRECATED: 
-       * Helper method returns the last object from a collection. If your enumerable contains only one object, this method should always return that object. If your enumerable is empty, this method should return `undefined`.
-       */
-      lastObject: any;
-      /**
-       * DEPRECATED: 
-       * Returns `true` if the passed object can be found in the receiver. The default version will iterate through the enumerable until the object is found. You may want to override this with a more efficient version.
-       */
-      contains(obj: {}): boolean;
-      /**
-       * DEPRECATED: 
-       * Iterates through the enumerable, calling the passed function on each item. This method corresponds to the `forEach()` method defined in JavaScript 1.6.
-       */
-      forEach(callback: Function, target: {}): {};
-      /**
-       * DEPRECATED: 
-       * Alias for `mapBy`
-       */
-      getEach(key: string): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Sets the value on the named property for each member. This is more efficient than using other methods defined on this helper. If the object implements Ember.Observable, the value will be changed to `set(),` otherwise it will be set directly. `null` objects are skipped.
-       */
-      setEach(key: string, value: {}): {};
-      /**
-       * DEPRECATED: 
-       * Maps all of the items in the enumeration to another value, returning a new array. This method corresponds to `map()` defined in JavaScript 1.6.
-       */
-      map(callback: Function, target: {}): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Similar to map, this specialized function returns the value of the named property on all items in the enumeration.
-       */
-      mapBy(key: string): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns an array with all of the items in the enumeration that the passed function returns true for. This method corresponds to `filter()` defined in JavaScript 1.6.
-       */
-      filter(callback: Function, target: {}): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns an array with all of the items in the enumeration where the passed function returns false. This method is the inverse of filter().
-       */
-      reject(callback: Function, target: {}): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns an array with just the items with the matched property. You can pass an optional second argument with the target value. Otherwise this will match any property that evaluates to `true`.
-       */
-      filterBy(key: string, value: any): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns an array with the items that do not have truthy values for key.  You can pass an optional second argument with the target value.  Otherwise this will match any property that evaluates to false.
-       */
-      rejectBy(key: string, value: string): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns the first item in the array for which the callback returns true. This method works similar to the `filter()` method defined in JavaScript 1.6 except that it will stop working on the array once a match is found.
-       */
-      find(callback: Function, target: {}): {};
-      /**
-       * DEPRECATED: 
-       * Returns the first item with a property matching the passed value. You can pass an optional second argument with the target value. Otherwise this will match any property that evaluates to `true`.
-       */
-      findBy(key: string, value: string): {};
-      /**
-       * DEPRECATED: 
-       * Returns `true` if the passed function returns true for every item in the enumeration. This corresponds with the `every()` method in JavaScript 1.6.
-       */
-      every(callback: Function, target: {}): boolean;
-      /**
-       * DEPRECATED: Use `isEvery` instead
-       */
-      everyBy(key: string, value: string): boolean;
-      /**
-       * DEPRECATED: 
-       * Returns `true` if the passed property resolves to the value of the second argument for all items in the enumerable. This method is often simpler/faster than using a callback.
-       */
-      isEvery(key: string, value: string): boolean;
-      /**
-       * DEPRECATED: 
-       * Returns a copy of the array with all `null` and `undefined` elements removed.
-       */
-      compact(): Ember.Array;
-      /**
-       * DEPRECATED: 
-       * Returns a new enumerable that excludes the passed value. The default implementation returns an array regardless of the receiver type unless the receiver does not contain the value.
-       */
-      without(value: {}): Enumerable;
-      /**
-       * DEPRECATED: 
-       * Converts the enumerable into an array and sorts by the keys specified in the argument.
-       */
-      sortBy(property: string): Ember.Array;
-    }
-    /**
-     * An `Ember.SubArray` tracks an array in a way similar to, but more specialized than, `Ember.TrackedArray`.  It is useful for keeping track of the indexes of items within a filtered array.
-     */
-    export class SubArray {
-    }
-    /**
-     * An `Ember.TrackedArray` tracks array operations.  It's useful when you want to lazily compute the indexes of items in an array after they've been shifted by subsequent operations.
-     */
-    export class TrackedArray {
-    }
     export class _Metamorph {
     }
     export class _MetamorphView extends View implements _Metamorph {
     }
     /**
-     * DEPRECATED: 
-     * `Ember.RenderBuffer` gathers information regarding the view and generates the final representation. `Ember.RenderBuffer` will generate HTML which can be pushed to the DOM.
+     * An `Ember.Component` is a view that is completely isolated. Properties accessed in its templates go to the view object and actions are targeted at the view object. There is no access to the surrounding context or outer controller; all contextual information must be passed in.
      */
-    export class RenderBuffer {
+    export class Component extends View implements ViewTargetActionSupport {
+      /**
+       * Calls a action passed to a component.
+       */
+      sendAction(action: string, params: any);
+      /**
+       * Returns true when the component was invoked with a block template.
+       */
+      hasBlock: any;
+      /**
+       * Returns true when the component was invoked with a block parameter supplied.
+       */
+      hasBlockParams: any;
+      /**
+       * Enables components to take a list of parameters as arguments
+       */
+      static positionalParams: any;
+      /**
+       * Renders the view again. This will work regardless of whether the view is already in the DOM or not. If the view is in the DOM, the rendering process will be deferred to give bindings a chance to synchronize.
+       */
+      rerender();
+      /**
+       * Returns the current DOM element for the view.
+       */
+      element: DOMElement;
+      /**
+       * Returns a jQuery object for this view's element. If you pass in a selector string, this method will return a jQuery object, using the current element as its buffer.
+       */
+      $(selector: string): JQuery;
+      /**
+       * The HTML `id` of the view's element in the DOM. You can provide this value yourself but it must be unique (just as in HTML):
+       */
+      elementId: string;
+      /**
+       * Tag name for the view's outer element. The tag name is only used when an element is first created. If you change the `tagName` for an element, you must destroy and recreate the view element.
+       */
+      tagName: string;
+      /**
+       * Normally, Ember's component model is "write-only". The component takes a bunch of attributes that it got passed in, and uses them to render its template.
+       */
+      readDOMAttr(name: string): void;
     }
     export class AriaRoleSupport {
       /**
@@ -3099,6 +2873,30 @@ declare module 'ember' {
      * `Ember.ViewTargetActionSupport` is a mixin that can be included in a view class to add a `triggerAction` method with semantics similar to the Handlebars `{{action}}` helper. It provides intelligent defaults for the action's target: the view's controller; and the context that is sent with the action: the view's context.
      */
     export class ViewTargetActionSupport extends TargetActionSupport {
+      /**
+       * Renders the view again. This will work regardless of whether the view is already in the DOM or not. If the view is in the DOM, the rendering process will be deferred to give bindings a chance to synchronize.
+       */
+      rerender();
+      /**
+       * Returns the current DOM element for the view.
+       */
+      element: DOMElement;
+      /**
+       * Returns a jQuery object for this view's element. If you pass in a selector string, this method will return a jQuery object, using the current element as its buffer.
+       */
+      $(selector: string): JQuery;
+      /**
+       * The HTML `id` of the view's element in the DOM. You can provide this value yourself but it must be unique (just as in HTML):
+       */
+      elementId: string;
+      /**
+       * Tag name for the view's outer element. The tag name is only used when an element is first created. If you change the `tagName` for an element, you must destroy and recreate the view element.
+       */
+      tagName: string;
+      /**
+       * Normally, Ember's component model is "write-only". The component takes a bunch of attributes that it got passed in, and uses them to render its template.
+       */
+      readDOMAttr(name: string): void;
     }
     export class VisibilitySupport {
       /**
@@ -3114,39 +2912,12 @@ declare module 'ember' {
     /**
      * The internal class used to create text inputs when the `{{input}}` helper is used with `type` of `checkbox`.
      */
-    export class Checkbox extends View {
+    export class Checkbox extends Component {
     }
     /**
      * `Ember.CollectionView` is an `Ember.View` descendent responsible for managing a collection (an array or array-like object) by maintaining a child view object and associated DOM representation for each item in the array and ensuring that child views and their associated rendered HTML are updated when items in the array are added, removed, or replaced.
      */
     export class CollectionView extends ContainerView implements EmptyViewSupport {
-    }
-    /**
-     * An `Ember.Component` is a view that is completely isolated. Properties accessed in its templates go to the view object and actions are targeted at the view object. There is no access to the surrounding context or outer controller; all contextual information must be passed in.
-     */
-    export class Component extends View {
-      /**
-       * DEPRECATED: 
-       * A components template property is set by passing a block during its invocation. It is executed within the parent context.
-       */
-      template: any;
-      /**
-       * DEPRECATED: 
-       * Specifying a components `templateName` is deprecated without also providing the `layout` or `layoutName` properties.
-       */
-      templateName: any;
-      /**
-       * Calls a action passed to a component.
-       */
-      sendAction(action: string, params: any);
-      /**
-       * Returns true when the component was invoked with a block template.
-       */
-      hasBlock: any;
-      /**
-       * Returns true when the component was invoked with a block parameter supplied.
-       */
-      hasBlockParams: any;
     }
     /**
      * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-containerview
@@ -3270,7 +3041,7 @@ declare module 'ember' {
        */
       value: string;
       /**
-       * The `type` attribute of the input element. To remain compatible with IE8, this cannot change after the element has been rendered. It is suggested to avoid using a dynamic type attribute if you are supporting IE8 since it will be set once and never change.
+       * The `type` attribute of the input element.
        */
       type: string;
       /**
@@ -3295,46 +3066,6 @@ declare module 'ember' {
      * `Ember.View` is the class in Ember responsible for encapsulating templates of HTML content, combining templates with data to render as sections of a page's DOM, and registering and responding to user-initiated events.
      */
     export class View extends CoreView implements TemplateRenderingSupport, ClassNamesSupport, LegacyViewSupport, InstrumentationSupport, VisibilitySupport, AriaRoleSupport {
-      /**
-       * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-view
-       * The name of the layout to lookup if no layout is provided.
-       */
-      layoutName: string;
-      /**
-       * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-view
-       * A view may contain a layout. A layout is a regular template but supersedes the `template` property during rendering. It is the responsibility of the layout template to retrieve the `template` property from the view (or alternatively, call `Handlebars.helpers.yield`, `{{yield}}`) to render it in the correct location.
-       */
-      layout: Function;
-      /**
-       * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-view
-       * Renders the view again. This will work regardless of whether the view is already in the DOM or not. If the view is in the DOM, the rendering process will be deferred to give bindings a chance to synchronize.
-       */
-      rerender();
-      /**
-       * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-view
-       * Returns the current DOM element for the view.
-       */
-      element: DOMElement;
-      /**
-       * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-view
-       * Returns a jQuery object for this view's element. If you pass in a selector string, this method will return a jQuery object, using the current element as its buffer.
-       */
-      $(selector: string): JQuery;
-      /**
-       * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-view
-       * The HTML `id` of the view's element in the DOM. You can provide this value yourself but it must be unique (just as in HTML):
-       */
-      elementId: string;
-      /**
-       * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-view
-       * Tag name for the view's outer element. The tag name is only used when an element is first created. If you change the `tagName` for an element, you must destroy and recreate the view element.
-       */
-      tagName: string;
-      /**
-       * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-view
-       * Normally, Ember's component model is "write-only". The component takes a bunch of attributes that it got passed in, and uses them to render its template.
-       */
-      readDOMAttr(name: string): void;
       /**
        * DEPRECATED: See http://emberjs.com/deprecations/v1.x/#toc_ember-view
        * Standard CSS class names to apply to the view's outer element. This property automatically inherits any class names defined by the view's superclasses as well.
@@ -3372,17 +3103,12 @@ declare module 'ember' {
    */
   export class Registry {
   }
-  /**
-   * Wraps an Handlebars helper with an HTMLBars helper for backwards compatibility.
-   */
-  export class HandlebarsCompatibleHelper {
+  export class Backburner {
   }
   /**
    * Helper class that allows you to register your library with Ember.
    */
   export class Libraries {
-  }
-  export class Backburner {
   }
   /**
    * Objects of this type can implement an interface to respond to requests to get and set. The default implementation handles simple properties.
@@ -3411,24 +3137,66 @@ declare module 'ember' {
   export interface String {
   }
   /**
-   * This is the object instance returned when you get the `@each` property on an array. It uses the unknownProperty handler to automatically create EachArray instances for property names.
+   * ContainerProxyMixin is used to provide public access to specific container functionality.
    */
-  export class EachProxy {
+  export class ContainerProxyMixin {
+    /**
+     * Returns an object that can be used to provide an owner to a manually created instance.
+     */
+    ownerInjection(): {};
+    /**
+     * Given a fullName return a corresponding instance.
+     */
+    lookup(fullName: string, options: {}): any;
   }
   /**
-   * An HTMLBars AST transformation that deprecates usage of `controller` with the `{{with}}` helper.
+   * RegistryProxyMixin is used to provide public access to specific registry functionality.
    */
-  export class DeprecateWithController {
-  }
-  /**
-   * An HTMLBars AST transformation that replaces all instances of {{bind-attr}} helpers with the equivalent HTMLBars-style bound attributes. For example
-   */
-  export class TransformBindAttrToAttributes {
-  }
-  /**
-   * An HTMLBars AST transformation that replaces all instances of
-   */
-  export class TransformEachInToBlockParams {
+  export class RegistryProxyMixin {
+    /**
+     * Given a fullName return the corresponding factory.
+     */
+    resolveRegistration(fullName: string): Function;
+    /**
+     * Registers a factory that can be used for dependency injection (with `inject`) or for service lookup. Each factory is registered with a full name including two parts: `type:name`.
+     */
+    register(fullName: string, factory: Function, options: {});
+    /**
+     * Unregister a factory.
+     */
+    unregister(fullName: string);
+    /**
+     * Check if a factory is registered.
+     */
+    hasRegistration(fullName: string): boolean;
+    /**
+     * Register an option for a particular factory.
+     */
+    registerOption(fullName: string, optionName: string, options: {});
+    /**
+     * Return a specific registered option for a particular factory.
+     */
+    registeredOption(fullName: string, optionName: string): {};
+    /**
+     * Register options for a particular factory.
+     */
+    registerOptions(fullName: string, options: {});
+    /**
+     * Return registered options for a particular factory.
+     */
+    registeredOptions(fullName: string): {};
+    /**
+     * Allow registering options for all factories of a type.
+     */
+    registerOptionsForType(type: string, options: {});
+    /**
+     * Return the registered options for all factories of a type.
+     */
+    registeredOptionsForType(type: string): {};
+    /**
+     * Define a dependency injection onto a specific factory or all factories of a type.
+     */
+    inject(factoryNameOrType: string, property: string, injectionName: string);
   }
   /**
    * An HTMLBars AST transformation that replaces all instances of
@@ -3439,11 +3207,6 @@ declare module 'ember' {
    * An HTMLBars AST transformation that replaces all instances of
    */
   export class TransformInputOnToOnEvent {
-  }
-  /**
-   * An HTMLBars AST transformation that replaces all instances of
-   */
-  export class TransformWithAsToHash {
   }
   export default Ember
 }
