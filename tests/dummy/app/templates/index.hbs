@@ -1,81 +1,13 @@
-<h3>Introduction</h3>
-<desc>
-  The <strong>ui-list</strong> Ember-CLI addon is a set components meant to help you manage lists in your applications. Lists are everywhere and therefore it
-  is our selfish hope that this addon is soon everywhere too but regardless of its distribution, here's what it does ...
-</desc>
-<h3>Components</h3>
-<desc>
-  The typical usage -- or at least the most compact/simplist usage -- is inline use of the "LIST" components. These in turn will manage the ITEMs and
-  leverage HELPERs where appropriate. Still you may go into any level of detail you like, click on any of the components below to get
-  design details and interactive examples. Interactive examples? How lucky are you? Yes the world is finally giving back. You're a consumer.
-  Your job is now clear ... start clicking on components.
-</desc>
-<desc>
-  <div class="row">
-      <div class="col-xs-6 col-sm-3">
-        <heading>MACRO</heading>
-        <ul class="components">
-          <li>nothing yet</li>
-        </ul>
-      </div>
-      <div class="col-xs-6 col-sm-3">
-        <heading>LIST</heading>
-        <ul class="components">
-          <li>{{#link-to 'demo-list'}}<code>ui-list</code>{{/link-to}}</li>
-          <hr width='25%'/>
-          <li>{{#link-to 'demo-selectable-list'}}<code>ui-selectable-list</code>{{/link-to}}</li>
-          <li>{{#link-to 'demo-nav-list.simple'}}<code>ui-nav-list</code>{{/link-to}}</li>
-          <li>{{#link-to 'demo-sortable-list'}}<code>ui-sortable-list</code>{{/link-to}}</li>
-          <li>{{#link-to 'demo-tabular-list'}}<code>ui-tabular-list</code>{{/link-to}}</li>
-        </ul>
-      </div>
-      <div class="col-xs-6 col-sm-3">
-        <heading>ITEM</heading>
-        <ul class="components">
-          <li>{{#link-to 'demo-item'}}<code>ui-item</code>{{/link-to}}</li>
-          <hr width='25%'/>
-          <li>{{#link-to 'demo-sortable-item'}}<code>ui-sortable-item</code>{{/link-to}}</li>
-          <li>{{#link-to 'demo-actionable-item'}}<code>ui-actionable-item</code>{{/link-to}}</li>
-          <li>{{#link-to 'demo-row-item'}}<code>ui-row-item</code>{{/link-to}}</li>
-        </ul>
-      </div>
-      <div class="col-xs-6 col-sm-3">
-        <heading>GRANULAR</heading>
-        <ul class="components">
-          <li>{{#link-to 'demo-pane'}}<code>ui-pane</code>{{/link-to}}</li>
-          <li>{{#link-to 'demo-aspect'}}<code>ui-aspect</code>{{/link-to}}</li>
-          <hr width='25%'/>
-          <li>{{#link-to 'demo-column-pane'}}<code>ui-column-pane</code>{{/link-to}}</li>
-          <hr width='25%'/>
-          <li>
-            {{#link-to 'ui-icon-aspect'}}<code>ui-icon-aspect</code>{{/link-to}}
-          </li>
-          <li>{{#link-to 'ui-aspect-timer'}}<code>ui-aspect-timer</code>{{/link-to}}</li>
-          <li>{{#link-to 'demo-aspect-handle'}}<code>ui-aspect-handle</code>{{/link-to}}</li>
-        </ul>
-      </div>
-  </div>
-</desc>
-<row>
-  <description>
-    <p>
-      <heading>External Dependencies</heading>
-      <ul class="components">
-        <li><a href="http://development.ui-icon.divshot.io/"><code>ui-icon</code></a></li>
-        <li><a href="http://development.ui-image.divshot.io/"><code>ui-image</code></a></li>
-      </ul>
-    </p>
-  </description>
-</row>
+{{#markdown-convert style='github'}}
 
+  ## Overview
+  The goal of this addon is to provide highly reusable primitives for user interface elements which fall under the very common category of "list and items" user interface elements. This minimal representation will be represented by the following:
 
-<h3>Design Diagrams</h3>
-<desc>
-  Here are some high level design diagrams which illustrate the thinking involved in these components:<br/>
-  <centered>
-    {{radio-buttons buttons='HL Design::hl-design,Responsibilities,Actions,Node Messenger::node-messenger' value=designImage}}
-  </centered>
-  <indent>
-    <a href="images/{{designImage}}.png" target="_new"><img src="images/{{designImage}}.png"></a>
-  </indent>
-</desc>
+  - **`ui-list` Component** - a minimal container for items
+  - **`ui-item` Component** - a minimal item representation
+  - **`list` Mixin** - all of the generalized list functionality
+  - **`item` Mixin** - all of the generalized item functionality
+
+  The responsibilities that will be assumed for a list _versus_ an item _versus_ a section will break down like so:
+
+{{/markdown-convert}}
