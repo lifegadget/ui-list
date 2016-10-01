@@ -1,0 +1,33 @@
+<list
+  id={{id}}
+  name={{name}}
+  class={{classy}}
+  role={{role}}
+  data-cardinality={{cardinality}}
+>
+
+  {{#if isBlock}}
+
+
+
+  {{else}}
+
+    {{#each _items as |item|}}
+      {{#let (or item.id (concat id '-' (auto-id 10))) as |itemId|}}
+        {{component (concat 'ui-' type '-item')
+          id=itemId
+          value=item
+          size=size
+          selected=(includes selected itemId)
+          disabled=(includes disabled itemId)
+          onSelected=(action 'onSelected' itemId)
+          onHover=(action 'onHover' itemId)
+          onFocus=(action 'onFocus' itemId)
+
+        }}
+      {{/let}}
+    {{/each}}
+
+  {{/if}}
+
+</list>

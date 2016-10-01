@@ -1,13 +1,73 @@
 {{#markdown-convert style='github'}}
 
-  ## Overview
-  The goal of this addon is to provide highly reusable primitives for user interface elements which fall under the very common category of "list and items" user interface elements. This minimal representation will be represented by the following:
+## Overview
+The goal of this addon is to provide highly reusable primitives for user interface elements which fall under the very common category of "list and items" user interface elements. This minimal representation will be represented by the following:
 
-  - **`ui-list` Component** - a minimal container for items
-  - **`ui-item` Component** - a minimal item representation
-  - **`list` Mixin** - all of the generalized list functionality
-  - **`item` Mixin** - all of the generalized item functionality
+- **`ui-list` Component** - a minimal container for items
+- **`ui-default-item` Component** - a minimal item representation
+- **`item-section` Component** - a base component for "sections"
+- **`list` Mixin** - all of the generalized list functionality
+- **`item` Mixin** - all of the generalized item functionality
 
-  The responsibilities that will be assumed for a list _versus_ an item _versus_ a section will break down like so:
+With these primitives it will be possible to have children addon's which use these primitives and extend the base functionality.
+
+## Installation
+
+```bash
+ember install ui-list
+# then any number of child components you would like to use
+ember install ui-list-navigation
+ember install ui-item-tabs
+```
+
+> Note: previous versions of this addon (e.g., 0.5.x or less) were built in the 1.x ember days and were starting to become aged so for all 1.x versions of this addon onward this is a completely Ember 2.x implementation and complete rewrite of what came before it (although with the same/similar design goals)
+
+## Roles and Responsibilities
+
+### The List
+
+- Responsible for _proxying item events_ up to it's containers
+- Providing a flexible way to swap in and out different "types" of items
+- Providing the single source of state to it's items; this includes:
+  - items selected state
+  - selection cardinality (aka, min and max items which can be selected, default is 0:1)
+  - items disabled/enabled state
+  - validity and error state of items
+
+
+  > Note: it is _not_ the responsibility of the list to validate it's items nor to handle the user interactions with the items. This is just basic DDAU, the items handle user interaction and then tell the list they want to update their state.
+
+- The _order_ the items are displayed in (defaulting to natural order)
+- Setting macro styling options (via CSS property )
+
+### The Item
+
+- Owns event interaction with the user
+- Owns informing the list when it wants to change state (DDAU)
+- Can be in several states:
+  - enabled/disabled
+  - selected/unselected
+  - validation state (none/success/warning/failure)
+- An item also represents a segment of state which is stored as its `value` (a value can be an array, object, or literal)
+- Provides a visual structure which -- using flexbox -- provides a set of "sections" where content can be layed out
+- An item must have a default way of rendering its _sections_ but also `yield` each section in the block form for the container to do as they like
+
+### The Section
+
+- An area/section of screen real-estate granted by the Item
+- Has access to all the properties of the Item via the `parentItem` property
+- Sections must not exist in the App's namespace directly (aka, the addon's `app` directory) but must stay in their given addon's namespace (aka, `addon` directory). This will allow compact naming that does not run the risk of namespace collisions.
+
+
+### Simple Example
 
 {{/markdown-convert}}
+
+
+{{ui-list
+
+  items='foo,bar, baz'
+  selected=selected
+  onChange=(mut selected)
+
+}}
