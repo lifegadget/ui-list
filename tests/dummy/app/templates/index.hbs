@@ -58,16 +58,6 @@ ember install ui-item-tabs
 - Has access to all the properties of the Item via the `parentItem` property
 - Sections must not exist in the App's namespace directly (aka, the addon's `app` directory) but must stay in their given addon's namespace (aka, `addon` directory). This will allow compact naming that does not run the risk of namespace collisions.
 
-
-### Simple Example
-
 {{/markdown-convert}}
 
 
-{{ui-list
-
-  items='foo,bar, baz'
-  selected=selected
-  onChange=(mut selected)
-
-}}

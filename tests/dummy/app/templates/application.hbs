@@ -1,9 +1,38 @@
-{{#markdown-convert style='github'}}
+{{#ui-navigation
+    selected=currentPath
+    mood='primary'
+    onChange=(action 'navHandler')
 
-  # ui-list
+    as |nav|
+}}
+
+  {{#nav.items}}
+    {{#nav.brand
+      linkTo='https://github.com/lifegadget/ui-list'
+    }}
+      {{icon 'github' size='2.5rem'}}
+      ui-list
+    {{/nav.brand}}
+    {{nav.item 'Intro' routeTo='index'}}
+    {{nav.item 'Basics' routeTo='demo'}}
+    {{nav.item 'Skinning' routeTo='skinning'}}
+    {{nav.item 'Actions' routeTo='actions'}}
+    {{nav.item 'Bespoke Items' routeTo='bespoke-items'}}
+    {{nav.item 'Related Addons' routeTo='related'}}
+    {{#nav.right}}
+      <img alt="fury" src="https://badge.fury.io/js/ui-list.svg">
+    {{/nav.right}}
+  {{/nav.items}}
+{{/ui-navigation}}
+<br>
+
+{{#markdown-convert style='github'}}
   > list-based user interface elements for ambitious Ember applications
 
 {{/markdown-convert}}
 
 <br>
+
+
+
 {{outlet}}

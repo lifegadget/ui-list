@@ -1,0 +1,140 @@
+{{#markdown-convert style='github'}}
+
+## Demonstration
+
+### Simple Text List
+We'll start with a very simple list of text items so that we can start to understand the basics
+of the `ui-list` addon.
+
+{{/markdown-convert}}
+
+<br>
+<div class="flex">
+  <div class="flex simple-text-list" style="width: 200px">
+    {{ui-list
+
+      items='foo,bar, baz'
+      selected=selected
+      orient=orientation
+      halign=halign
+      valign=valign
+      fit=fit
+      reversed=reversed
+      onSelected=(mut selected)
+
+    }}
+  </div>
+
+  <div class="flex fill column">
+    We're able to achieve the example list component to the left using only the code to the right to achieve these results. Using the controls below you can change some of the display characteristics:
+
+    <div class="flex">
+      <div class="flex column orientation">
+        <h3>Orientation</h3>
+        <div>
+          items:
+        </div>
+        {{ui-toggle-button
+          on='vertical'
+          onValue='vertical'
+          off='horizontal'
+          offValue='horizontal'
+          size='small'
+          value=orientation
+          onToggle=(mut orientation)
+        }}
+
+        <br>
+        <div>
+          selected:
+        </div>
+        {{ui-toggle-button
+          on='reversed'
+          onValue=true
+          off='normal'
+          offValue=false
+          size='small'
+          value=reversed
+          onToggle=(mut reversed)
+        }}
+      </div>
+      <div class="flex column">
+        <h3>Alignment</h3>
+        <div>
+          horizontal
+          <span class="sidenote">(defaults left)</span>
+        </div>
+        {{ui-buttons
+          buttons='left,center,right,around,between'
+          value=halign
+          size='small'
+          onChange=(mut halign)
+        }}
+
+        <br>
+        <div>
+          vertical
+          <span class="sidenote">(default top)</span>
+        </div>
+        {{ui-buttons
+          buttons='top,center,bottom'
+          value=valign
+          size='small'
+          onChange=(mut valign)
+        }}
+
+        <br>
+        <div>
+          fit / fill
+          <span class="sidenote">(default fill)</span>
+        </div>
+        {{ui-toggle-button
+          on='fit'
+          off='fill'
+          value=fit
+          size='small'
+          width='250px'
+          mood='secondary'
+          onToggle=(mut fit)
+        }}
+        <div class="sidenote">
+          Note: when setting to <b>FILL</b> the entire row/column (depending on orientation) is filled. This is typically
+          what you want but "fit" makes sense if you want items to only use up the space they take.
+        </div>
+        <div class="sidenote">
+          What may not be clear at first is that to preserve the meaning of primary axis alignment we must apply the CSS to either the list or item component depending on fit/fill.
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="flex fit self-start column" style="width:250px">
+<code class='handlebars'><pre class="h-pad">
+\{{ui-list
+
+  items='foo,bar, baz'
+  selected=selected
+  halign='{{halign}}'
+  valign='{{valign}}'
+  fit={{fit}}
+  orient='{{orientation}}'
+  reversed={{reversed}}
+  onSelected=(mut selected)
+
+}}
+</pre></code>
+    <p class="sidenote">
+      <b>Note</b>: in this example we're mutating
+      {{tag 'selected'}} whenever the {{tag 'onSelected()'}} action is triggered. If you didn't
+      want to have the list be "selectable" then simply don't listen to {{tag 'onSelected()'}}.
+    </p>
+  </div>
+</div>
+<br>
+{{#markdown-convert style='github'}}
+### Full Utilisation of Default Item
+In the "bespoke items" section you'll see that it's very easy to substitute your own "item" component to replace the default but before that let's explore the power of the _default_ item component as it's utility is far greater than illustrated in the example above.
+
+As was mentioned in the Intro, an item is composed of 1:M sections. In the case of the default item component, it has three sections: _left, center,_ and _right_.
+
+{{/markdown-convert}}

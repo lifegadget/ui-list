@@ -4,11 +4,40 @@
   role={{role}}
   tabindex={{tabindex}}
 
-  onclick={{action 'onSelected' id}}
+  onclick={{action 'onClick' id}}
   onmouseover={{action 'onHover' id true}}
   onmouseout={{action 'onHover' id false}}
   onfocus={{action 'onFocus' id true}}
   onblur={{action 'onFocus' id false}}
 >
-  {{value}}
+{{#if hasBlock}}
+
+{{/if}}
+
+  {{#ui-section
+    name='left'
+    align='center'
+    sizing='fit'
+  }}
+
+  {{/ui-section}}
+
+  {{#ui-section
+    name='center'
+    sizing='fill'
+    align='left'
+  }}
+
+    {{or value.title value}}
+
+  {{/ui-section}}
+
+  {{#ui-section
+    name='right'
+    sizing='fit'
+    align='right'
+  }}
+
+  {{/ui-section}}
+
 </item>

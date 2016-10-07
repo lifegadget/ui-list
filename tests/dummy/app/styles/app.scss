@@ -1,0 +1,70 @@
+@import 'ui-navigation';
+@import 'ui-list';
+@import 'ui-tag';
+@import 'ui-list/default';
+@import 'ui-button';
+// @import '/ui-button/bootstrap/buttons';
+html, body {
+	font-family: Verdana, Geneva, sans-serif;
+	margin: 20px;
+}
+.flex {
+  display: flex;
+
+  &.column {
+    flex-direction: column;
+  }
+  &.fill {
+    flex: 1 0;
+    margin: 0.25rem;
+  }
+
+  &.self-start {
+    align-self: flex-start;
+  }
+}
+
+.right {
+  display: block;
+  float: right;
+}
+
+.h-pad {
+  padding: 0 0.75rem 0.75rem;
+}
+
+div.column, span.column {
+  margin: 0.25rem 0.5rem;
+}
+
+code {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 9pt;
+	line-spacing: 1rem;
+	color: rgb(63, 63, 63);
+	background-color: rgb(235, 234, 234);
+}
+
+note {
+	display: block;
+	color: #7C7C7C;
+	font-weight: 150;
+	border-left-style: solid;
+	border-left-color: lightgrey;
+	padding-left: 10px;
+  margin-top: .5rem;
+	margin-bottom: 1rem;
+}
+
+.column.orientation {
+  width: 165px;
+}
+
+.simple-text-list {
+  border: 1px lightgrey dotted;
+  border-radius: 3px;
+}
+
+.sidenote {
+  font-size: 0.7rem;
+}

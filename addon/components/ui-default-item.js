@@ -6,5 +6,4 @@ export default Ember.Component.extend(item, {
   layout,
   tagName: '',
 
-
 });

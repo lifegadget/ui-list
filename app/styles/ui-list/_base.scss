@@ -1,0 +1,37 @@
+list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &.orient-horizontal {
+    flex-direction: row;
+    justify-content: stretch;
+  }
+  &.orient-vertical {
+    align-items: stretch;
+  }
+}
+
+item {
+  display: flex;
+}
+
+.tiny-size {
+  font-size: 0.75em;
+}
+
+.small-size {
+  font-size: 0.9em;
+}
+
+.default-size {
+  font-size: 1.1em;
+}
+
+.large-size {
+  font-size: 1.5em;
+}
+
+.huge-size {
+  font-size: 2em;
+}

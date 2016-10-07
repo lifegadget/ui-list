@@ -18,12 +18,11 @@
           id=itemId
           value=item
           size=size
-          selected=(includes selected itemId)
-          disabled=(includes disabled itemId)
-          onSelected=(action 'onSelected' itemId)
-          onHover=(action 'onHover' itemId)
-          onFocus=(action 'onFocus' itemId)
-
+          selected=(includes _selected itemId)
+          disabled=(includes _disabled itemId)
+          onClick=(action 'onClick')
+          onHover=(action 'onHover')
+          onFocus=(action 'onFocus')
         }}
       {{/let}}
     {{/each}}

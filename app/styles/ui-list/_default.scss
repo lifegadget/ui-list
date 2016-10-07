@@ -1,0 +1,91 @@
+@import 'variables';
+$hover-color: hsl(0, 0%, 97%);
+
+.default-skin {
+
+  &.orient-vertical {
+    margin-top: $list-margin;
+    margin-bottom: $list-margin;
+
+    .selected {
+      border-left: $selected-border-thickness solid $selected-border-color;
+      border-bottom-left-radius: 0px;
+      border-top-left-radius: 0px;
+    }
+  }
+  &.orient-horizontal {
+    margin-left: $list-margin;
+    margin-right: $list-margin;
+
+    .selected.normal {
+      border-bottom: $selected-border-thickness solid $selected-border-color;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+
+    .selected.reversed {
+      border-top: $selected-border-thickness solid $selected-border-color;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 0px;
+    }
+  }
+
+  item {
+    padding: 0.25rem;
+    border-radius: 5px;
+    transition-duration: $transition-timing;
+
+    section {
+      display: flex;
+      cursor: pointer;
+    }
+
+    &.orient-vertical {
+      section {
+        margin-left: $space-between-sections;
+        margin-right: $space-between-sections;
+      }
+      section:first-of-type {
+        margin-left: 0;
+        margin-right: $space-between-sections;
+      }
+      section:last-of-type {
+        margin-left: 0;
+        margin-right: $space-between-sections;
+      }
+    }
+  }
+
+  &.orient-horizontal {
+    section {
+      margin: inherit $space-between-sections;
+    }
+    section:first-of-type {
+      margin-left: 0;
+      margin-right: $space-between-sections;
+    }
+    section:last-of-type {
+      margin-right: 0;
+      margin-left: $space-between-sections;
+    }
+  }
+
+  &.tiny-size item {
+    padding: 0.15rem;
+  }
+  &.large-size item {
+    padding: 0.5rem;
+  }
+  &.huge-size item {
+    padding: 0.75rem;
+  }
+
+  item:hover {
+    background-color: $hover-color;
+
+    section {
+      background-color: $hover-color;
+    }
+  }
+
+}

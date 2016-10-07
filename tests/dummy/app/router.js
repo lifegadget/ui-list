@@ -7,6 +7,12 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('demo');
+  this.route('addons');
+  this.route('actions');
+  this.route('related');
+  this.route('skinning');
+  this.route('bespoke-items');
 });
 
 export default Router;

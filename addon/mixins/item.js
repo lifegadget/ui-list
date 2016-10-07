@@ -1,7 +1,8 @@
 import Ember from 'ember';
-const { computed } = Ember;
+import ddau from 'ui-list/mixins/ddau';
+const { computed, get } = Ember;
 
-export default Ember.Mixin.create({
+export default Ember.Mixin.create(ddau, {
 
   classy: computed('hovering', 'focused', 'selected', 'disabled', function() {
     const { hovering, focused, selected, disabled } = this.getProperties('hovering', 'focused', 'selected', 'disabled');
@@ -11,9 +12,11 @@ export default Ember.Mixin.create({
   tabindex: 1,
 
   actions: {
-    onSelected(id) {
-      console.log('selected', id);
-      this.attrs.onSelected(id, this);
+    onClick(id) {
+      this.ddau('onClick', {
+        id,
+        item: this
+      }, get(this, 'item.value') || get(this, 'item'));
     },
     onHover(id, isHovering) {
       this.set('hovering', isHovering);

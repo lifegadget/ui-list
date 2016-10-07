@@ -1,0 +1,104 @@
+// FILL
+list.fill item {
+  flex: 1 0;
+}
+
+// HORIZONTAL LAYOUT
+// FIT
+.fit.halign-left.orient-horizontal {
+  justify-content: flex-start;
+}
+.fit.halign-right.orient-horizontal {
+  justify-content: flex-end;
+}
+.fit.halign-center.orient-horizontal {
+  justify-content: center;
+}
+.fit.halign-stretch.orient-horizontal {
+  justify-content: stretch;
+}
+.fit.halign-around.orient-horizontal {
+  justify-content: space-around;
+}
+.fit.halign-between.orient-horizontal {
+  justify-content: space-between;
+}
+// FILL
+.fill.halign-left.orient-horizontal item {
+  justify-content: flex-start;
+}
+.fill.halign-right.orient-horizontal item {
+  justify-content: flex-end;
+}
+.fill.halign-center.orient-horizontal item {
+  justify-content: center;
+}
+.fill.halign-stretch.orient-horizontal item {
+  justify-content: stretch;
+}
+.fill.halign-around.orient-horizontal item {
+  justify-content: space-around;
+}
+.fill.halign-between.orient-horizontal item {
+  justify-content: space-between;
+}
+
+.valign-top.orient-horizontal {
+  align-items: flex-start;
+}
+.valign-bottom.orient-horizontal {
+  align-items: flex-end;
+}
+.valign-center.orient-horizontal {
+  align-items: center;
+}
+.valign-around.orient-horizontal {
+  align-items: space-around;
+}
+.valign-between.orient-horizontal {
+  align-items: space-between;
+}
+
+
+// VERTICAL LAYOUT
+// ---------------------------
+.halign-left.orient-vertical {
+  align-items: flex-start;
+}
+
+.halign-right.orient-vertical {
+  align-items: flex-end;
+}
+
+.halign-center.orient-vertical {
+  align-items: center;
+}
+
+.halign-stretch.orient-vertical {
+  align-items: stretch;
+}
+
+// FIT
+.fit.valign-top.orient-vertical {
+  justify-content: flex-start;
+}
+
+.fit.valign-bottom.orient-vertical {
+  justify-content: flex-end;
+}
+
+.fit.valign-center.orient-horizontal {
+  justify-content: center;
+}
+// FILL
+.fill.valign-top.orient-vertical item {
+  align-items: flex-start;
+}
+
+.fill.valign-bottom.orient-vertical item {
+  align-items: flex-end;
+}
+
+.fill.valign-center.orient-vertical item {
+  align-items: center;
+}
