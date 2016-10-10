@@ -1,7 +1,7 @@
 @import 'ui-navigation';
 @import 'ui-list';
 @import 'ui-tag';
-@import 'ui-list/default';
+@import 'ui-list/skins/default';
 @import 'ui-button';
 // @import '/ui-button/bootstrap/buttons';
 html, body {
@@ -22,6 +22,12 @@ html, body {
   &.self-start {
     align-self: flex-start;
   }
+}
+
+.row {
+  @extend .flex;
+  width: 100%;
+  margin: 0;
 }
 
 .right {
@@ -64,7 +70,18 @@ note {
   border: 1px lightgrey dotted;
   border-radius: 3px;
 }
+.demo-full-utilisation {
+  border: 1px lightgrey dotted;
+  width: 400px;
+}
 
 .sidenote {
   font-size: 0.7rem;
+}
+p {
+  margin: 0.5rem 0;
+
+  &.sidenote {
+    margin: 0.35rem 0;
+  }
 }

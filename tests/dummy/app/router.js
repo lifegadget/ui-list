@@ -13,6 +13,7 @@ Router.map(function() {
   this.route('related');
   this.route('skinning');
   this.route('bespoke-items');
+  this.route('extended-api');
 });
 
 export default Router;

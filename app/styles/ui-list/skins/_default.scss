@@ -1,4 +1,4 @@
-@import 'variables';
+@import '../variables';
 $hover-color: hsl(0, 0%, 97%);
 
 .default-skin {
@@ -34,10 +34,19 @@ $hover-color: hsl(0, 0%, 97%);
     padding: 0.25rem;
     border-radius: 5px;
     transition-duration: $transition-timing;
+    cursor: pointer;
 
     section {
       display: flex;
       cursor: pointer;
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+
+      section {
+        cursor: not-allowed;
+      }
     }
 
     &.orient-vertical {
@@ -81,6 +90,7 @@ $hover-color: hsl(0, 0%, 97%);
   }
 
   item:hover {
+    transition-duration: $transition-timing;
     background-color: $hover-color;
 
     section {
@@ -88,4 +98,8 @@ $hover-color: hsl(0, 0%, 97%);
     }
   }
 
+}
+
+section.ui-list {
+  display: flex;
 }

@@ -1,12 +1,13 @@
 import Ember from 'ember';
 import ddau from 'ui-list/mixins/ddau';
 const { computed, get } = Ember;
+const classProps = [ 'hovering', 'focused', 'selected', 'disabled', 'reversed' ];
 
 export default Ember.Mixin.create(ddau, {
 
-  classy: computed('hovering', 'focused', 'selected', 'disabled', function() {
-    const { hovering, focused, selected, disabled } = this.getProperties('hovering', 'focused', 'selected', 'disabled');
-    return `ui-item ${hovering ? ' hovering' : ''}${focused ? ' focused' : ''}${selected ? ' selected' : ''}${disabled ? ' disabled' : ''}`;
+  classy: computed(...classProps, function() {
+    const { hovering, focused, selected, disabled, reversed } = this.getProperties(...classProps);
+    return `ui-item ${hovering ? ' hovering' : ''}${focused ? ' focused' : ''}${selected ? ' selected' : ''}${disabled ? ' disabled' : ''}${reversed ? ' reversed' : ' normal'}`;
   }),
   role: 'listitem',
   tabindex: 1,

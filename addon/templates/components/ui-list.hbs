@@ -13,7 +13,7 @@
   {{else}}
 
     {{#each _items as |item|}}
-      {{#let (or item.id (concat id '-' (auto-id 10))) as |itemId|}}
+      {{#auto-id item=item as |itemId|}}
         {{component (concat 'ui-' type '-item')
           id=itemId
           value=item
@@ -24,7 +24,7 @@
           onHover=(action 'onHover')
           onFocus=(action 'onFocus')
         }}
-      {{/let}}
+      {{/auto-id}}
     {{/each}}
 
   {{/if}}

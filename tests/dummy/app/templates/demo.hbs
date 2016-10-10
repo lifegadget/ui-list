@@ -97,13 +97,13 @@ of the `ui-list` addon.
           mood='secondary'
           onToggle=(mut fit)
         }}
-        <div class="sidenote">
+        <p class="sidenote">
           Note: when setting to <b>FILL</b> the entire row/column (depending on orientation) is filled. This is typically
           what you want but "fit" makes sense if you want items to only use up the space they take.
-        </div>
-        <div class="sidenote">
+        </p>
+        <p class="sidenote">
           What may not be clear at first is that to preserve the meaning of primary axis alignment we must apply the CSS to either the list or item component depending on fit/fill.
-        </div>
+        </p>
       </div>
     </div>
 
@@ -125,16 +125,53 @@ of the `ui-list` addon.
 </pre></code>
     <p class="sidenote">
       <b>Note</b>: in this example we're mutating
-      {{tag 'selected'}} whenever the {{tag 'onSelected()'}} action is triggered. If you didn't
-      want to have the list be "selectable" then simply don't listen to {{tag 'onSelected()'}}.
+      {{tag 'selected'}} whenever the {{tag 'onSelected()'}} action is triggered.
+    </p>
+    <p class="sidenote">
+      If you didn't want to have the list be "selectable" then simply don't listen to {{tag 'onSelected()'}}.
     </p>
   </div>
 </div>
 <br>
+
+
 {{#markdown-convert style='github'}}
-### Full Utilisation of Default Item
+> Note: the dotted line surrounding both demo's is not part of the `ui-list` component itself but added to the demo simply to highlight the area that the widget is operating in.
+
+### Full Utilisation of the _Default Item_
 In the "bespoke items" section you'll see that it's very easy to substitute your own "item" component to replace the default but before that let's explore the power of the _default_ item component as it's utility is far greater than illustrated in the example above.
 
-As was mentioned in the Intro, an item is composed of 1:M sections. In the case of the default item component, it has three sections: _left, center,_ and _right_.
+As was mentioned in the Intro section, an item is composed of 1:M "sections". In the case of the default item component, it has three sections: _left, center,_ and _right_. These sections work together to bring a list item similar to what you see below:
+{{/markdown-convert}}
 
+<div class="row">
+  <div class="demo-full-utilisation flex">
+      {{ui-list
+
+        items=(array
+          (hash id='pass' title='Passed' icon='check-circle')
+          (hash id='unknown'
+            title='Unknown Outcome'
+            icon='question-circle'
+            badge=5
+            chevron=true
+          )
+          (hash id='fail' title='Failed' icon='times-circle')
+        )
+        selected=selected
+        orient='vertical'
+        halign=halign
+        valign=valign
+        fit=fit
+        reversed=reversed
+        onSelected=(mut selected)
+
+      }}
+  </div>
+
+</div>
+
+<br>
+{{#markdown-convert style='github'}}
+  > **Note**: sections which have no content are simply ignored. That's why the first example only populated the "center" section, whereas in the above example if you remove icon it will collapse the "left" section.
 {{/markdown-convert}}

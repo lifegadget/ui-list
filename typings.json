@@ -1,5 +1,6 @@
 {
   "globalDependencies": {
+    "immutable": "registry:dt/immutable#3.8.1+20160608070634",
     "showdown": "registry:dt/showdown#1.4.1+20160608102004"
   }
 }

@@ -37,22 +37,21 @@
     "ember-composable-helpers": "1.1.2",
     "ember-disable-prototype-extensions": "^1.1.0",
     "ember-export-application-global": "^1.0.5",
-    "ember-immutable": "0.1.1",
-    "ember-let": "0.5.2",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
     "ember-route-action-helper": "2.0.0",
-    "immutable": "3.8.1",
     "loader.js": "^4.0.11",
     "ui-button": "2.1.4",
-    "ui-markdown": "0.1.11",
-    "ui-navigation": "0.1.4",
+    "ui-markdown": "0.1.12",
+    "ui-navigation": "0.1.8",
     "ui-tag": "0.1.2"
   },
   "keywords": [
     "ember-addon"
   ],
   "dependencies": {
+    "immutable": "3.8.1",
+    "ember-immutable": "0.1.1",
     "ember-cli-babel": "^5.1.7",
     "ember-cli-htmlbars": "^1.0.10",
     "ember-truth-helpers": "^1.2.0"

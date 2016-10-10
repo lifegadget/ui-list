@@ -91,6 +91,9 @@ list.fill item {
   justify-content: center;
 }
 // FILL
+list.fill.orient-vertical item {
+  width: 100%;
+}
 .fill.valign-top.orient-vertical item {
   align-items: flex-start;
 }
