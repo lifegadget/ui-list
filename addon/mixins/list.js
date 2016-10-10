@@ -69,14 +69,15 @@ const list = Ember.Mixin.create(ddau, {
      */
     onClick(hash) {
       const { id, item } = hash;
+      const _selected = this.get('_selected');
       this.ddau('onClick', {
-        id,
+        id: Set.isSet(_selected) ? id : id.toArray(),
         item,
         list: this
       }, get(item, 'value') || item);
 
       this.ddau('onSelected', {
-        id,
+        id: Set.isSet(_selected) ? id : id.toArray(),
         item,
         list,
       }, this.toggleSetProperty('_selected', id));

@@ -57,6 +57,14 @@ of the `ui-list` addon.
           value=reversed
           onToggle=(mut reversed)
         }}
+
+        <h3>Cardinality</h3>
+        {{ui-buttons
+          buttons='0:0,0:1,1:1,0:2'
+          values=cardinality
+          size='tiny'
+          onChange=(mut cardinality)
+        }}
       </div>
       <div class="flex column">
         <h3>Alignment</h3>
