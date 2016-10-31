@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import ddau from 'ui-list/mixins/ddau';
-///<reference path='./node_modules/immutable/dist/immutable.d.ts'/>
 import Immutable from 'immutable';
 const { Set } = Immutable; // jshint ignore:line
 const { computed, typeOf, get, debug } = Ember;
@@ -70,14 +69,15 @@ const list = Ember.Mixin.create(ddau, {
     onClick(hash) {
       const { id, item } = hash;
       const _selected = this.get('_selected');
+      const idValue = Set.isSet(_selected) ? id : id.toArray();
       this.ddau('onClick', {
-        id: Set.isSet(_selected) ? id : id.toArray(),
+        id: idValue,
         item,
         list: this
       }, get(item, 'value') || item);
 
       this.ddau('onSelected', {
-        id: Set.isSet(_selected) ? id : id.toArray(),
+        id: idValue,
         item,
         list,
       }, this.toggleSetProperty('_selected', id));

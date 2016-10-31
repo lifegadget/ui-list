@@ -1,9 +1,9 @@
 @import 'ui-navigation';
 @import 'ui-list';
-@import 'ui-tag';
 @import 'ui-list/skins/default';
+@import 'ui-tag';
 @import 'ui-button';
-// @import '/ui-button/bootstrap/buttons';
+
 html, body {
 	font-family: Verdana, Geneva, sans-serif;
 	margin: 20px;

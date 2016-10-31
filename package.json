@@ -1,6 +1,6 @@
 {
   "name": "ui-list",
-  "version": "1.0.0-alpha.1",
+  "version": "0.5.6",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
@@ -41,9 +41,9 @@
     "ember-resolver": "^2.0.3",
     "ember-route-action-helper": "2.0.0",
     "loader.js": "^4.0.11",
-    "ui-button": "2.1.4",
+    "ui-button": "2.1.5",
     "ui-markdown": "0.1.12",
-    "ui-navigation": "0.1.8",
+    "ui-navigation": "0.1.10",
     "ui-tag": "0.1.2"
   },
   "keywords": [
