@@ -25,8 +25,6 @@
 
 /* Default Skin */
 .ui-list.table .row {
-}
-.ui-list.table .row {
   margin: 0px 0px -1px 0px;
   border-left: 2px solid rgb(28, 29, 29);
 }

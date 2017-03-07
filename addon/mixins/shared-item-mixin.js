@@ -1,8 +1,8 @@
 import Ember from 'ember';
-const { keys, create } = Object;
-const { computed, observer, $, run, on, typeOf, debug } = Ember; 
-const { defineProperty, get, set, inject, isEmpty, merge } = Ember;
+const { keys } = Object;
+const { computed, typeOf, defineProperty, merge } = Ember;
 const a = Ember.A;
+
 const capitalize = Ember.String.capitalize;
 const dasherize = thingy => {
   return thingy ? Ember.String.dasherize(thingy) : thingy;

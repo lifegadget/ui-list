@@ -34,7 +34,7 @@
         position:
       </span>
       <span class="control">
-        {{radio-buttons buttons='left,right,top,bottom' defaultValue=0 value=position size='small'}}
+        {{radio-buttons buttons='left,right,top,bottom' value=position size='small' onChange=(mut position)}}
       </span>
     </class>
     <span class="row">
@@ -42,7 +42,7 @@
         skin:
       </span>
       <span class="control">
-        {{radio-buttons buttons='nav,tab,flat,plus' value=skin size='small'}}
+        {{radio-buttons buttons='nav,tab,flat,plus' value=skin size='small' onChange=(mut skin)}}
       </span>
     </span>
     <span class="row">
@@ -50,7 +50,7 @@
         size:
       </span>
       <span class="control">
-        {{radio-buttons buttons='tiny,small,default,large,huge' value=size size='small'}}
+        {{radio-buttons buttons='tiny,small,default,large,huge' value=size size='small' onChange=(mut size)}}
       </span>
     </span>
     <span class="row">
@@ -58,7 +58,7 @@
         mood:
       </span>
       <span class="control">
-        {{radio-buttons buttons='default,success,info,warn::warning,error' value=mood size='small'}}
+        {{radio-buttons buttons='default,success,info,warn::warning,error' value=mood size='small' onChange=(mut mood)}}
       </span>
     </span>
     <span class="row">
