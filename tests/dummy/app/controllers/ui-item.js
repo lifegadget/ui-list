@@ -1,5 +1,5 @@
 import Ember from 'ember';
-const { computed, observer, $, A, run, on } = Ember;    // jshint ignore:line
+const { computed, observer, $, A, run, on } = Ember;     
 
 export default Ember.Controller.extend({
 

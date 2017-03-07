@@ -1,8 +1,8 @@
 import Ember from 'ember';
-const { keys, create } = Object; // jshint ignore:line
-const { computed, observer, $, run, on, typeOf, debug } = Ember;  // jshint ignore:line
-const { defineProperty, get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
-const a = Ember.A; // jshint ignore:line
+const { keys, create } = Object;
+const { computed, observer, $, run, on, typeOf, debug } = Ember; 
+const { defineProperty, get, set, inject, isEmpty, merge } = Ember;
+const a = Ember.A;
 const capitalize = Ember.String.capitalize;
 const dasherize = thingy => {
   return thingy ? Ember.String.dasherize(thingy) : thingy;
@@ -53,13 +53,17 @@ let SharedItem = Ember.Mixin.create({
   /**
    * INITIALIZE ITEM COMPONENT
    */
-  _init: on('init', function() {
+  init() {
+    this._super(...arguments);
     this._unpackData();       // map the data hash populated by list component onto item object
     this._shortcutAliases();  // add convenience API-surface shortcuts (e.g., 'icon' instead of 'leftIcon', etc.)
     this._defineAspectMappings(); // ensure all mappings are setup as CP's
     this._logicPanes();       // create hasXXX() logic flags for page existance
+  },
+  didInsertElement() {
+    this._super(...arguments);
     this._setDefaultValues();
-  }),
+  },
 
   // Unpack data property passed in from a list
   _unpackData: function() {

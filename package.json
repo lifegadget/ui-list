@@ -56,10 +56,10 @@
     "ember-disable-proxy-controllers": "^1.0.1",
     "ember-export-application-global": "^1.0.5",
     "ember-load-initializers": "^0.5.1",
-    "ember-moment": "7.0.0-beta.3",
+    "ember-moment": "7.3.0",
     "ember-resolver": "^2.1.0",
     "loader.js": "^4.0.1",
-    "ui-button": "2.0.0",
+    "ui-button": "2.1.12",
     "ui-ember-slider": "0.3.8",
     "ui-input": "0.10.2",
     "ui-navigator-service": "0.3.1"
@@ -68,12 +68,12 @@
     "ember-addon"
   ],
   "dependencies": {
-    "ember-cli-htmlbars": "^1.0.3",
+    "ember-cli-htmlbars": "^1.1.1",
     "ember-cli-stylist": "^0.4.11",
     "ember-new-computed": "^1.0.3",
-    "ember-truth-helpers": "^1.2.0",
+    "ember-truth-helpers": "^1.3.0",
     "merge": "^1.2.0",
-    "ui-icon": "^0.11.7",
+    "ui-icon": "^0.11.11",
     "ui-image": "0.1.10",
     "ui-responsive-toolbelt": "0.0.8"
   },

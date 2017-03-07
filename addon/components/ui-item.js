@@ -1,8 +1,8 @@
 import Ember from 'ember';
-const { keys, create } = Object; // jshint ignore:line
-const { computed, observer, $, A, run, on } = Ember;  // jshint ignore:line
-const { typeOf, debug, defineProperty, isPresent } = Ember;  // jshint ignore:line
-const { get, set, inject, isEmpty, merge } = Ember; // jshint ignore:line
+const { keys, create } = Object;  
+const { computed, observer, $, A, run, on } = Ember;   
+const { typeOf, debug, defineProperty, isPresent } = Ember;   
+const { get, set, inject, isEmpty, merge } = Ember;  
 
 import layout from '../templates/components/ui-item';
 import SharedItem from 'ui-list/mixins/shared-item-mixin';

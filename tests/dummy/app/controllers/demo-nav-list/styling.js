@@ -1,6 +1,6 @@
 import Ember from 'ember';
-const { keys, create } = Object; // jshint ignore:line
-const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
+const { keys, create } = Object;  
+const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;   
 
 export default Ember.Controller.extend({
   flashMessages: Ember.inject.service(),

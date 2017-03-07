@@ -1,4 +1,4 @@
-import Ember from 'ember';  // jshint ignore:line
+import Ember from 'ember';   
 import layout from '../templates/components/ui-item';
 import UiList from '../components/ui-item';
 import SortableItem from '../mixins/sortable-item';

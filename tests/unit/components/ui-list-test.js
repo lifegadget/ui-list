@@ -1,5 +1,5 @@
 import Ember from 'ember';
-const { computed, observer, $, A, run, on, typeOf, debug, keys } = Ember;    // jshint ignore:line
+const { computed, observer, $, A, run, on, typeOf, debug, keys } = Ember;     
 import {
   moduleForComponent,
   test

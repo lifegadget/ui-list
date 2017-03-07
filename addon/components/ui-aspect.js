@@ -1,7 +1,7 @@
 import Ember from 'ember';
-const { keys, create } = Object; // jshint ignore:line
-const { computed, observer, $, A, run, on, typeOf, debug } = Ember;  // jshint ignore:line
-const { defineProperty, get, set, inject, isEmpty } = Ember; // jshint ignore:line
+const { keys, create } = Object;  
+const { computed, observer, $, A, run, on, typeOf, debug } = Ember;   
+const { defineProperty, get, set, inject, isEmpty } = Ember;  
 import layout from '../templates/components/ui-aspect';
 import NodeMessenger from '../mixins/node-messenger';
 

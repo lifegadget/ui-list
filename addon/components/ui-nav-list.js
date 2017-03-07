@@ -1,8 +1,8 @@
-import Ember from 'ember';  // jshint ignore:line
+import Ember from 'ember';   
 import layout from '../templates/components/ui-list';
 import UiSelectableList from '../components/ui-selectable-list';
-const { keys, create } = Object; // jshint ignore:line
-const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;  // jshint ignore:line
+const { keys, create } = Object;  
+const {computed, observer, $, A, run, on, typeOf, debug, defineProperty, get, set, inject, isEmpty} = Ember;   
 
 export default UiSelectableList.extend({
   layout: layout,
